@@ -2,22 +2,24 @@
 
 namespace App\Http\Controllers\Esims;
 
-use App\Models\Esims\ClientEsim;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\ClientEsim\StoreClientEsimRequest;
-use App\Http\Requests\ClientEsim\UpdateClientEsimRequest;
-
-use App\Http\Resources\Esims\ClientEsimResource;
-use Illuminate\Contracts\View\Factory;
-use App\Http\Resources\SearchCollection;
-use App\Http\Requests\ClientEsim\FetchRequest;
-use Illuminate\Contracts\Foundation\Application;
-use App\Repositories\Contracts\IClientEsimRepositoryContract;
-
+use PDF;
 use Exception;
 use \Illuminate\View\View;
+use App\Models\Esims\ClientEsim;
+
 use Illuminate\Support\Collection;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Contracts\View\Factory;
+use App\Http\Resources\SearchCollection;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
+
+use App\Http\Requests\ClientEsim\FetchRequest;
+use App\Http\Resources\Esims\ClientEsimResource;
+use Illuminate\Contracts\Foundation\Application;
+use App\Http\Requests\ClientEsim\StoreClientEsimRequest;
+use App\Http\Requests\ClientEsim\UpdateClientEsimRequest;
+use App\Repositories\Contracts\IClientEsimRepositoryContract;
 
 class ClientEsimController extends Controller
 {
@@ -33,6 +35,15 @@ class ClientEsimController extends Controller
      */
     public function __construct(IClientEsimRepositoryContract $repository) {
         $this->repository = $repository;
+    }
+
+    public function generatePDF($id)
+    {
+        $client = new ClientEsimResource(ClientEsim::where('id', $id)->first());
+        $acqrcode = QrCode::size(100)->generate($client->esim->ac);
+
+        $pdf = PDF::loadView('clientesims.preview', ['client' => $client, 'acqrcode' => $acqrcode, 'generate_now' => true]);    
+        return $pdf->download('clientesims.pdf');
     }
 
     /**
@@ -82,14 +93,14 @@ class ClientEsimController extends Controller
      */
     public function store(StoreClientEsimRequest $request)
     {
-        $esim = ClientEsim::createNew(
+        $clientesim = ClientEsim::createNew(
             $request->esim_id,
             $request->nom_raison_sociale,
             $request->prenom,
             $request->email,
             $request->numero_telephone
         );
-        return new ClientEsimResource($esim);
+        return new ClientEsimResource($clientesim);
     }
 
     /**
@@ -98,9 +109,14 @@ class ClientEsimController extends Controller
      * @param  \App\Models\ClientEsim  $clientEsim
      * @return \Illuminate\Http\Response
      */
-    public function show(ClientEsim $clientEsim)
+    public function show(ClientEsim $clientesim)
     {
-        // 
+        $client = new ClientEsimResource($clientesim);
+        $acqrcode = QrCode::size(100)->generate($client->esim->ac);
+        
+        return view('clientesims.preview')
+            ->with('acqrcode', $acqrcode)
+            ->with('client', $client);
     }
 
     /**

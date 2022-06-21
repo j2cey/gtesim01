@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PDFController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\StatusController;
@@ -296,3 +297,9 @@ Route::get('clientesims.fetch',[ClientEsimController::class,'fetch'])
 Route::get('clientesims.fetchall',[ClientEsimController::class,'fetchall'])
     ->name('clientesims.fetchall')
     ->middleware('auth');
+Route::get('clientesims.generatepdf/{id}',[ClientEsimController::class,'generatePDF'])
+->name('clientesims.generatepdf')
+->middleware('auth');
+
+Route::get('pdf/preview', [PDFController::class, 'preview'])->name('pdf.preview');
+Route::get('pdf/generate', [PDFController::class, 'generatePDF'])->name('pdf.generate');
