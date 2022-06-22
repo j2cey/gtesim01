@@ -140,7 +140,7 @@
                             timer: 3000
                         }).then(() => {
                             $('#addUpdateClientEsim').modal('hide')
-                            window.location = '/clientesims'
+                            window.location = '/clientesims.previewpdf/' + newclientesim.id
                         })
 
                     }).catch(error => {

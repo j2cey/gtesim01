@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Esims;
 
+use App\Http\Resources\StatusResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class EsimResource extends JsonResource
@@ -23,6 +24,7 @@ class EsimResource extends JsonResource
             'pin' => $this->pin,
             'puk' => $this->puk,
 
+            'status' => StatusResource::make($this->status),
             'statutesim' => StatutEsimResource::make($this->statutesim),
 
             'created_at' => $this->created_at,

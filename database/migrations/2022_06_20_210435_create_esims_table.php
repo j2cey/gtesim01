@@ -24,7 +24,7 @@ class CreateEsimsTable extends Migration
             
             $table->string('imsi')->comment('imsi');
             $table->string('iccid')->comment('iccid');
-            $table->string('pin')->comment('pin');
+            $table->string('pin')->default("0000")->comment('pin');
             $table->string('puk')->comment('puk');
             $table->string('ac')->nullable()->comment('ac');
 

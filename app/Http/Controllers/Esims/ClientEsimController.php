@@ -5,15 +5,17 @@ namespace App\Http\Controllers\Esims;
 use PDF;
 use Exception;
 use \Illuminate\View\View;
-use App\Models\Esims\ClientEsim;
+use App\Mail\NotifyProfileEsim;
 
+use App\Models\Esims\ClientEsim;
 use Illuminate\Support\Collection;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Contracts\View\Factory;
+
 use App\Http\Resources\SearchCollection;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
-
 use App\Http\Requests\ClientEsim\FetchRequest;
 use App\Http\Resources\Esims\ClientEsimResource;
 use Illuminate\Contracts\Foundation\Application;
@@ -119,6 +121,9 @@ class ClientEsimController extends Controller
             $request->email,
             $request->numero_telephone
         );
+
+        Mail::to($clientesim->email)->send(new NotifyProfileEsim($clientesim));
+
         return new ClientEsimResource($clientesim);
     }
 

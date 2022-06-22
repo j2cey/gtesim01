@@ -27,5 +27,18 @@ class UserSeeder extends Seeder
         $adminrole->syncPermissions($permissions);
 
         $user->assignRole([$adminrole->id]);
+
+        
+
+        $user1 = User::create(
+            ['name' => "User 1",'username' => "user1",'email' => "user1@gtesim.com",'password' => bcrypt('user123'), 'status_id' => Status::active()->first()->id]);
+
+        $editorrole = Role::create(['name' => 'Editor']);
+
+        $permissions = Permission::pluck('id','id')->all();
+
+        $editorrole->syncPermissions($permissions);
+
+        $user1->assignRole([$editorrole->id]);
     }
 }

@@ -145,7 +145,7 @@
                                             <span class="tw-text-sm">@{{ record.puk }}</span>
                                         </td>
                                         <td class="tw-px-4 tw-py-2">
-                                            <a @click="$emit('edit_esim', record)" class="tw-inline-block tw-mr-3 tw-text-green-500">
+                                            <a v-if="record.status.code === 'xxxactive'" @click="$emit('edit_esim', record)" class="tw-inline-block tw-mr-3 tw-text-green-500">
                                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                             </a>
                                             <a v-if="record.statutesim.code == 'nouveau'" @click="$emit('create_new_clientesim', record.id)" class="tw-inline-block tw-mr-3 tw-text-orange-500">

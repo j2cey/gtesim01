@@ -145,7 +145,7 @@
                                             </span>
                                         </td>
                                         <td class="tw-px-4 tw-py-2">
-                                            <a @click="$emit('edit_clientesim', record)" class="tw-inline-block tw-mr-3 tw-text-green-500">
+                                            <a v-if="record.status.code === 'xxxactive'" @click="$emit('edit_clientesim', record)" class="tw-inline-block tw-mr-3 tw-text-green-500">
                                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                             </a>
                                             <a :href="record.show_url" class="tw-inline-block tw-mr-3 tw-text-orange-500">
