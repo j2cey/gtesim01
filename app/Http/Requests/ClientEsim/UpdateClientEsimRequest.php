@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\ClientEsim;
 
+use App\Models\Esims\ClientEsim;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateClientEsimRequest extends ClientEsimRequest

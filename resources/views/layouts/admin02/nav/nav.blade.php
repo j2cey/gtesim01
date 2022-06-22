@@ -1,6 +1,6 @@
 <nav class="main-header navbar navbar-expand-md navbar-light navbar-lightblue">
     <div class="container">
-        <a href="/" class="navbar-brand"
+        <a href="/clientesims" class="navbar-brand"
            style="display: flex; align-items: center; justify-content: center; height: 100%; ">
             <img src="{{ asset('assets/images/logo.png') }}" alt="Logo" class="brand-image elevation-3"
                  style="opacity: .8">

@@ -162,6 +162,7 @@ Vue.component(
     "clientesim-addupdate",
     require("./views/clientesims/addupdate").default
 );
+Vue.component("clientesim-show", require("./views/clientesims/show").default);
 Vue.component("esim-addupdate", require("./views/esims/addupdate").default);
 
 /**

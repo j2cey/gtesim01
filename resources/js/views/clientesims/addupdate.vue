@@ -153,9 +153,17 @@
                 this.clientesimForm
                     .put(`/clientesims/${this.clientesimId}`,undefined)
                     .then(updclientesim => {
+
                         this.loading = false
-                        ClientEsimBus.$emit('clientesim_updated', updclientesim)
-                        $('#addUpdateClientEsim').modal('hide')
+
+                        this.$swal({
+                            html: '<small>Client modife avec Succes !</small>',
+                            icon: 'success',
+                            timer: 3000
+                        }).then(() => {
+                            ClientEsimBus.$emit('clientesim_updated', updclientesim)
+                            $('#addUpdateClientEsim').modal('hide')
+                        })
                     }).catch(error => {
                     this.loading = false
                 });

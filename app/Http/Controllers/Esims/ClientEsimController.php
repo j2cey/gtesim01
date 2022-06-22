@@ -37,12 +37,31 @@ class ClientEsimController extends Controller
         $this->repository = $repository;
     }
 
+    public function previewPDF($id) {
+
+        $client = new ClientEsimResource(ClientEsim::where('id', $id)->first());
+        //$acqrcode = QrCode::size(100)->generate($client->esim->ac);
+        return view('clientesims.preview')
+            ->with('client', $client);
+    }
+
     public function generatePDF($id)
     {
         $client = new ClientEsimResource(ClientEsim::where('id', $id)->first());
         $acqrcode = QrCode::size(100)->generate($client->esim->ac);
 
         $pdf = PDF::loadView('clientesims.preview', ['client' => $client, 'acqrcode' => $acqrcode, 'generate_now' => true]);    
+        
+        $pdf->getDomPDF()->setHttpContext(
+            stream_context_create([
+                'ssl' => [
+                    'allow_self_signed'=> TRUE,
+                    'verify_peer' => FALSE,
+                    'verify_peer_name' => FALSE,
+                ]
+            ])
+        );
+        
         return $pdf->download('clientesims.pdf');
     }
 
@@ -111,12 +130,8 @@ class ClientEsimController extends Controller
      */
     public function show(ClientEsim $clientesim)
     {
-        $client = new ClientEsimResource($clientesim);
-        $acqrcode = QrCode::size(100)->generate($client->esim->ac);
-        
-        return view('clientesims.preview')
-            ->with('acqrcode', $acqrcode)
-            ->with('client', $client);
+        return view('clientesims.show')
+            ->with('clientesim', new ClientEsimResource($clientesim));
     }
 
     /**
@@ -137,9 +152,16 @@ class ClientEsimController extends Controller
      * @param  \App\Models\ClientEsim  $clientEsim
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateClientEsimRequest $request, ClientEsim $clientEsim)
+    public function update(UpdateClientEsimRequest $request, ClientEsim $clientesim)
     {
-        //
+        $clientesim = $clientesim->updateOne(
+            $request->esim_id,
+            $request->nom_raison_sociale,
+            $request->prenom,
+            $request->email,
+            $request->numero_telephone
+        );
+        return new ClientEsimResource($clientesim);
     }
 
     /**
@@ -148,8 +170,12 @@ class ClientEsimController extends Controller
      * @param  \App\Models\ClientEsim  $clientEsim
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ClientEsim $clientEsim)
+    public function destroy(ClientEsim $clientesim)
     {
-        //
+        $clientesim->load('esim');
+        $esim = $clientesim->esim;
+        $esim->setStatutFree();
+
+        return redirect()->route('clientesims.index');
     }
 }

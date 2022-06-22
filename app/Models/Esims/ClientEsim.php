@@ -93,5 +93,27 @@ class ClientEsim extends BaseModel implements Auditable
         return $clientesim;
     }
 
+    public function updateOne($esim_id, $nom_raison_sociale, $prenom, $email, $numero_telephone)
+    {
+        $esim = Esim::getFirstFree($esim_id);
+
+        $esim->setStatutFree();
+
+        $this->update([
+            'nom_raison_sociale' => $nom_raison_sociale,
+            'prenom' => $prenom,
+            'email' => $email,
+            'numero_telephone' => $numero_telephone,
+        ]);
+
+        $this->esim()->associate($esim);
+
+        $this->save();
+
+        $esim->setStatutAttribue();
+
+        return $this;
+    }
+
     #endregion
 }

@@ -78,7 +78,13 @@ class Esim extends BaseModel implements Auditable
     public function setStatutAttribue() {
         $esim_attribue_statut = StatutEsim::where('code', "attribue")->first();
         $this->statutesim()->associate($esim_attribue_statut);
-        $esim->save();
+        $this->save();
+    }
+
+    public function setStatutFree() {
+        $esim_nouveau_statut = StatutEsim::where('code', "nouveau")->first();
+        $this->statutesim()->associate($esim_nouveau_statut);
+        $this->save();
     }
 
     public static function getFirstFree($esim_id = -1) {

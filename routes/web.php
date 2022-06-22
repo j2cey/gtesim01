@@ -17,7 +17,7 @@ use App\Http\Controllers\ExecutionController;
 use App\Http\Controllers\GradeUnitController;
 use App\Http\Controllers\DifficultyController;
 use App\Http\Controllers\Esims\EsimController;
-use App\Http\Controllers\StatutEsimController;
+use App\Http\Controllers\Esims\StatutEsimController;
 use App\Http\Controllers\SubSubjectController;
 use App\Http\Controllers\AppreciationController;
 use App\Http\Controllers\Reports\ReportController;
@@ -299,6 +299,9 @@ Route::get('clientesims.fetchall',[ClientEsimController::class,'fetchall'])
     ->middleware('auth');
 Route::get('clientesims.generatepdf/{id}',[ClientEsimController::class,'generatePDF'])
 ->name('clientesims.generatepdf')
+->middleware('auth');
+Route::get('clientesims.previewpdf/{id}',[ClientEsimController::class,'previewPDF'])
+->name('clientesims.previewpdf')
 ->middleware('auth');
 
 Route::get('pdf/preview', [PDFController::class, 'preview'])->name('pdf.preview');

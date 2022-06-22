@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Esims;
 
+use App\Models\StatutEsim;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreStatutEsimRequest;
 use App\Http\Requests\UpdateStatutEsimRequest;
-use App\Models\StatutEsim;
 
 class StatutEsimController extends Controller
 {

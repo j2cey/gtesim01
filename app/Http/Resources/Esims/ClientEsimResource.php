@@ -27,6 +27,7 @@ class ClientEsimResource extends JsonResource
 
             'esim' => EsimResource::make($this->esim),
 
+            'esim_id' => $this->esim_id,
             'created_at' => $this->created_at,
 
             'show_url' => route('clientesims.show', $this->uuid), 
