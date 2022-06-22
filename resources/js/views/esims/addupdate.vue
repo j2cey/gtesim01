@@ -55,8 +55,8 @@
                 </div>
                 <div class="modal-footer justify-content-between">
                     <b-button type="is-dark" size="is-small" data-dismiss="modal">Close</b-button>
-                    <b-button type="is-primary" size="is-small" :loading="loading" @click="updateEsim()" :disabled="!isValidCreateForm" v-if="editing">Save</b-button>
-                    <b-button type="is-primary" size="is-small" :loading="loading" @click="createEsim()" :disabled="!isValidCreateForm" v-else>Create Esim</b-button>
+                    <b-button type="is-primary" size="is-small" :loading="loading" @click="updateEsim()" :disabled="!isValidCreateForm" v-if="editing">Enregistrer</b-button>
+                    <b-button type="is-primary" size="is-small" :loading="loading" @click="createEsim()" :disabled="!isValidCreateForm" v-else>Creer Esim</b-button>
                 </div>
             </div>
             <!-- /.modal-content -->

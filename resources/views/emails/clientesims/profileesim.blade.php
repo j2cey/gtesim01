@@ -1,21 +1,25 @@
 @component('mail::message')
-# Introduction
-
-Bonjour.
+# Bonjour.
 
 Bravo ! Vous avez cree avec succes votre e-sim chez Moov-Africa.
 
-Trouvez, ci-dessous les informations necessaires:
+@component('mail::panel')
+Infos e-sim
+@endcomponent
+
+@component('mail::table')
+| -------------           |:-------------|
+| Nom/Raison Sociale      | <strong>{{ $client->nom_raison_sociale  }} {{ $client->prenom  }}</strong> |
+| Numero Telephone        | <strong>{{ $client->numero_telephone  }}</strong> |
+| Code PIN                | <strong>{{ $client->esim->pin  }}</strong> |
+| Code PIN                | <strong>{{ $client->esim->puk  }}</strong> |
+@endcomponent
+
+@component('mail::panel')
+scannez le QR code pour telecharger votre profile E-SIM
+@endcomponent
 
 <p>
-    Nom/Raison Sociale : <strong>{{ $client->nom_raison_sociale  }} {{ $client->prenom  }}</strong>
-    Numero Telephone : <strong>{{ $client->numero_telephone  }}</strong>
-    Code PIN : <strong>{{ $client->pin  }}</strong>
-    Code PUK : <strong>{{ $client->puk  }}</strong>
-</p>
-
-<p>
-    scannez le QR code pour telecharger votre profile E-SIM
     {{ $qrcode  }}
 </p>
 

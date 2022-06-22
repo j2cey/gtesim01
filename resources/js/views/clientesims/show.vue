@@ -58,13 +58,13 @@
                         <div class="form-group row">
                             <label for="pin" class="col-sm-2 col-form-label text-xs">PIN</label>
                             <div class="col-sm-10">
-                                <input readonly type="text" class="form-control form-control-sm border-0" style="background-color: white" id="pin" name="pin" placeholder="pin" v-model="clientesim.pin">
+                                <input readonly type="text" class="form-control form-control-sm border-0" style="background-color: white" id="pin" name="pin" placeholder="pin" v-model="clientesim.esim.pin">
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="puk" class="col-sm-2 col-form-label text-xs">Puk</label>
                             <div class="col-sm-10">
-                                <input readonly type="text" class="form-control form-control-sm border-0" style="background-color: white" id="puk" name="puk" placeholder="puk" v-model="clientesim.puk">
+                                <input readonly type="text" class="form-control form-control-sm border-0" style="background-color: white" id="puk" name="puk" placeholder="puk" v-model="clientesim.esim.puk">
                             </div>
                         </div>
                     </form>
