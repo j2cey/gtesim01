@@ -47,7 +47,7 @@
 
                 </div>
                 <div class="modal-footer justify-content-between">
-                    <b-button type="is-dark" size="is-small" data-dismiss="modal">Close</b-button>
+                    <b-button type="is-dark" size="is-small" data-dismiss="modal">Fermer</b-button>
                     <b-button type="is-primary" size="is-small" :loading="loading" @click="updateClientEsim()" :disabled="!isValidCreateForm" v-if="editing">Enregistrer</b-button>
                     <b-button type="is-primary" size="is-small" :loading="loading" @click="createClientEsim()" :disabled="!isValidCreateForm" v-else>Creer Client</b-button>
                 </div>
