@@ -157,8 +157,8 @@
 									<td class="col-md-8">{{ $client->numero_telephone }}</td>
 								</tr>
 								<tr>
-									<td class="col-md-4">Numero Serie (IMSI)</td>
-									<td class="col-md-8">{{ $client->esim->imsi }}</td>
+									<td class="col-md-4">ICCID</td>
+									<td class="col-md-8">{{ $client->esim->iccid }}</td>
 								</tr>
 								<tr>
 									<td class="col-md-4">Numero PIN</td>

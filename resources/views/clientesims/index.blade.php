@@ -112,7 +112,8 @@
                                         <th class="tw-px-4 tw-py-2">#</th>
                                         <th class="tw-px-4 tw-py-2">Nom</th>
                                         <th class="tw-px-4 tw-py-2">Prenom</th>
-                                        <th class="tw-px-4 tw-py-2">Num. Phone</th>
+					<th class="tw-px-4 tw-py-2">Num. Phone</th>
+					<th class="tw-px-4 tw-py-2">ICCID</th>
                                         <th class="tw-px-4 tw-py-2">Email</th>
                                         <th class="tw-px-4 tw-py-2">Status</th>
                                         <th class="tw-px-4 tw-py-2">Details</th>
@@ -134,6 +135,9 @@
                                         </td>
                                         <td class="tw-px-4 tw-py-2">
                                             <span class="tw-text-sm">@{{ record.numero_telephone }}</span>
+					</td>
+					<td class="tw-px-4 tw-py-2">
+                                            <span class="tw-text-sm">@{{ record.esim.iccid }}</span>
                                         </td>
                                         <td class="tw-px-4 tw-py-2">
                                             <span class="tw-text-sm">@{{ record.email }}</span>

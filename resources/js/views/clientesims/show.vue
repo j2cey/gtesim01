@@ -55,6 +55,18 @@
                                 <input readonly type="text" class="form-control form-control-sm border-0" style="background-color: white" id="numero_telephone" name="numero_telephone" placeholder="numero_telephone" v-model="clientesim.numero_telephone">
                             </div>
                         </div>
+			<div class="form-group row">
+                            <label for="imsi" class="col-sm-2 col-form-label text-xs">IMSI</label>
+                            <div class="col-sm-10">
+                                <input readonly type="text" class="form-control form-control-sm border-0" style="background-color: white" id="imsi" name="imsi" placeholder="imsi" v-model="clientesim.esim.imsi">
+                            </div>
+                        </div>
+			<div class="form-group row">
+                            <label for="iccid" class="col-sm-2 col-form-label text-xs">ICCID</label>
+                            <div class="col-sm-10">
+                                <input readonly type="text" class="form-control form-control-sm border-0" style="background-color: white" id="iccid" name="iccid" placeholder="iccid" v-model="clientesim.esim.iccid">
+                            </div>
+                        </div>
                         <div class="form-group row">
                             <label for="pin" class="col-sm-2 col-form-label text-xs">PIN</label>
                             <div class="col-sm-10">

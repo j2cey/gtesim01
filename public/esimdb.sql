@@ -27,8 +27,8 @@ SET time_zone = "+00:00";
 --
 
 INSERT INTO `esims` (`id`, `imsi`, `iccid`, `pin`, `puk`, `ac`, `statut_esim_id`, `technologie_esim_id`, `uuid`, `tags`, `status_id`, `is_default`, `created_at`, `updated_at`) VALUES
-(1, '628010102400050', '892410100102400050', '0000', '38670951', 'LPA:1$moovgabon.rsp.instant-connectivity.com$DC3BD-7F5B7-0B6C7-6F301', 3, 1, '969a2d2c-9892-484f-9a1c-10d884bedd84', NULL, 1, 0, '2022-06-22 08:14:30', '2022-06-22 08:32:10'),
-(2, '628010102400051', '892410100102400051', '0000', '48991918', 'LPA:1$moovgabon.rsp.instant-connectivity.com$CB1D3-B57A2-824D2-7DD35', 3, 1, '969a2d68-bf06-44e4-bce4-d2a578390eeb', NULL, 1, 0, '2022-06-22 08:15:09', '2022-06-22 08:34:17'),
+(1, '628010102400050', '892410100102400050', '0000', '38670951', 'LPA:1$moovgabon.rsp.instant-connectivity.com$DC3BD-7F5B7-0B6C7-6F301', 1, 1, '969a2d2c-9892-484f-9a1c-10d884bedd84', NULL, 1, 0, '2022-06-22 08:14:30', '2022-06-22 08:32:10'),
+(2, '628010102400051', '892410100102400051', '0000', '48991918', 'LPA:1$moovgabon.rsp.instant-connectivity.com$CB1D3-B57A2-824D2-7DD35', 1, 1, '969a2d68-bf06-44e4-bce4-d2a578390eeb', NULL, 1, 0, '2022-06-22 08:15:09', '2022-06-22 08:34:17'),
 (3, '628010102400052', '892410100102400052', '0000', '13083938', 'LPA:1$moovgabon.rsp.instant-connectivity.com$CAE60-748AE-A5858-1C840', 1, 1, '969a2d99-5649-4496-a1a1-6d84b7d1d39f', NULL, 1, 0, '2022-06-22 08:15:41', '2022-06-22 08:15:41'),
 (4, '628010102400053', '892410100102400053', '0000', '42263424', 'LPA:1$moovgabon.rsp.instant-connectivity.com$C9B09-E7EBB-D9B55-CEE40', 1, 1, '969a2dcd-9bdb-4db0-82d9-cdb8bd0b6860', NULL, 1, 0, '2022-06-22 08:16:15', '2022-06-22 08:16:15'),
 (5, '628010102400054', '892410100102400054', '0000', '42345363', 'LPA:1$moovgabon.rsp.instant-connectivity.com$D3772-6B409-31CBA-92458', 1, 1, '969a2dff-7613-414a-bb51-689e5cf2e18e', NULL, 1, 0, '2022-06-22 08:16:48', '2022-06-22 08:16:48'),
