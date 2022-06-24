@@ -52,7 +52,7 @@ class ClientEsimController extends Controller
         $client = new ClientEsimResource(ClientEsim::where('id', $id)->first());
         $acqrcode = QrCode::size(100)->generate($client->esim->ac);
 
-        $pdf = PDF::loadView('clientesims.preview', ['client' => $client, 'acqrcode' => $acqrcode, 'generate_now' => true]);    
+        $pdf = PDF::loadView('clientesims.preview', ['client' => $client, 'acqrcode' => $acqrcode, 'generate_now' => true])->setPaper('a4', 'portrait');    
         
         $pdf->getDomPDF()->setHttpContext(
             stream_context_create([

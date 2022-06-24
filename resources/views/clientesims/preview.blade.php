@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Generate PDF Laravel 8 - phpcodingstuff.com</title>
+    <title>Generation PDF E-Sim - gtesim.moov-africa</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 </head>
 <style type="text/css">
-
+	html { margin: 0px; }
+	@page { margin:0px; }
         .body{
             background:#eee;
-            margin-top:20px;
+            margin: 0px;
         }
         .text-danger strong {
         	color: #9f181c;
@@ -17,10 +18,10 @@
 			background: #ffffff none repeat scroll 0 0;
 			border-bottom: 2px solid #333333;
 			border-top: 2px solid #fcf9f9;
-			margin-top: 50px;
-			margin-bottom: 50px;
-			padding: 40px 30px !important;
-			position: relative;
+			margin-top: 5px;
+			margin-bottom: 5px;
+			padding: 5px 5px !important;
+			position: center;
 			box-shadow: 0 1px 21px #acacac;
 			color: #333333;
 			font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
@@ -51,26 +52,26 @@
 			color:#fff;
 		}
 		.receipt-right h5 {
-			font-size: 16px;
+			font-size: 12px;
 			font-weight: bold;
 			margin: 0 0 7px 0;
 		}
 		.receipt-right p {
-			font-size: 12px;
+			font-size: 10px;
 			margin: 0px;
 		}
 		.receipt-right p i {
 			text-align: center;
-			width: 18px;
+			width: 16px;
 		}
 		.receipt-main td {
-			padding: 9px 20px !important;
+			padding: 4px 15px !important;
 		}
 		.receipt-main th {
-			padding: 13px 20px !important;
+			padding: 8px 15px !important;
 		}
 		.receipt-main td {
-			font-size: 13px;
+			font-size: 10px;
 			font-weight: initial !important;
 		}
 		.receipt-main td p:last-child {
@@ -78,7 +79,7 @@
 			padding: 0;
 		}	
 		.receipt-main td h2 {
-			font-size: 20px;
+			font-size: 16px;
 			font-weight: 900;
 			margin: 0;
 			text-transform: uppercase;
@@ -116,7 +117,7 @@
 								<tbody>
 									<tr>
 										<td class="col-md-8"><h5>Moov-Africa E-sim</h5></td>
-										<td class="col-md-4 text-right"><img alt="logo" src="data:image/png;base64,{{ base64_encode(file_get_contents(public_path('images/logo.png'))) }}" style="width: 81px; border-radius: 4px;"></td>
+										<td class="col-md-4 text-right"><img alt="logo" src="data:image/png;base64,{{ base64_encode(file_get_contents(public_path('images/logo.png'))) }}" style="width: 91px; border-radius: 4px;"></td>
 									</tr>
 								</tbody>
 							</table>
@@ -175,11 +176,20 @@
 						<div class="col text-center">
 							<p> <small> Scannez ce QR code pour telecharger votre profile E-SIM </small> </p>
 							<p>
-								<img src="data:image/png;base64, {{ base64_encode(QrCode::format('png')->size(100)->generate($client->esim->ac)) }} ">
+								<img src="data:image/png;base64, {{ base64_encode(QrCode::format('png')->size(150)->generate($client->esim->ac)) }} ">
 							</p>
-							<h6 style="color: rgb(140, 140, 140);"><b>{{ $client->esim->iccid }}</b></h6>
 						</div>
 					</div>
+
+					<div class="row">
+                                                <div class="col-md-6 text-left">
+                                                	<img alt="logo" src="data:imae/png;base64,{{ base64_encode(file_get_contents(public_path('images/IPHONE.PNG'))) }}" style="width: 225px;">
+                                                </div>
+                                                <div class="col-md-6 text-right">
+                                                        <img alt="logo" src="data:image/png;base64,{{ base64_encode(file_get_contents(public_path('images/ANDROID.PNG'))) }}" style="width: 240px;">
+                                                </div>
+                                        </div>					
+
 					@if(!isset($generate_now))
 					<div class="row">
 						<div class="col-md-6">
