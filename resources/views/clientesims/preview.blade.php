@@ -182,11 +182,8 @@
 					</div>
 
 					<div class="row">
-                                                <div class="col-md-6 text-left">
-                                                	<img alt="logo" src="data:imae/png;base64,{{ base64_encode(file_get_contents(public_path('images/IPHONE.PNG'))) }}" style="width: 225px;">
-                                                </div>
-                                                <div class="col-md-6 text-right">
-                                                        <img alt="logo" src="data:image/png;base64,{{ base64_encode(file_get_contents(public_path('images/ANDROID.PNG'))) }}" style="width: 240px;">
+                                                <div class="col text-center">
+                                                	<img alt="logo" src="data:imae/png;base64,{{ base64_encode(file_get_contents(public_path('images/mode_operatoire.PNG'))) }}" style="width: 500px;">
                                                 </div>
                                         </div>					
 
