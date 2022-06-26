@@ -67,6 +67,16 @@ class ClientEsimController extends Controller
         return $pdf->download('clientesims.pdf');
     }
 
+    public function preprintPDF($id)
+    {
+        $client = new ClientEsimResource(ClientEsim::where('id', $id)->first());
+        $acqrcode = QrCode::size(100)->generate($client->esim->ac);
+
+        $pdf = PDF::loadView('clientesims.preview', ['client' => $client, 'acqrcode' => $acqrcode, 'generate_now' => true]);
+
+        return $pdf->setPaper('a4', 'portrait')->stream();
+    }
+
     /**
      * Fetch records.
      *
