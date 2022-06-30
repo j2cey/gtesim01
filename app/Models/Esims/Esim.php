@@ -23,6 +23,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @property string $pin
  * @property string $puk
  * 
+ * @property string $eki
+ * @property string $pin2
+ * @property string $puk2
+ * @property string $adm1
+ * @property string $opc
+ * 
  * @property integer|null $statut_esim_id 
  * @property integer|null $technologie_esim_id 
  *
@@ -96,7 +102,7 @@ class Esim extends BaseModel implements Auditable
         }
     }
 
-    public static function createNew($imsi, $iccid, $ac, $pin, $puk)
+    public static function createNew($imsi, $iccid, $ac, $pin, $puk, $eki = null, $pin2 = null, $puk2 = null, $adm1 = null, $opc = null)
     {
         $default_statutesim = StatutEsim::getDefault();
         $default_technologieesim = TechnologieEsim::getDefault();
@@ -107,6 +113,11 @@ class Esim extends BaseModel implements Auditable
             'ac' => $ac,
             'pin' => $pin,
             'puk' => $puk,
+            'eki' => $eki,
+            'pin2' => $pin2,
+            'puk2' => $puk2,
+            'adm1' => $adm1,
+            'opc' => $opc,
         ]);
 
         $esim->statutesim()->associate($default_statutesim); 
@@ -118,4 +129,14 @@ class Esim extends BaseModel implements Auditable
     }
 
     #endregion
+
+    public static function boot ()
+    {
+        parent::boot();
+
+        // juste avant suppression
+        self::creating(function($model){
+            
+        });
+    }
 }

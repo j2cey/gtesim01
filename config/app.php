@@ -27,6 +27,11 @@ return [
     */
 
     'env' => env('APP_ENV', 'production'),
+    
+    'esim_fichier_entete' => env('ESIM_FICHIER_ENTETE', '/var/www/gtesim/public'),
+    'esim_fichier_corps' => env('ESIM_FICHIER_CORPS', '/var/www/gtesim/public'),
+    
+    'RAW_FOLDER' => env('RAW_FOLDER', '/var/www/gtesim/public'),
 
     /*
     |--------------------------------------------------------------------------
@@ -170,6 +175,7 @@ return [
         Spatie\Permission\PermissionServiceProvider::class,
         Barryvdh\Debugbar\ServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
+        Maatwebsite\Excel\ExcelServiceProvider::class,
 
         /*
          * Application Service Providers...

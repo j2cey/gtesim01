@@ -290,6 +290,20 @@ Route::get('esims.fetchall',[EsimController::class,'fetchall'])
     ->name('esims.fetchall')
     ->middleware('auth');
 
+Route::get('esims.headfiles',[EsimController::class,'headfiles'])
+    ->name('esims.headfiles')
+    ->middleware('auth');
+Route::post('esims.headfiles',[EsimController::class,'headfilespost'])
+    ->name('esims.headfilespost')
+    ->middleware('auth');
+
+Route::get('esims.bodyfiles',[EsimController::class,'bodyfiles'])
+    ->name('esims.bodyfiles')
+    ->middleware('auth');
+Route::post('esims.bodyfiles',[EsimController::class,'bodyfilespost'])
+    ->name('esims.bodyfilespost')
+    ->middleware('auth');
+
 Route::resource('clientesims',ClientEsimController::class)->middleware('auth');
 Route::get('clientesims.fetch',[ClientEsimController::class,'fetch'])
     ->name('clientesims.fetch')

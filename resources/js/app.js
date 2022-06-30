@@ -164,6 +164,7 @@ Vue.component(
 );
 Vue.component("clientesim-show", require("./views/clientesims/show").default);
 Vue.component("esim-addupdate", require("./views/esims/addupdate").default);
+Vue.component("esims-file-upload", require("./views/esims/fileUpload").default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

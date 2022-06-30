@@ -6,6 +6,7 @@ use Exception;
 use App\Models\Esims\Esim;
 use \Illuminate\View\View;
 
+use Illuminate\Http\Request;
 use App\Models\Esims\StatutEsim;
 use Illuminate\Support\Collection;
 use App\Http\Controllers\Controller;
@@ -17,6 +18,8 @@ use App\Http\Requests\Esim\FetchRequest;
 use App\Http\Requests\Esim\UpdateEsimRequest;
 use App\Http\Resources\SearchCollection;
 use App\Http\Resources\Esims\EsimResource;
+use App\Models\Esims\EsimBodyFile;
+use App\Models\Esims\EsimHeadFile;
 use Illuminate\Contracts\Foundation\Application;
 use App\Repositories\Contracts\IEsimRepositoryContract;
 
@@ -138,5 +141,33 @@ class EsimController extends Controller
     public function destroy(Esim $esim)
     {
         //
+    }
+    
+    public function headfiles()
+    {
+        return view('esims.headfiles');
+    }
+    
+    public function headfilespost(Request $request)
+    {
+        $formInput = $request->all();
+
+        $new_esimheadfile = EsimHeadFile::create();
+
+        $new_esimheadfile->verifyAndStoreFile( $request, "esim_fichier", "fichier", "esim_fichier_entete");
+    }
+
+    public function bodyfiles()
+    {
+        return view('esims.bodyfiles');
+    }
+    
+    public function bodyfilespost(Request $request)
+    {
+        $formInput = $request->all();
+
+        $new_esimbodyfile = EsimBodyFile::create();
+
+        $new_esimbodyfile->verifyAndStoreFile( $request, "esim_fichier", "fichier", "esim_fichier_corps");
     }
 }

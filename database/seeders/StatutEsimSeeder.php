@@ -17,5 +17,6 @@ class StatutEsimSeeder extends Seeder
         StatutEsim::createNew("Nouveau", "nouveau", "nouveau")->setDefault();
         StatutEsim::createNew("Attribution", "attribution", "attribution");
         StatutEsim::createNew("Attribue", "attribue", "attribue");
+        StatutEsim::createNew("Suspendue", "suspendue", "suspendue");
     }
 }

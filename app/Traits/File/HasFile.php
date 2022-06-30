@@ -3,20 +3,57 @@
 namespace App\Traits\File;
 
 use SplFileInfo;
+use App\Models\Files\File;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\File;
+use App\Traits\Data\HasData;
+use App\Traits\ImportModels\HasImportModel;
 
 trait HasFile
 {
+    use HasData, HasImportFileResult;
+
+    /**
+     * Get all of the model's files
+     * @return mixed
+     */
+    public function files()
+    {
+        return $this->morphMany(File::class, 'hasfile');
+    }
+
+    /**
+     * Get the oldest model's file
+     * @return mixed
+     */
+    public function file()
+    {
+        return $this->morphOne(File::class, 'hasfile');
+    }
+
+    /**
+     * Get the lastets model's file
+     * @return mixed
+     */
+    public function latestFile()
+    {
+        return $this->morphOne(File::class, 'hasfile')->latest('id');
+    }
+
+    public function removeFiles() {
+        $this->files()->each(function($file) {
+            $file->delete();
+        });
+    }
+
     /**
      * @param Request $request
      * @param $fieldname_rqst
-     * @param $fieldname_db
+     * @param $file_role
      * @param string $directory
-     * @param string $oldimage
-     * @return string|null
+     * @param File $curr_file
+     * @return File|null
      */
-    public function verifyAndStoreFile( Request $request, $fieldname_rqst, $fieldname_db, $directory = 'unknown', $oldimage = ' ' ) {
+    public function verifyAndStoreFile( Request $request, $fieldname_rqst, $file_role, $directory = 'unknown', File $curr_file = null ) {
 
         if( $request->hasFile( $fieldname_rqst ) ) {
 
@@ -30,27 +67,58 @@ trait HasFile
             $file_dir = config('app.' . $directory);
 
             // Check if the old image exists inside folder
-            if (file_exists( $file_dir . '/' . $oldimage)) {
-                unlink($file_dir . '/' . $oldimage);
+            if (is_null($curr_file)) {
+                $file_obj = new File();
+            } else {
+                $curr_file->deleteRawFile();
+                $file_obj = $curr_file;
             }
 
+            //dd("verifyAndStoreFile: ",$file_obj);
+
+            $elem_type = get_called_class();
+
             // Set image name
-            $file = $request->file($fieldname_rqst);//$request->image;
+            $file = $request->file($fieldname_rqst);
             $file_name = md5($directory . '_' . time()) . '.' . $file->getClientOriginalExtension();
 
             // Move image to folder
             $file->move($file_dir, $file_name);
 
-            $this->update([
-                $fieldname_db => $file_name,
-                $fieldname_db . '_size' => $file->getSize(),
-                $fieldname_db . '_type' => $file->getClientOriginalExtension(),
-            ]);
+            $file_obj->config_dir = $directory;
+            //$file_obj->model_type = $elem_type;
+            //$file_obj->model_id = $this->id;
+            $file_obj->name = $file_name;
+            $file_obj->role = $file_role;
+            $file_obj->type = $file->getClientMimeType();
+            $file_obj->size = 0;//$file->getSize(); TODO: Manage getSize
+            $file_obj->extension = $file->getClientOriginalExtension();
 
-            return $file_name;
+            $file_obj->save();
+
+            $this->files()->save($file_obj);
+
+            return $file_obj;
         }
 
-        return -1;
+        return null;
+    }
+
+    public function createFileInfos($name, $role, $filepath) {
+        $elem_type = get_called_class();
+        //$file_arr = explode($relativepath, "/");
+        $file = new \SplFileInfo($filepath);
+        $file = File::create([
+            'model_type' => $elem_type,
+            'model_id' => $this->id,
+            'name' => $name,
+            'role' => $role,
+            'type' => mime_content_type($filepath),
+            'size' => $file->getSize(),
+            'extension' => $file->getExtension(),
+        ]);
+
+        return $file;
     }
 
     public function splitFileIntoSubfiles($from_dir, $from_file, $to_dir, $subfile_max_line,$entete_premiere_ligne = false) {
@@ -91,5 +159,27 @@ trait HasFile
         }
 
         return $subfiles;
+    }
+
+    public static function getFileUploadMaxSize($type_wanted) {
+        $val_mo = config('Settings.files.uploads.max_size.any');
+        return self::convert_bytes($val_mo, "Mo", $type_wanted);
+    }
+
+    public static function getImageUploadMaxSize($type_wanted) {
+        $val_mo = config('Settings.files.uploads.max_size.image');
+        return self::convert_bytes($val_mo, "Mo", $type_wanted);
+    }
+
+    public static function getVideoUploadMaxSize($type_wanted) {
+        $val_mo = config('Settings.files.uploads.max_size.video');
+        return self::convert_bytes($val_mo, "Mo", $type_wanted);
+    }
+
+    public static function bootHasFiles()
+    {
+        static::deleting(function ($model) {
+            $model->removeFiles();
+        });
     }
 }

@@ -53,6 +53,14 @@
                         <li class="nav-item">
                             <a href="/esims" class="nav-link">E-sims</a>
                         </li>
+                        @role('Admin')
+                        <li class="nav-item">
+                            <a href="/esims.headfiles" class="nav-link">Dump En-tete</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/esims.bodyfiles" class="nav-link">Dump Corps</a>
+                        </li>
+                        @endrole
                     </ul>
                 </li>
 

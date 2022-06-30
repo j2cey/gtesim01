@@ -17,7 +17,7 @@ class AnalysisHighlightController extends Controller
 
     public function fetch()
     {
-
+        
     }
 
     /**

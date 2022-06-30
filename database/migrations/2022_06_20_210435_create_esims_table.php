@@ -27,6 +27,11 @@ class CreateEsimsTable extends Migration
             $table->string('pin')->default("0000")->comment('pin');
             $table->string('puk')->comment('puk');
             $table->string('ac')->nullable()->comment('ac');
+            $table->string('eki')->nullable()->comment('eki');
+            $table->string('pin2')->nullable()->comment('pin2');
+            $table->string('puk2')->nullable()->comment('puk2');
+            $table->string('adm1')->nullable()->comment('adm1');
+            $table->string('opc')->nullable()->comment('opc');
 
             $table->foreignId('statut_esim_id')->nullable()
                 ->comment('reference du statut de l esim')

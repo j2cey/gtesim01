@@ -6,7 +6,7 @@ namespace App\Traits\Data;
 
 trait HasData
 {
-    function convert_bytes($val , $type_val , $type_wanted){
+    static function convert_bytes($val , $type_val , $type_wanted){
         $tab_val = array("o", "ko", "Mo", "Go", "To", "Po", "Eo");
         if (!(in_array($type_val, $tab_val) && in_array($type_wanted, $tab_val)))
             return 0;
