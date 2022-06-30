@@ -42,6 +42,7 @@ class ClientEsimController extends Controller
     public function previewPDF($id) {
 
         $client = new ClientEsimResource(ClientEsim::where('id', $id)->first());
+        //dd($client);
         //$acqrcode = QrCode::size(100)->generate($client->esim->ac);
         return view('clientesims.preview')
             ->with('client', $client);

@@ -59,16 +59,17 @@ class EsimBodyImport implements ToModel, WithChunkReading, WithEvents, WithValid
         }
 
         $iccid = substr($row[0], 0, -1);
+        $ac = $row[2];
 
         // Skip Duplicates
-        if( Esim::where('iccid', $iccid)->count() > 0 ) {
+        if( Esim::where('ac', $ac)->count() > 0 ) {
             return null;
         }
 
         $old_esim = Esim::where('iccid', $iccid)->first();
         if ( $old_esim ) {
             $old_esim->update([
-                'ac' => $row[2],
+                'ac' => $ac,
             ]);
         }
 

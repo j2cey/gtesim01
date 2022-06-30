@@ -128,6 +128,10 @@ class Esim extends BaseModel implements Auditable
         return $esim;
     }
 
+    public function generateEsimQrcodeImage() {
+        
+    }
+
     #endregion
 
     public static function boot ()

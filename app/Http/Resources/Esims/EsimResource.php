@@ -20,6 +20,7 @@ class EsimResource extends JsonResource
             'uuid' => $this->uuid,
 
             'imsi' => $this->imsi,
+            'ac' => $this->ac,
             'iccid' => $this->iccid,
             'pin' => $this->pin,
             'puk' => $this->puk,

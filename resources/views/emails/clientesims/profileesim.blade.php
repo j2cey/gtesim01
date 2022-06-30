@@ -21,7 +21,7 @@ scannez ce QR code pour telecharger votre profile E-SIM
 @endcomponent
 
 <p>
-    {{ $qrcode  }}
+    <img src="data:image/png;base64, {{ base64_encode(QrCode::format('png')->size(150)->generate($client->esim->ac)) }} ">
 </p>
 
 Merci,<br>
