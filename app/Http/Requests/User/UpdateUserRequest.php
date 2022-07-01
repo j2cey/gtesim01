@@ -34,6 +34,8 @@ class UpdateUserRequest extends UserRequest
     protected function prepareForValidation()
     {
         $this->merge([
+            'is_local' => $this->setCheckOrOptionValue($this->input('is_local')),
+            'is_ldap' => $this->setCheckOrOptionValue($this->input('is_ldap')),
             'status' => $this->setRelevantStatus($this->input('status'), 'id', true),
             'roles' => $this->setRelevantIdsList($this->input('roles'), true),
         ]);

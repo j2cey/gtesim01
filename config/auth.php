@@ -46,6 +46,16 @@ return [
             'provider' => 'users',
             'hash' => false,
         ],
+
+        'ldap' => [
+            'driver' => 'session',
+            'provider' => 'ldap',
+        ],
+
+        'ldaplocal' => [
+            'driver' => 'session',
+            'provider' => 'ldaplocal',
+        ],
     ],
 
     /*
@@ -69,6 +79,14 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
+        ],
+        'ldap' => [
+            'driver' => 'ldap', // Was 'eloquent'.
+            'model'  => App\Models\Ldap\LdapAccount::class,
+        ],
+        'ldaplocal' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Ldap\LdapAccount::class,
         ],
 
         // 'users' => [

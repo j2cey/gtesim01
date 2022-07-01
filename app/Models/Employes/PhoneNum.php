@@ -1,15 +1,14 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Employes;
 
-use PHPUnit\Util\Json;
-use Illuminate\Support\Carbon;
+use App\Models\BaseModel;
 use OwenIt\Auditing\Contracts\Auditable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
- * Class LdapAccountImportResult
- * @package App\Models
+ * Class PhoneNum
+ * @package App\Models\Employes
  *
  * @property integer $id
  *
@@ -18,18 +17,17 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @property string|null $tags
  * @property integer|null $status_id
  *
- * @property integer $lines_count
- * @property integer $lines_parsed
- * @property integer $lines_parse_success
- * @property integer $lines_parse_fail
- *
- * @property Json $report
+ * @property string $numero
+ * @property string $hasphonenum_type
+ * @property integer $hasphonenum_id
+ * @property integer $posi
  *
  * @property Carbon $created_at
  * @property Carbon $updated_at
  */
-class LdapAccountImportResult extends BaseModel implements Auditable
+class PhoneNum extends BaseModel implements Auditable
 {
     use HasFactory, \OwenIt\Auditing\Auditable;
+    
     protected $guarded = [];
 }

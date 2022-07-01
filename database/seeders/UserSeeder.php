@@ -18,7 +18,7 @@ class UserSeeder extends Seeder
     public function run()
     {
         $user = User::create(
-            ['name' => "admin",'username' => "admin",'email' => "admin@gtesim.com",'password' => bcrypt('admin123'), 'status_id' => Status::active()->first()->id]);
+            ['name' => "admin",'username' => "admin",'email' => "admin@gtesim.com",'is_local' => 1,'password' => bcrypt('admin123'), 'status_id' => Status::active()->first()->id]);
 
         $adminrole = Role::create(['name' => 'Admin']);
 

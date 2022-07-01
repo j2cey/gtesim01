@@ -117,6 +117,21 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -127,6 +142,8 @@ var User = /*#__PURE__*/_createClass(function User(user) {
   this.email = user.email || '';
   this.username = user.username || '';
   this.password = user.password || '';
+  this.is_local = user.is_local || 0;
+  this.is_ldap = user.is_ldap || 0;
   this.roles = user.roles || [];
   this.status = user.status || {};
 });
@@ -624,6 +641,162 @@ var render = function () {
                       1
                     ),
                   ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-group row" }, [
+                    _c(
+                      "div",
+                      {
+                        staticClass:
+                          "custom-control custom-switch custom-switch-off-danger custom-switch-on-success col-sm-4",
+                      },
+                      [
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.userForm.is_local,
+                              expression: "userForm.is_local",
+                            },
+                          ],
+                          staticClass: "custom-control-input",
+                          attrs: {
+                            type: "checkbox",
+                            id: "is_local",
+                            name: "is_local",
+                            autocomplete: "is_local",
+                          },
+                          domProps: {
+                            checked: Array.isArray(_vm.userForm.is_local)
+                              ? _vm._i(_vm.userForm.is_local, null) > -1
+                              : _vm.userForm.is_local,
+                          },
+                          on: {
+                            change: function ($event) {
+                              var $$a = _vm.userForm.is_local,
+                                $$el = $event.target,
+                                $$c = $$el.checked ? true : false
+                              if (Array.isArray($$a)) {
+                                var $$v = null,
+                                  $$i = _vm._i($$a, $$v)
+                                if ($$el.checked) {
+                                  $$i < 0 &&
+                                    _vm.$set(
+                                      _vm.userForm,
+                                      "is_local",
+                                      $$a.concat([$$v])
+                                    )
+                                } else {
+                                  $$i > -1 &&
+                                    _vm.$set(
+                                      _vm.userForm,
+                                      "is_local",
+                                      $$a
+                                        .slice(0, $$i)
+                                        .concat($$a.slice($$i + 1))
+                                    )
+                                }
+                              } else {
+                                _vm.$set(_vm.userForm, "is_local", $$c)
+                              }
+                            },
+                          },
+                        }),
+                        _vm._v(" "),
+                        _vm._m(1),
+                        _vm._v(" "),
+                        _vm.userForm.errors.has("is_local")
+                          ? _c("span", {
+                              staticClass: " invalid-feedback d-block text-xs",
+                              attrs: { role: "alert" },
+                              domProps: {
+                                textContent: _vm._s(
+                                  _vm.userForm.errors.get("is_local")
+                                ),
+                              },
+                            })
+                          : _vm._e(),
+                      ]
+                    ),
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-group row" }, [
+                    _c(
+                      "div",
+                      {
+                        staticClass:
+                          "custom-control custom-switch custom-switch-off-danger custom-switch-on-success col-sm-4",
+                      },
+                      [
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.userForm.is_ldap,
+                              expression: "userForm.is_ldap",
+                            },
+                          ],
+                          staticClass: "custom-control-input",
+                          attrs: {
+                            type: "checkbox",
+                            id: "is_ldap",
+                            name: "is_ldap",
+                            autocomplete: "is_ldap",
+                          },
+                          domProps: {
+                            checked: Array.isArray(_vm.userForm.is_ldap)
+                              ? _vm._i(_vm.userForm.is_ldap, null) > -1
+                              : _vm.userForm.is_ldap,
+                          },
+                          on: {
+                            change: function ($event) {
+                              var $$a = _vm.userForm.is_ldap,
+                                $$el = $event.target,
+                                $$c = $$el.checked ? true : false
+                              if (Array.isArray($$a)) {
+                                var $$v = null,
+                                  $$i = _vm._i($$a, $$v)
+                                if ($$el.checked) {
+                                  $$i < 0 &&
+                                    _vm.$set(
+                                      _vm.userForm,
+                                      "is_ldap",
+                                      $$a.concat([$$v])
+                                    )
+                                } else {
+                                  $$i > -1 &&
+                                    _vm.$set(
+                                      _vm.userForm,
+                                      "is_ldap",
+                                      $$a
+                                        .slice(0, $$i)
+                                        .concat($$a.slice($$i + 1))
+                                    )
+                                }
+                              } else {
+                                _vm.$set(_vm.userForm, "is_ldap", $$c)
+                              }
+                            },
+                          },
+                        }),
+                        _vm._v(" "),
+                        _vm._m(2),
+                        _vm._v(" "),
+                        _vm.userForm.errors.has("is_ldap")
+                          ? _c("span", {
+                              staticClass: " invalid-feedback d-block text-xs",
+                              attrs: { role: "alert" },
+                              domProps: {
+                                textContent: _vm._s(
+                                  _vm.userForm.errors.get("is_ldap")
+                                ),
+                              },
+                            })
+                          : _vm._e(),
+                      ]
+                    ),
+                  ]),
                 ]),
               ]
             ),
@@ -688,6 +861,26 @@ var staticRenderFns = [
         },
       },
       [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+    )
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "label",
+      { staticClass: "custom-control-label", attrs: { for: "is_local" } },
+      [_c("span", { staticClass: "text text-xs" }, [_vm._v("Is Local")])]
+    )
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "label",
+      { staticClass: "custom-control-label", attrs: { for: "is_ldap" } },
+      [_c("span", { staticClass: "text text-xs" }, [_vm._v("Is LDAP")])]
     )
   },
 ]

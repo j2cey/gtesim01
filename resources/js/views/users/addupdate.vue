@@ -81,6 +81,21 @@
                                 </div>
                             </div>
 
+                            <div class="form-group row">
+                                <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success col-sm-4">
+                                    <input type="checkbox" class="custom-control-input" id="is_local" name="is_local" autocomplete="is_local" v-model="userForm.is_local">
+                                    <label class="custom-control-label" for="is_local"><span class="text text-xs">Is Local</span></label>
+                                    <span class=" invalid-feedback d-block text-xs" role="alert" v-if="userForm.errors.has('is_local')" v-text="userForm.errors.get('is_local')"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success col-sm-4">
+                                    <input type="checkbox" class="custom-control-input" id="is_ldap" name="is_ldap" autocomplete="is_ldap" v-model="userForm.is_ldap">
+                                    <label class="custom-control-label" for="is_ldap"><span class="text text-xs">Is LDAP</span></label>
+                                    <span class=" invalid-feedback d-block text-xs" role="alert" v-if="userForm.errors.has('is_ldap')" v-text="userForm.errors.get('is_ldap')"></span>
+                                </div>
+                            </div>
+
                         </div>
                     </form>
 
@@ -107,6 +122,8 @@
             this.email = user.email || ''
             this.username = user.username || ''
             this.password = user.password || ''
+            this.is_local = user.is_local || 0
+            this.is_ldap = user.is_ldap || 0
             this.roles = user.roles || []
             this.status = user.status || {}
         }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Ldap;
 
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Model;
@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
  * Class LdapAccountImport
- * @package App\Models
+ * @package App\Models\Ldap
  *
  * @property integer $id
  *

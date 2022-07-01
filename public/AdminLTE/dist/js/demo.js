@@ -12,7 +12,8 @@
     class: 'p-3 control-sidebar-content'
   })
 
-  $sidebar.append($container)
+  // remove from control bar a-side-bar
+  //$sidebar.append($container)
 
   var navbar_dark_skins = [
     'navbar-primary',
@@ -39,6 +40,7 @@
     'navbar-orange',
   ]
 
+  
   $container.append(
     '<h5>Customize AdminLTE</h5><hr class="mb-2"/>'
   )

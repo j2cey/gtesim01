@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Ldap;
 
 use Illuminate\Support\Carbon;
 use App\Traits\Base\BaseTrait;
@@ -10,7 +10,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 /**
  * Class LdapAccount
- * @package App\Models
+ * @package App\Models\Ldap
  *
  * @property integer $id
  *

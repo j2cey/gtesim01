@@ -85,6 +85,8 @@ class UserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'username' => $request->username,
+            'is_local' => $request->is_local,
+            'is_ldap' => $request->is_ldap,
         ]);
 
         // sync roles

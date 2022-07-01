@@ -133,7 +133,7 @@ class ClientEsimController extends Controller
             $request->numero_telephone
         );
 
-        //Mail::to($clientesim->email)->send(new NotifyProfileEsim($clientesim));
+        Mail::to($clientesim->email)->send(new NotifyProfileEsim($clientesim));
 
         return new ClientEsimResource($clientesim);
     }

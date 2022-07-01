@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Traits\Base\BaseTrait;
 use Illuminate\Support\Carbon;
+use App\Models\Ldap\LdapAccount;
 use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
