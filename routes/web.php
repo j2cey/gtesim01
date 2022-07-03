@@ -320,6 +320,9 @@ Route::get('clientesims.previewpdf/{id}',[ClientEsimController::class,'previewPD
 Route::get('clientesims.preprintpdf/{id}',[ClientEsimController::class,'preprintPDF'])
 ->name('clientesims.preprintpdf')
 ->middleware('auth');
+Route::get('clientesims.mailtest/{id}',[ClientEsimController::class,'mailtest'])
+->name('clientesims.mailtest')
+->middleware('auth');
 
 Route::get('pdf/preview', [PDFController::class, 'preview'])->name('pdf.preview');
 Route::get('pdf/generate', [PDFController::class, 'generatePDF'])->name('pdf.generate');

@@ -138,6 +138,13 @@ class ClientEsimController extends Controller
         return new ClientEsimResource($clientesim);
     }
 
+    public function mailtest($id)
+    {
+        $clientesim = ClientEsim::where('id', $id)->first();
+        
+        Mail::to($clientesim->email)->send(new NotifyProfileEsim($clientesim));
+    }
+
     /**
      * Display the specified resource.
      *
