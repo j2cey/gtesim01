@@ -31,7 +31,7 @@ class UserSeeder extends Seeder
         
 
         $user1 = User::create(
-            ['name' => "User 1",'username' => "user1",'email' => "user1@gtesim.com",'password' => bcrypt('user123'), 'status_id' => Status::active()->first()->id]);
+            ['name' => "User 1",'username' => "user1",'email' => "user1@gtesim.com",'is_local' => 1,'password' => bcrypt('user123'), 'status_id' => Status::active()->first()->id]);
 
         $editorrole = Role::create(['name' => 'Editor']);
 
