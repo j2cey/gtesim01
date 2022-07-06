@@ -1,11 +1,17 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use App\Traits\Migrations\BaseMigrationTrait;
+use Illuminate\Database\Migrations\Migration;
 
 class CreateEsimQrcodesTable extends Migration
 {
+    use BaseMigrationTrait;
+
+    public $table_name = 'esim_qrcodes';
+    public $table_comment = 'liste de QR Codes d une e-sim donnee';
+
     /**
      * Run the migrations.
      *
@@ -13,9 +19,17 @@ class CreateEsimQrcodesTable extends Migration
      */
     public function up()
     {
-        Schema::create('esim_qrcodes', function (Blueprint $table) {
+        Schema::create($this->table_name, function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+
+            $table->string('raw_value')->nullable()->comment('raw_value');
+            $table->string('qrcode_img')->nullable()->comment('qrcode_img');
+
+            $table->foreignId('esim_id')->nullable()
+                ->comment('reference de l e-sim')
+                ->constrained('esims')->onDelete('set null');
+
+            $table->baseFields();
         });
     }
 
@@ -26,6 +40,10 @@ class CreateEsimQrcodesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('esim_qrcodes');
+        Schema::table($this->table_name, function (Blueprint $table) {
+            $table->dropBaseForeigns();
+            $table->dropForeign(['esim_id']);
+        });
+        Schema::dropIfExists($this->table_name);
     }
 }

@@ -324,5 +324,9 @@ Route::get('clientesims.mailtest/{id}',[ClientEsimController::class,'mailtest'])
 ->name('clientesims.mailtest')
 ->middleware('auth');
 
+Route::get('clientesims.sendmail/{id}',[ClientEsimController::class,'sendMail'])
+->name('clientesims.sendmail')
+->middleware('auth');
+
 Route::get('pdf/preview', [PDFController::class, 'preview'])->name('pdf.preview');
 Route::get('pdf/generate', [PDFController::class, 'generatePDF'])->name('pdf.generate');

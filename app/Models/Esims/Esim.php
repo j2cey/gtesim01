@@ -40,6 +40,7 @@ class Esim extends BaseModel implements Auditable
     use HasFactory, \OwenIt\Auditing\Auditable;
 
     protected $guarded = [];
+    protected $with = ['qrcode'];
 
     #region Validation Rules
 
@@ -75,6 +76,10 @@ class Esim extends BaseModel implements Auditable
 
     public function technologieesim() {
         return $this->belongsTo(TechnologieEsim::class, 'technologie_esim_id');
+    }
+
+    public function qrcode() {
+        return $this->hasOne(EsimQrcode::class, 'esim_id');
     }
 
     #endregion
@@ -128,8 +133,13 @@ class Esim extends BaseModel implements Auditable
         return $esim;
     }
 
-    public function generateEsimQrcodeImage() {
-        
+    public function saveQrcode()
+    {
+        if ($this->qrcode) {
+            // update qrcode
+        } else {
+            EsimQrcode::createNew($this, $this->ac);
+        }
     }
 
     #endregion

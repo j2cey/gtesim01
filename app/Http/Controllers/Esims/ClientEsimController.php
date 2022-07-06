@@ -4,16 +4,16 @@ namespace App\Http\Controllers\Esims;
 
 use PDF;
 use Exception;
+use GuzzleHttp\Client;
 use \Illuminate\View\View;
 use App\Mail\NotifyProfileEsim;
-
 use App\Models\Esims\ClientEsim;
 use Illuminate\Support\Collection;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Contracts\View\Factory;
-
+use Illuminate\Support\Facades\Storage;
 use App\Http\Resources\SearchCollection;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use App\Http\Requests\ClientEsim\FetchRequest;
@@ -133,7 +133,7 @@ class ClientEsimController extends Controller
             $request->numero_telephone
         );
 
-        Mail::to($clientesim->email)->send(new NotifyProfileEsim($clientesim));
+        //Mail::to($clientesim->email)->send(new NotifyProfileEsim($clientesim));
 
         return new ClientEsimResource($clientesim);
     }
@@ -141,8 +141,46 @@ class ClientEsimController extends Controller
     public function mailtest($id)
     {
         $clientesim = ClientEsim::where('id', $id)->first();
+        $clientesim->esim->saveQrcode();
+        //Mail::to($clientesim->email)->send(new NotifyProfileEsim($clientesim));
+    }
+
+    public function sendMail($id)
+    {
+        $post_link = "http://192.168.5.174/clientesims.sendmail";
+        $directory = "esim_fichier_qrcode";
+
+        $clientesim = ClientEsim::where('id', $id)->first();
+        $clientesim->esim->saveQrcode();
         
-        Mail::to($clientesim->email)->send(new NotifyProfileEsim($clientesim));
+        $file_name = config('app.' . $directory) . '/' . $clientesim->esim->qrcode->qrcode_img;
+        
+        $qrcode_img = public_path($file_name);
+
+        //dd($clientesim->esim->qrcode);
+
+        $client = new Client(['headers' => ['Authorization' => 'auth_trusted_header']]);
+        $options = [
+            'multipart' => [
+                [
+                    'Content-type' => 'multipart/form-data',
+                    'name' => 'file',
+                    'contents' => file_get_contents($qrcode_img),//base64_encode( file_get_contents($qrcode_img) ), // fopen('data:image/png;base64,' . $qrcode_img, 'r'), // data://text/plain;base64
+                    'filename' => 'qrcode_image.png',
+                ],
+                ['name' => 'nom', 'contents' => $clientesim->nom_raison_sociale . ' ' .$clientesim->prenom],
+                ['name' => 'email', 'contents' => $clientesim->email,],
+                ['name' => 'telephone', 'contents' => $clientesim->numero_telephone,],
+                ['name' => 'imsi', 'contents' => $clientesim->esim->imsi,],
+                ['name' => 'iccid', 'contents' => $clientesim->esim->iccid,],
+                ['name' => 'pin', 'contents' => $clientesim->esim->pin,],
+                ['name' => 'puk', 'contents' => $clientesim->esim->puk,],
+            ]
+        ];
+
+        $response = $client->post($post_link, $options);
+
+        dd($response);
     }
 
     /**

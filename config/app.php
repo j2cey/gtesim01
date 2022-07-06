@@ -38,6 +38,7 @@ return [
     
     'esim_fichier_entete' => env('ESIM_FICHIER_ENTETE', '/var/www/gtesim/public'),
     'esim_fichier_corps' => env('ESIM_FICHIER_CORPS', '/var/www/gtesim/public'),
+    'esim_fichier_qrcode' => env('ESIM_FICHIER_QRCODE', '/var/www/gtesim/public'),
     
     'RAW_FOLDER' => env('RAW_FOLDER', '/var/www/gtesim/public'),
 
