@@ -6,8 +6,8 @@ use PDF;
 use \Illuminate\View\View;
 use App\Models\Esims\ClientEsim;
 use Illuminate\Support\Collection;
+use App\Jobs\ClientEsimSendMailJob;
 use App\Http\Controllers\Controller;
-use App\Events\ClientEsimCreatedEvent;
 use Illuminate\Contracts\View\Factory;
 use App\Http\Resources\SearchCollection;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
@@ -130,7 +130,7 @@ class ClientEsimController extends Controller
         
         //Mail::to($clientesim->email)->send(new NotifyProfileEsim($clientesim));
         
-        event( new ClientEsimCreatedEvent( $clientesim ));
+        ClientEsimSendMailJob::dispatch($clientesim);
 
         return new ClientEsimResource($clientesim);
     }
