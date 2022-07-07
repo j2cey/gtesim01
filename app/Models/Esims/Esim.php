@@ -139,6 +139,7 @@ class Esim extends BaseModel implements Auditable
             // update qrcode
         } else {
             EsimQrcode::createNew($this, $this->ac);
+            $this->save();
         }
     }
 

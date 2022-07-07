@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\ClientEsim;
 
+use App\Models\Esims\ClientEsim;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ClientEsimRequest extends FormRequest
@@ -23,8 +24,16 @@ class ClientEsimRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            //
-        ];
+        return ClientEsim::defaultRules();
+    }
+
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return ClientEsim::messagesRules();
     }
 }
