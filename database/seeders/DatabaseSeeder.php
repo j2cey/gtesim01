@@ -22,22 +22,6 @@ class DatabaseSeeder extends Seeder
 
         $this->call(TypeDepartementSeeder::class);
 
-        $this->call(GradeUnitSeeder::class);
-        $this->call(GoalTypeSeeder::class);
-        $this->call(OperatorSeeder::class);
-        $this->call(PrioritySeeder::class);
-        $this->call(DifficultySeeder::class);
-        $this->call(AppreciationSeeder::class);
-        $this->call(CategorySeeder::class);
-
-        $this->call(DynamicAttributeTypeSeeder::class);
-
-        $this->call(ThresholdTypeSeeder::class);
-        $this->call(AnalysisRuleTypeSeeder::class);
-        $this->call(AnalysisHighlightTypeSeeder::class);
-
-        $this->call(ReportTypeSeeder::class);
-
         $this->call(StatutEsimSeeder::class);
         $this->call(TechnologieEsimSeeder::class);
         $this->call(ImportModelFieldTypeSeeder::class);
