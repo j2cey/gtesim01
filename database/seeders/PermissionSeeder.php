@@ -20,10 +20,37 @@ class PermissionSeeder extends Seeder
             ['role-edit', 1],
             ['role-delete', 1],
 
-            ['workflow-list', 4],
-            ['workflow-create', 3],
-            ['workflow-edit', 3],
-            ['workflow-delete', 3]
+            ['statutesim-list', 4],
+            ['statutesim-create', 3],
+            ['statutesim-edit', 3],
+            ['statutesim-delete', 3],
+            
+            ['technologieesim-list', 4],
+            ['technologieesim-create', 3],
+            ['technologieesim-edit', 3],
+            ['technologieesim-delete', 3],
+            
+            ['clientesim-list', 4],
+            ['clientesim-show', 4],
+            ['clientesim-create', 3],
+            ['clientesim-edit', 3],
+            ['clientesim-delete', 3],
+            ['clientesim-print', 4],
+            ['clientesim-esim-attach', 3],
+            ['clientesim-esim-dettach', 3],
+
+            ['esim-list', 4],
+            ['esim-show', 4],
+            ['esim-create', 3],
+            ['esim-edit', 3],
+            ['esim-delete', 3],
+            ['esim-attach', 3],
+            ['esim-import', 3],
+
+            ['esimqrcode-list', 4],
+            ['esimqrcode-create', 3],
+            ['esimqrcode-edit', 3],
+            ['esimqrcode-delete', 3]
         ];
 
         foreach ($permissions as $permission) {

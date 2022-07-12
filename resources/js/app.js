@@ -109,12 +109,19 @@ Vue.use(Buefy);
  */
 import LaravelPermissionToVueJS from "laravel-permission-to-vuejs";
 //Vue.use(LaravelPermissionToVueJS)
+
+Vue.prototype.can = function(value){
+    return window.Laravel.jsPermissions.permissions.includes(value);
+}
+Vue.prototype.is = function(value){
+    return window.Laravel.jsPermissions.roles.includes(value);
+}
 /**
  * end Added
  */
 
-import Permissions from "./mixins/Permissions";
-Vue.mixin(Permissions);
+//import Permissions from "./mixins/Permissions";
+//Vue.mixin(Permissions);
 
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
@@ -135,9 +142,6 @@ Vue.component("rawDisplayer", rawDisplayer);
 Vue.component("systems-index", require("./views/systems/index").default);
 Vue.component("user-show", require("./views/users/show").default);
 
-Vue.component("subject-create", require("./views/subjects/addupdate").default);
-Vue.component("subject-details", require("./views/subjects/details").default);
-
 Vue.component(
     "times-circle",
     require("./components/Icons/TimesCircle").default
@@ -154,15 +158,12 @@ Vue.component(
     require("./components/Search/SearchResults").default
 );
 
-Vue.component("report-index", require("./views/reports/index").default);
-Vue.component("report-addupdate", require("./views/reports/addupdate").default);
-Vue.component("reports-details", require("./views/reports/details").default);
-
 Vue.component(
     "clientesim-addupdate",
     require("./views/clientesims/addupdate").default
 );
 Vue.component("clientesim-show", require("./views/clientesims/show").default);
+
 Vue.component("esim-addupdate", require("./views/esims/addupdate").default);
 Vue.component("esims-file-upload", require("./views/esims/fileUpload").default);
 

@@ -15,5 +15,7 @@ class RoleSeeder extends Seeder
     public function run()
     {
         $defaultrole = Role::create(['name' => 'Simple UserResource']);
+        $adminrole = Role::create(['name' => 'Admin']);
+        $editorrole = Role::create(['name' => 'Editor']);
     }
 }

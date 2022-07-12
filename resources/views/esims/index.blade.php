@@ -13,7 +13,9 @@
                     <h2 class="tw-text-blue-600 tw-text-sm tw-font-bold tw-mb-3 tw-border-b tw-border-gray-400 tw-pb-2">
                         <span class="text text-align-left">Liste de E-sims</span>
                         <span class="text text-align-right">
+                            @can('esim-create')
                             <b-button size="is-small" type="is-info is-light" @click="$emit('create_new_esim')"><i class="fas fa-plus"></i></b-button>
+                            @endcan
                         </span>
                     </h2>
 
@@ -145,12 +147,16 @@
                                             <span class="tw-text-sm">@{{ record.puk }}</span>
                                         </td>
                                         <td class="tw-px-4 tw-py-2">
-                                            <a v-if="record.status.code === 'xxxactive'" @click="$emit('edit_esim', record)" class="tw-inline-block tw-mr-3 tw-text-green-500">
+                                            @can('esim-edit')
+                                            <a @click="$emit('edit_esim', record)" class="tw-inline-block tw-mr-3 tw-text-green-500">
                                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                             </a>
+                                            @endcan
+                                            @can('esim-attach')
                                             <a v-if="record.statutesim.code == 'nouveau'" @click="$emit('create_new_clientesim', record.id)" class="tw-inline-block tw-mr-3 tw-text-orange-500">
                                                 <i class="fa fa-paperclip" aria-hidden="true"></i>
                                             </a>
+                                            @endcan
                                         </td>
                                     </tr>
 

@@ -135,6 +135,14 @@ class User extends Authenticatable implements Auditable
         return $permissions;
     }
 
+    public function jsPermissions()
+    {
+        return json_encode([
+                'roles' => $this->getRoleNames(),
+                'permissions' => $this->getAllPermissions()->pluck('name'),
+            ]);
+    }
+
     #region Custom Functions
 
     public function isActive() {

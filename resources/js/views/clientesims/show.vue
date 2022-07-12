@@ -9,13 +9,13 @@
                 </div>
                 <div class="col-md-3 col-sm-4 col-12 text-right">
                     <span class="text text-sm">
-                        <a type="button" class="btn btn-tool text-success" data-toggle="tooltip" @click="showPreviewPDF(clientesim)">
+                        <a v-if="can('clientesim-print')" type="button" class="btn btn-tool text-success" data-toggle="tooltip" @click="showPreviewPDF(clientesim)">
                             <i class="fa fa-print"></i>
                         </a>
-                        <a v-if="false" type="button" class="btn btn-tool text-warning" data-toggle="tooltip" @click="editClientEsim(clientesim)">
+                        <a v-if="can('clientesim-edit')" type="button" class="btn btn-tool text-warning" data-toggle="tooltip" @click="editClientEsim(clientesim)">
                             <i class="fa fa-pencil-square-o"></i>
                         </a>
-                        <a v-if="false" type="button" class="btn btn-tool text-danger" @click="deleteClientEsim(clientesim)">
+                        <a v-if="can('clientesim-delete')" type="button" class="btn btn-tool text-danger" @click="deleteClientEsim(clientesim)">
                             <i class="fas fa-trash"></i>
                         </a>
                     </span>
