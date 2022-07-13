@@ -61,6 +61,15 @@ class UserController extends Controller
         return User::all();
     }
 
+    public function onlineusers() {
+        $users = User::select("*")
+            ->whereNotNull('last_seen')
+            ->orderBy('last_seen', 'DESC')
+            ->paginate(10);
+
+        return view('users.online', compact('users'));
+    }
+
     /**
      * [edit description]
      * @param  User $user [description]

@@ -66,6 +66,9 @@ Route::get('users.fetch',[UserController::class,'fetch'])
 Route::get('users.fetchall',[UserController::class,'fetchall'])
     ->name('users.fetchall')
     ->middleware('auth');
+Route::get('users.online', [UserController::class, 'onlineusers'])
+    ->name('users.online')
+    ->middleware('auth');
 
 #endregion
 

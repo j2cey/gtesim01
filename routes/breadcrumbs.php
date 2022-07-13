@@ -14,6 +14,10 @@ Breadcrumbs::for('home', function ($trail) {
 Breadcrumbs::for('systems.index', function (Trail $trail) {
     $trail->parent('home')->push('System', route('systems.index'));
 });
+// User Online
+Breadcrumbs::for('users.online', function (Trail $trail) {
+    $trail->parent('home')->push('Users-Online', route('users.online'));
+});
 #endregion
 
 #region Esims

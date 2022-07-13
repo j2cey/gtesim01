@@ -90,6 +90,9 @@
                         <li class="nav-item">
                             <a href="/systems.index" class="nav-link">Index</a>
                         </li>
+                        <li class="nav-item">
+                            <a href="/users.online" class="nav-link">Users Online</a>
+                        </li>
                     </ul>
                 </li>
                 @endrole

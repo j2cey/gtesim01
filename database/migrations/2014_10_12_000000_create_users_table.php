@@ -36,6 +36,8 @@ class CreateUsersTable extends Migration
 
             $table->string('login_type')->default("local")->comment('type de connexion');
 
+            $table->timestamp('last_seen')->nullable()->comment('if user login then it will update last_seen time and add key for online in cache');
+
             $table->rememberToken();
         });
         $this->setTableComment($this->table_name,$this->table_comment);
