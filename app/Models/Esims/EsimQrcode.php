@@ -32,6 +32,8 @@ class EsimQrcode extends BaseModel implements Auditable
 
     protected $guarded = [];
 
+    public const CONFIG_DIR = "esim_fichier_qrcode";
+
     #region Validation Rules
 
     public static function defaultRules() {
@@ -65,6 +67,23 @@ class EsimQrcode extends BaseModel implements Auditable
 
     #endregion
 
+    #region Accessors
+
+    public function getImageFullpathAttribute() {
+        $separator = "/";
+        if ( ! is_null($this->qrcode_img) ) {
+            return public_path('/') . config('app.' . self::CONFIG_DIR) . $separator . $this->qrcode_img;
+        }
+        return null;
+    }
+
+    public function getImageFolderpathAttribute() {
+        $separator = "/";
+        return public_path('/') . config('app.' . self::CONFIG_DIR) . $separator;
+    }
+
+    #endregion
+
     #region Custom Functions
 
     public static function createNew(Esim $esim, $raw_value)
@@ -84,11 +103,11 @@ class EsimQrcode extends BaseModel implements Auditable
 
     public function generateQrcodeImage() {
         // <img src="data:image/png;base64, {{ base64_encode(QrCode::format('png')->size(150)->generate($client->esim->ac)) }} ">
-        $directory = "esim_fichier_qrcode";
+        //$directory = "esim_fichier_qrcode";
         
-        $file_dir = config('app.' . $directory);
-        $file_name = md5($directory . '_' . time()) . '.png';
-        $output_file = $file_dir . '/' . $file_name;
+        //$file_dir = config('app.' . self::CONFIG_DIR);
+        $file_name = md5(self::CONFIG_DIR . '_' . time()) . '.png';
+        //$output_file = $this->image_folderpath . $file_name;
 
         $this->qrcode_img = $file_name;
         $this->save();
@@ -96,10 +115,8 @@ class EsimQrcode extends BaseModel implements Auditable
         $image = QrCode::format('png')
             //->merge('img/jpg', 0.1, true)
             ->size(200)->errorCorrection('H')
-            ->generate($this->raw_value, public_path($output_file));
-
-        
-
+            ->generate($this->raw_value, $this->image_fullpath);
+            
         //Storage::disk('public')->put($output_file, $image);
     }
 

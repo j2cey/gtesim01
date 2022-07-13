@@ -130,9 +130,9 @@ class ClientEsim extends BaseModel implements Auditable
 
         $this->esim->saveQrcode();
         
-        $file_name = config('app.' . $directory) . '/' . $this->esim->qrcode->qrcode_img;
+        $file_name = public_path('/') . config('app.' . $directory) . '/' . $this->esim->qrcode->qrcode_img;
         
-        $qrcode_img = public_path($file_name);
+        $qrcode_img = $file_name;
 
         $client = new Client(['headers' => ['Authorization' => 'auth_trusted_header']]);
         $options = [
