@@ -96,7 +96,10 @@ class ClientEsim extends BaseModel implements Auditable
         $clientesim->esim->saveQrcode();
         $clientesim->save();
 
-        $esim->setStatutAttribue();
+        //$esim->setStatutAttribue();
+        $esim->update([
+            'statut_esim_id' => 3,
+        ]);
 
         return $clientesim->load(['esim','esim.qrcode']);;
     }

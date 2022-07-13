@@ -28,7 +28,7 @@
                             search: '',
                             per_page: {{ $defaultPerPage }},
                             page: 1,
-                            order_by: 'nom_raison_sociale:asc',
+                            order_by: 'id:desc',
                             createdat_from: '',
                             createdat_to: '',
                             status: '',
