@@ -10,7 +10,7 @@
                 </div>
                 <div class="modal-body">
 
-                    <form class="form-horizontal" @submit.prevent @keydown="clientesimForm.errors.clear()">
+                    <form class="form-horizontal" @submit.prevent @keydown="clientesimForm.errors.clear()" v-if="clientsMatched.length === 0">
                         <div class="card-body">
                             <div class="form-group row">
                                 <label for="nom_raison_sociale" class="col-sm-2 col-form-label text-xs">Nom / Raison Sociale</label>
@@ -45,6 +45,36 @@
                         </div>
                     </form>
 
+                    <div class="card-body p-0" v-else>
+                        <h5 class="tw-text-blue-600 tw-text-sm tw-font-bold tw-mb-3 tw-border-b tw-border-gray-400 tw-pb-2">
+                            <span class="text text-align-left">Creer une E-sim pour un client existant</span>
+                            <span class="text text-align-right">
+                            <b-button size="is-small" type="is-info is-light" @click="$emit('create_new_clientesim', -1)">Valider</b-button>
+                            </span>
+                        </h5>
+                        <div class="card-body table-responsive p-0" style="min-height: 200px;">
+                            <table class="table m-0">
+                                <thead>
+                                <tr class="text text-sm">
+                                    <th></th>
+                                    <th>Nom</th>
+                                    <th>Prenom</th>
+                                    <th>Date</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr v-for="(client, index) in clientsMatched" :key="client.id" class="text text-xs">
+                                    <td></td>
+                                    <td><div class="text border-right">{{ client.nom_raison_sociale }}</div></td>
+                                    <td><div class="text border-right">{{ client.prenom }}</div></td>
+                                    <td>{{ client.created_at | formatDate }}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.table-responsive -->
+                    </div>
+
                 </div>
                 <div class="modal-footer justify-content-between">
                     <b-button type="is-dark" size="is-small" data-dismiss="modal">Fermer</b-button>
@@ -68,8 +98,8 @@
             this.nom_raison_sociale = clientesim.nom_raison_sociale || ''
             this.prenom = clientesim.prenom || ''
             this.numero_telephone = clientesim.numero_telephone || ''
-            this.email = clientesim.email || '' 
-            this.esim_id = clientesim.esim_id || '' 
+            this.email = clientesim.email || ''
+            this.esim_id = clientesim.esim_id || ''
         }
     }
     export default {
@@ -105,7 +135,7 @@
             })
         },
         created() {
-            
+
         },
         data() {
             return {
@@ -116,7 +146,9 @@
                 clientesimId: null,
                 editing: false,
                 loading: false,
-                clientesimtypes: []
+                clientesimtypes: [],
+                clientsMatched: [],
+                searchClientsMatched: "",
             }
         },
         methods: {
@@ -135,9 +167,12 @@
                     .post('/clientesims.checkbeforecreate')
                     .then(resp => {
                         this.loading = false
-                        
-                        
 
+                        console.log(resp)
+
+                        if (resp.data.action_type === 1) {
+                            this.clientsMatched = resp.data.val
+                        }
                     }).catch(error => {
                     this.loading = false
                 });

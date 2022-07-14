@@ -49,8 +49,8 @@ class ClientEsimController extends Controller
         $client = new ClientEsimResource(ClientEsim::where('id', $id)->first());
         $acqrcode = QrCode::size(100)->generate($client->esim->ac);
 
-        $pdf = PDF::loadView('clientesims.preview', ['client' => $client, 'acqrcode' => $acqrcode, 'generate_now' => true])->setPaper('a4', 'portrait');    
-        
+        $pdf = PDF::loadView('clientesims.preview', ['client' => $client, 'acqrcode' => $acqrcode, 'generate_now' => true])->setPaper('a4', 'portrait');
+
         $pdf->getDomPDF()->setHttpContext(
             stream_context_create([
                 'ssl' => [
@@ -60,7 +60,7 @@ class ClientEsimController extends Controller
                 ]
             ])
         );
-        
+
         return $pdf->download('clientesims.pdf');
     }
 
@@ -119,17 +119,25 @@ class ClientEsimController extends Controller
         ->where('prenom', 'LIKE', '%' . $request->prenom . '%')
         ->get();
 
+        $res = [
+            'action_type' => 0,
+            'val' => null,
+        ];
+
         if ( $clientsesims_matched->count() > 0 ) {
             // some matches
-
+            $res['action_type'] = 1;
+            $res['val'] = $clientsesims_matched;
         } else {
             // no match
-            
+            $res['action_type'] = 2;
         }
 
-        dd($clientsesims_matched->count(), $clientsesims_matched);
+        return response()->json([
+            'data' => $res
+        ], 200);
     }
-    
+
     public function store(StoreClientEsimRequest $request)
     {
         return $this->storeclientesim($request);
@@ -143,9 +151,9 @@ class ClientEsimController extends Controller
             $request->email,
             $request->numero_telephone
         );
-        
+
         //Mail::to($clientesim->email)->send(new NotifyProfileEsim($clientesim));
-        
+
         ClientEsimSendMailJob::dispatch($clientesim);
 
         return new ClientEsimResource($clientesim);
