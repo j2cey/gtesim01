@@ -43,17 +43,16 @@ class ClientEsim extends BaseModel implements Auditable
         return [
             'nom_raison_sociale' => ['required'],
             'email' => ['required','email'],
-            'numero_telephone' => ['required','regex:/^([0-9\s\-\+\(\)]*)$/','min:8',],
         ];
     }
     public static function createRules() {
         return array_merge(self::defaultRules(), [
-
+            'numero_telephone' => ['required','regex:/^([0-9\s\-\+\(\)]*)$/','min:8',],
         ]);
     }
     public static function updateRules($model) {
         return array_merge(self::defaultRules(), [
-
+            'numero_telephone' => ['required','regex:/^([0-9\s\-\+\(\)]*)$/','min:8',],
         ]);
     }
 
@@ -83,6 +82,8 @@ class ClientEsim extends BaseModel implements Auditable
     public static function createNew($esim_id, $nom_raison_sociale, $prenom, $email, $numero_telephone)
     {
         $esim = Esim::getFirstFree($esim_id);
+
+        $esim->setStatutAttribution();
         
         $clientesim = ClientEsim::create([
             'nom_raison_sociale' => $nom_raison_sociale,
@@ -96,10 +97,7 @@ class ClientEsim extends BaseModel implements Auditable
         $clientesim->esim->saveQrcode();
         $clientesim->save();
 
-        //$esim->setStatutAttribue();
-        $esim->update([
-            'statut_esim_id' => 3,
-        ]);
+        $esim->setStatutAttribue();
 
         return $clientesim->load(['esim','esim.qrcode']);;
     }

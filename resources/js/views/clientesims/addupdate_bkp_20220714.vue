@@ -49,7 +49,7 @@
                 <div class="modal-footer justify-content-between">
                     <b-button type="is-dark" size="is-small" data-dismiss="modal">Fermer</b-button>
                     <b-button type="is-primary" size="is-small" :loading="loading" @click="updateClientEsim()" :disabled="!isValidCreateForm" v-if="editing">Enregistrer</b-button>
-                    <b-button type="is-primary" size="is-small" :loading="loading" @click="checkBeforeCreate()" :disabled="!isValidCreateForm" v-else>Creer Client</b-button>
+                    <b-button type="is-primary" size="is-small" :loading="loading" @click="createClientEsim()" :disabled="!isValidCreateForm" v-else>Creer Client</b-button>
                 </div>
             </div>
             <!-- /.modal-content -->
@@ -112,7 +112,6 @@
                 formTitle: 'Create ClientEsim',
                 clientesim: {},
                 clientesimForm: new Form(new ClientEsim({})),
-                clientesimFormCheck: new Form(new ClientEsim({})),
                 clientesimId: null,
                 editing: false,
                 loading: false,
@@ -126,21 +125,6 @@
                 } else {
                     this.createClientEsim()
                 }
-            },
-            checkBeforeCreate() {
-                this.loading = true
-                this.clientesimFormCheck = this.clientesimForm
-
-                this.clientesimFormCheck
-                    .post('/clientesims.checkbeforecreate')
-                    .then(resp => {
-                        this.loading = false
-                        
-                        
-
-                    }).catch(error => {
-                    this.loading = false
-                });
             },
             createClientEsim() {
                 this.loading = true

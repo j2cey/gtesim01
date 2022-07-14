@@ -17,6 +17,7 @@ use Illuminate\Contracts\Foundation\Application;
 use App\Http\Requests\ClientEsim\StoreClientEsimRequest;
 use App\Http\Requests\ClientEsim\UpdateClientEsimRequest;
 use App\Repositories\Contracts\IClientEsimRepositoryContract;
+use PhpParser\Node\Expr\Ternary;
 
 class ClientEsimController extends Controller
 {
@@ -112,14 +113,29 @@ class ClientEsimController extends Controller
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\StoreClientEsimRequest  $request
-     * @return \Illuminate\Http\Response
-     */
+    public function checkbeforecreate(StoreClientEsimRequest $request)
+    {
+        $clientsesims_matched = ClientEsim::where('nom_raison_sociale','LIKE', '%' . $request->nom_raison_sociale . '%')
+        ->where('prenom', 'LIKE', '%' . $request->prenom . '%')
+        ->get();
+
+        if ( $clientsesims_matched->count() > 0 ) {
+            // some matches
+
+        } else {
+            // no match
+            
+        }
+
+        dd($clientsesims_matched->count(), $clientsesims_matched);
+    }
+    
     public function store(StoreClientEsimRequest $request)
     {
+        return $this->storeclientesim($request);
+    }
+
+    public function storeclientesim(StoreClientEsimRequest $request) {
         $clientesim = ClientEsim::createNew(
             $request->esim_id,
             $request->nom_raison_sociale,

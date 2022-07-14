@@ -3,6 +3,7 @@
 namespace App\Models\Employes;
 
 use App\Models\BaseModel;
+use App\Models\Esims\Esim;
 use OwenIt\Auditing\Contracts\Auditable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -21,6 +22,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @property string $hasphonenum_type
  * @property integer $hasphonenum_id
  * @property integer $posi
+ * @property integer|null $esim_id
  *
  * @property Carbon $created_at
  * @property Carbon $updated_at
@@ -30,4 +32,12 @@ class PhoneNum extends BaseModel implements Auditable
     use HasFactory, \OwenIt\Auditing\Auditable;
     
     protected $guarded = [];
+
+    #region Eloquent Relationships
+    
+    public function esim() {
+        return $this->belongsTo(Esim::class, 'esim_id');
+    }
+
+    #endregion
 }
