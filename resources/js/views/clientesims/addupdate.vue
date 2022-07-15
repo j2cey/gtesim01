@@ -4,7 +4,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title text-sm" id="clientesimModalLabel">{{ formTitle }}</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close" @click="closeForm()" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -49,7 +49,10 @@
                         <h5 class="tw-text-blue-600 tw-text-sm tw-font-bold tw-mb-3 tw-border-b tw-border-gray-400 tw-pb-2">
                             <span class="text text-align-left">Creer une E-sim pour un client existant</span>
                             <span class="text text-align-right">
-                            <b-button size="is-small" type="is-info is-light" @click="$emit('create_new_clientesim', -1)">Valider</b-button>
+                            <b-button size="is-small" type="is-info is-light" @click="$emit('create_new_clientesim', -1)" v-if="clientsMatchedSelected">Valider</b-button>
+                            </span>
+                            <span>
+                                {{ clientsMatchedSelected }}
                             </span>
                         </h5>
                         <div class="card-body table-responsive p-0" style="min-height: 200px;">
@@ -64,7 +67,10 @@
                                 </thead>
                                 <tbody>
                                 <tr v-for="(client, index) in clientsMatched" :key="client.id" class="text text-xs">
-                                    <td></td>
+                                    <td>
+                                        <b-radio v-model="clientsMatchedSelected" size="is-small" :native-value="client.uuid" type="is-info is-light">
+                                        </b-radio>
+                                    </td>
                                     <td><div class="text border-right">{{ client.nom_raison_sociale }}</div></td>
                                     <td><div class="text border-right">{{ client.prenom }}</div></td>
                                     <td>{{ client.created_at | formatDate }}</td>
@@ -77,8 +83,9 @@
 
                 </div>
                 <div class="modal-footer justify-content-between">
-                    <b-button type="is-dark" size="is-small" data-dismiss="modal">Fermer</b-button>
+                    <b-button type="is-dark" size="is-small" @click="closeForm()">Fermer</b-button>
                     <b-button type="is-primary" size="is-small" :loading="loading" @click="updateClientEsim()" :disabled="!isValidCreateForm" v-if="editing">Enregistrer</b-button>
+                    <b-button type="is-danger" size="is-small" :loading="loading" @click="createClientEsim()" :disabled="!isValidCreateForm" v-else-if="clientsMatched.length > 0">Creer Nouveau Client</b-button>
                     <b-button type="is-primary" size="is-small" :loading="loading" @click="checkBeforeCreate()" :disabled="!isValidCreateForm" v-else>Creer Client</b-button>
                 </div>
             </div>
@@ -148,15 +155,28 @@
                 loading: false,
                 clientesimtypes: [],
                 clientsMatched: [],
+                clientsMatchedSelected: null,
                 searchClientsMatched: "",
             }
         },
         methods: {
+            closeForm() {
+                this.resetForm()
+                $('#addUpdateClientEsim').modal('hide')
+            },
+            resetForm() {
+                this.clientesimtypes = []
+                this.clientsMatched = [];
+                this.clientsMatchedSelected = null;
+                this.clientesimForm.reset();
+            },
             formKeyEnter() {
                 if (this.editing) {
                     this.updateClientEsim()
-                } else {
+                } else if(this.clientsMatched.length > 0) {
                     this.createClientEsim()
+                } else {
+                    this.checkBeforeCreate()
                 }
             },
             checkBeforeCreate() {
@@ -191,6 +211,7 @@
                             timer: 3000
                         }).then(() => {
                             $('#addUpdateClientEsim').modal('hide')
+                            this.resetForm()
                             window.location = '/clientesims.previewpdf/' + newclientesim.id
                         })
 

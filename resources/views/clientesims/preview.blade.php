@@ -170,6 +170,10 @@
 									<td class="col-md-4">Numero PUK</td>
 									<td class="col-md-8">{{ $client->esim->puk }}</td>
 								</tr>
+								<tr>
+									<td class="col-md-4">Code Activation</td>
+									<td class="col-md-8">{{ $client->esim->ac }}</td>
+								</tr>
 							</tbody>
 						</table>
 					</div>
@@ -183,10 +187,10 @@
 					</div>
 
 					<div class="row">
-                                                <div class="col text-center">
-                                                	<img alt="logo" src="data:imae/png;base64,{{ base64_encode(file_get_contents(public_path('images/mode_operatoire.PNG'))) }}" style="width: 530px;">
-                                                </div>
-                                        </div>					
+						<div class="col text-center">
+							<img alt="logo" src="data:imae/png;base64,{{ base64_encode(file_get_contents(public_path('images/mode_operatoire.PNG'))) }}" style="width: 530px;">
+						</div>
+					</div>					
 
 					@if(!isset($generate_now))
 					<div class="row">
@@ -194,8 +198,8 @@
 							<a href="{{ route('clientesims.show', $client->uuid) }}" class="btn btn-sm btn-secondary text-left">Retour</a>
 						</div>
 						<div class="col-md-4 text-center">
-                                                        <a href="{{ route('clientesims.preprintpdf', $client->id) }}" class="btn btn-sm btn-success text-left">Imprimer PDF</a>
-                                                </div>
+							<a href="{{ route('clientesims.preprintpdf', $client->id) }}" class="btn btn-sm btn-success text-left">Imprimer PDF</a>
+						</div>
 						<div class="col-md-4 text-right">
 							<a href="{{ route('clientesims.generatepdf', $client->id) }}" class="btn btn-sm btn-primary text-right">Télécharger PDF</a>
 						</div>
