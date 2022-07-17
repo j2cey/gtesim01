@@ -172,7 +172,7 @@
                 }).then((result) => {
                     if(result.value) {
 
-                        axios.delete(`/clientesims/${clientesim.id}`)
+                        axios.delete(`/clientesims/${clientesim.uuid}`)
                             .then(resp => {
 
                                 console.log('clientesim delete resp: ', resp)

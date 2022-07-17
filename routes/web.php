@@ -1,15 +1,17 @@
 <?php
 
-use App\Http\Controllers\EmailAddressController;
-use App\Http\Controllers\PhoneNumController;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PDFController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\UuidController;
 use App\Http\Controllers\StatusController;
 use App\Http\Controllers\SystemController;
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\PhoneNumController;
 use App\Http\Controllers\Esims\EsimController;
+use App\Http\Controllers\EmailAddressController;
 use App\Http\Controllers\Esims\StatutEsimController;
 use App\Http\Controllers\Esims\ClientEsimController;
 use App\Http\Controllers\Authorization\RoleController;
@@ -47,6 +49,10 @@ Route::get('systems.index',[SystemController::class,'index'])
 Route::resource('settings',SettingController::class);
 Route::get('settings.fetch',[SettingController::class,'fetch'])
     ->name('settings.fetch')
+    ->middleware('auth');
+
+Route::get('uuid.generate',[UuidController::class,'generate'])
+    ->name('uuid.generate')
     ->middleware('auth');
 
 #endregion

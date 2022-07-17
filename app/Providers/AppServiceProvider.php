@@ -28,8 +28,6 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind(IUserRepositoryContract::class, UserRepository::class);
-        $this->app->bind(ISubjectRepositoryContract::class, SubjectRepository::class);
-        $this->app->bind(IReportRepositoryContract::class, ReportRepositoryContract::class);
 
         $this->app->bind(IEsimRepositoryContract::class, EsimRepository::class);
         $this->app->bind(IClientEsimRepositoryContract::class, ClientEsimRepository::class);
@@ -57,18 +55,20 @@ class AppServiceProvider extends ServiceProvider
                 ->comment('status reference')
                 ->constrained('statuses')->onDelete('set null');
             $this->boolean('is_default')->default(false)->comment('determine whether is the default one.');
+/*
             $this->foreignId('created_by')->nullable()
                 ->comment('user creator reference')
                 ->constrained('users')->onDelete('set null');
             $this->foreignId('updated_by')->nullable()
                 ->comment('user updator reference')
                 ->constrained('users')->onDelete('set null');
+*/
             $this->timestamps();
         });
         Blueprint::macro('dropBaseForeigns', function () {
             $this->dropForeign(['status_id']);
-            $this->dropForeign(['created_by']);
-            $this->dropForeign(['updated_by']);
+            //$this->dropForeign(['created_by']);
+            //$this->dropForeign(['updated_by']);
         });
 
         JsonResource::withoutWrapping();

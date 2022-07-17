@@ -241,9 +241,7 @@ class ClientEsimController extends Controller
      */
     public function destroy(ClientEsim $clientesim)
     {
-        $clientesim->load('esim');
-        $esim = $clientesim->esim;
-        $esim->setStatutFree();
+        $clientesim->delete();
 
         return redirect()->route('clientesims.index');
     }

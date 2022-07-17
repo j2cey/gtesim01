@@ -97,6 +97,17 @@
                 </li>
                 @endrole
 
+                @role('Admin')
+                <li class="nav-item dropdown">
+                    <a id="uuidgenerator" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle">UUID</a>
+                    <ul aria-labelledby="uuidgenerator" class="dropdown-menu border-0 shadow">
+                        <li class="nav-item">
+                            <b-button size="is-small" type="is-text is-light" @click="$emit('uuid_generator_open')">Generator</b-button>
+                        </li>
+                    </ul>
+                </li>
+                @endrole
+
             </ul>
 
             <!-- SEARCH FORM -->

@@ -48,6 +48,7 @@
     @yield('content')
 
     <vue-noty></vue-noty>
+    <uuid-generator></uuid-generator>
 </div>
 <!-- ./wrapper -->
 

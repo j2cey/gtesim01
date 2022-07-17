@@ -37,7 +37,6 @@ class ClientEsim extends BaseModel implements Auditable
     use HasPhoneNums, HasEmailAddresses, HasFactory, \OwenIt\Auditing\Auditable;
 
     protected $guarded = [];
-    protected $with = ['esim'];
 
     #region Validation Rules
 
