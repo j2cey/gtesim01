@@ -15,11 +15,26 @@ trait HasEmailAddresses
         return $this->morphMany(EmailAddress::class, 'hasemailaddress');
     }
 
-    public function addNewEmailAddress($email)
+    public function latestEmailAddress()
+    {
+        return $this->morphOne(EmailAddress::class, 'hasemailaddress')->latest('id');
+    }
+
+    public function oldestEmailAddress()
+    {
+        return $this->morphOne(EmailAddress::class, 'hasemailaddress')->oldest('id');
+    }
+
+    public function addNewEmailAddress($email) : ?EmailAddress
     {
         // TODO: Valider l'adresse mail
         if (empty($email)) {
-            return false;
+            return null;
+        }
+
+        $adresseemail = $this->emailaddresses()->where('email', $email)->first();
+        if ($adresseemail) {
+            return $adresseemail;
         }
 
         $adresseemail_count = $this->emailaddresses()->count();
@@ -30,43 +45,41 @@ trait HasEmailAddresses
             'status_id' => Status::active()->first()->id,
         ]);
 
-        return true;
+        return $adresseemail;
+    }
+
+    public function hasThisEmail($email) {
+        if ( $this->emailaddresses()->where('email', $email)->count() > 0 ) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function removeEmailAddress($email) {
+        $email = $this->emailaddresses()->where('email', $email)->first();
+        if ($email) {
+            $email->delete();
+        }
+    }
+    public function removeEmailAddressesAll() {
+        $this->emailaddresses()->each( function($email) {
+            $email->delete();
+        });
     }
 
     /**
-     * Renvoie les e-mails (Adresseemail) de ce model.
+     * Add, dynamically, Eloquent relation (eager loading) to this model
      */
-    public function emailaddresses_old() {
-        $elem_type = get_called_class();
-        return $this->belongsToMany(EmailAddress::class, 'model_has_email_addresses', 'model_id', 'email_address_id')
-            //return $this->belongsToMany('App\Models\Role', 'role_user', 'user_id', 'role_id');
-            ->wherePivot('model_type', $elem_type)
-            ->withPivot('posi')
-            ->withTimestamps()
-            ->orderBy('posi','asc');
+    protected function initializeHasEmailAddresses()
+    {
+        $this->with = array_unique(array_merge($this->with, ['emailaddresses','latestEmailAddress','oldestEmailAddress']));
     }
 
-    public function addNewEmailAddress_old($email)
+    public static function bootHasEmailAddresses()
     {
-        // TODO: Valider l'adresse mail
-        if (empty($email)) {
-            return false;
-        }
-
-        $elem_type = get_called_class();
-
-        $adresseemail = EmailAddress::create([
-            'email' => $email,
-            'status_id' => Status::active()->first()->id,
-        ]);
-
-        $adresseemail_count = $this->emailaddresses()->count();
-
-        $this->emailaddresses()->attach($adresseemail->id, [
-            'model_type' => $elem_type,
-            'model_id' => $this->id,
-            'posi' => $adresseemail_count,
-        ]);
-        return true;
+        static::deleting(function ($model) {
+            $model->removeEmailAddressesAll();
+        });
     }
 }

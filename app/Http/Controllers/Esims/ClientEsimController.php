@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers\Esims;
 
+use App\Http\Requests\ClientEsim\StoreClientEsimPhonenumRequest;
+use App\Models\Employes\PhoneNum;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Response;
 use PDF;
 use \Illuminate\View\View;
 use App\Models\Esims\ClientEsim;
@@ -17,7 +21,6 @@ use Illuminate\Contracts\Foundation\Application;
 use App\Http\Requests\ClientEsim\StoreClientEsimRequest;
 use App\Http\Requests\ClientEsim\UpdateClientEsimRequest;
 use App\Repositories\Contracts\IClientEsimRepositoryContract;
-use PhpParser\Node\Expr\Ternary;
 
 class ClientEsimController extends Controller
 {
@@ -37,19 +40,21 @@ class ClientEsimController extends Controller
 
     public function previewPDF($id) {
 
-        $client = new ClientEsimResource(ClientEsim::where('id', $id)->first());
+        $phonenum = PhoneNum::with('hasphonenum')->where('id', $id)->first();
+        //$client = new ClientEsimResource(ClientEsim::where('id', $id)->first());
         //dd($client);
         //$acqrcode = QrCode::size(100)->generate($client->esim->ac);
         return view('clientesims.preview')
-            ->with('client', $client);
+            ->with('phonenum', $phonenum);
     }
 
     public function generatePDF($id)
     {
-        $client = new ClientEsimResource(ClientEsim::where('id', $id)->first());
-        $acqrcode = QrCode::size(100)->generate($client->esim->ac);
+        //$client = new ClientEsimResource(ClientEsim::where('id', $id)->first());
+        $phonenum = PhoneNum::with('hasphonenum')->where('id', $id)->first();
+        $acqrcode = QrCode::size(100)->generate($phonenum->esim->ac);
 
-        $pdf = PDF::loadView('clientesims.preview', ['client' => $client, 'acqrcode' => $acqrcode, 'generate_now' => true])->setPaper('a4', 'portrait');
+        $pdf = PDF::loadView('clientesims.preview', ['phonenum' => $phonenum, 'acqrcode' => $acqrcode, 'generate_now' => true])->setPaper('a4', 'portrait');
 
         $pdf->getDomPDF()->setHttpContext(
             stream_context_create([
@@ -66,10 +71,11 @@ class ClientEsimController extends Controller
 
     public function preprintPDF($id)
     {
-        $client = new ClientEsimResource(ClientEsim::where('id', $id)->first());
-        $acqrcode = QrCode::size(100)->generate($client->esim->ac);
+        //$client = new ClientEsimResource(ClientEsim::where('id', $id)->first());
+        $phonenum = PhoneNum::with('hasphonenum')->where('id', $id)->first();
+        $acqrcode = QrCode::size(100)->generate($phonenum->esim->ac);
 
-        $pdf = PDF::loadView('clientesims.preview', ['client' => $client, 'acqrcode' => $acqrcode, 'generate_now' => true]);
+        $pdf = PDF::loadView('clientesims.preview', ['phonenum' => $phonenum, 'acqrcode' => $acqrcode, 'generate_now' => true]);
 
         return $pdf->setPaper('a4', 'portrait')->stream();
     }
@@ -106,7 +112,7 @@ class ClientEsimController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function create()
     {
@@ -131,6 +137,7 @@ class ClientEsimController extends Controller
         } else {
             // no match
             $res['action_type'] = 2;
+            $res['val'] = $this->storeclientesim($request);
         }
 
         return response()->json([
@@ -144,19 +151,28 @@ class ClientEsimController extends Controller
     }
 
     public function storeclientesim(StoreClientEsimRequest $request) {
-        $clientesim = ClientEsim::createNew(
-            $request->esim_id,
-            $request->nom_raison_sociale,
-            $request->prenom,
-            $request->email,
-            $request->numero_telephone
-        );
+        if ( is_null($request->client_matched_selected) ) {
+            $clientesim = ClientEsim::createNew(
+                $request->nom_raison_sociale,
+                $request->prenom,
+                $request->email,
+                $request->numero_telephone
+            );
+        } else {
+            $clientesim = $request->client_matched_selected;
+        }
+        $clientesim->addNewEmailAddress($request->email);
+        $phonenum = $clientesim->addNewPhoneNum($request->numero_telephone,true,$request->esim_id);
 
-        //Mail::to($clientesim->email)->send(new NotifyProfileEsim($clientesim));
+        //ClientEsimSendMailJob::dispatch($clientesim);
 
-        ClientEsimSendMailJob::dispatch($clientesim);
+        return [new ClientEsimResource($clientesim),$phonenum];
+    }
 
-        return new ClientEsimResource($clientesim);
+    public function phonenumstore(StoreClientEsimPhonenumRequest $request) {
+        $phonenum = $request->client_esim->addNewPhoneNum($request->numero,true);
+
+        return $phonenum;
     }
 
     public function mailtest($id)
@@ -178,8 +194,8 @@ class ClientEsimController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\ClientEsim  $clientEsim
-     * @return \Illuminate\Http\Response
+     * @param ClientEsim $clientesim
+     * @return Application|Factory|\Illuminate\Contracts\View\View|Response
      */
     public function show(ClientEsim $clientesim)
     {
@@ -190,8 +206,8 @@ class ClientEsimController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\ClientEsim  $clientEsim
-     * @return \Illuminate\Http\Response
+     * @param  ClientEsim  $clientEsim
+     * @return Response
      */
     public function edit(ClientEsim $clientEsim)
     {
@@ -201,9 +217,9 @@ class ClientEsimController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdateClientEsimRequest  $request
-     * @param  \App\Models\ClientEsim  $clientEsim
-     * @return \Illuminate\Http\Response
+     * @param UpdateClientEsimRequest $request
+     * @param ClientEsim $clientesim
+     * @return ClientEsimResource
      */
     public function update(UpdateClientEsimRequest $request, ClientEsim $clientesim)
     {
@@ -220,8 +236,8 @@ class ClientEsimController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\ClientEsim  $clientEsim
-     * @return \Illuminate\Http\Response
+     * @param ClientEsim $clientesim
+     * @return RedirectResponse|Response
      */
     public function destroy(ClientEsim $clientesim)
     {

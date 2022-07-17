@@ -2,6 +2,8 @@
 
 namespace App\Models\Esims;
 
+use App\Traits\EmailAddress\HasEmailAddresses;
+use App\Traits\PhoneNum\HasPhoneNums;
 use GuzzleHttp\Client;
 use App\Models\BaseModel;
 use Illuminate\Support\Carbon;
@@ -19,12 +21,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @property string|null $tags
  *
  * @property string $nom_raison_sociale
- * @property string $prenom 
+ * @property string $prenom
  * @property string $email
- * @property string $numero_telephone 
+ * @property string $numero_telephone
  * @property string $pin
  * @property string $puk
- * 
+ *
  * @property integer|null $esim_id
  *
  * @property Carbon $created_at
@@ -32,7 +34,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  */
 class ClientEsim extends BaseModel implements Auditable
 {
-    use HasFactory, \OwenIt\Auditing\Auditable;
+    use HasPhoneNums, HasEmailAddresses, HasFactory, \OwenIt\Auditing\Auditable;
 
     protected $guarded = [];
     protected $with = ['esim'];
@@ -47,12 +49,21 @@ class ClientEsim extends BaseModel implements Auditable
     }
     public static function createRules() {
         return array_merge(self::defaultRules(), [
-            'numero_telephone' => ['required','regex:/^([0-9\s\-\+\(\)]*)$/','min:8',],
+            'numero_telephone' => [
+                'required',
+                'regex:/^([0-9\s\-\+\(\)]*)$/',
+                'min:8',
+                'unique:phone_nums,numero,NULL,id',
+            ],
         ]);
     }
     public static function updateRules($model) {
         return array_merge(self::defaultRules(), [
-            'numero_telephone' => ['required','regex:/^([0-9\s\-\+\(\)]*)$/','min:8',],
+            'numero_telephone' => [
+                'required',
+                'regex:/^([0-9\s\-\+\(\)]*)$/',
+                'min:8',
+            ],
         ]);
     }
 
@@ -64,6 +75,7 @@ class ClientEsim extends BaseModel implements Auditable
             'numero_telephone.required' => 'Numéro de téléphone requis',
             'numero_telephone.regex' => 'Numéro de téléphone non valide',
             'numero_telephone.min' => 'Numéro de téléphone doit avoir 8 digits minimum',
+            'numero_telephone.unique' => 'Numéro déjà attribué',
         ];
     }
 
@@ -79,27 +91,27 @@ class ClientEsim extends BaseModel implements Auditable
 
     #region Custom Functions
 
-    public static function createNew($esim_id, $nom_raison_sociale, $prenom, $email, $numero_telephone)
+    public static function createNew($nom_raison_sociale, $prenom, $email, $numero_telephone)
     {
-        $esim = Esim::getFirstFree($esim_id);
+        //$esim = Esim::getFirstFree($esim_id);
 
-        $esim->setStatutAttribution();
-        
+        //$esim->setStatutAttribution();
+
         $clientesim = ClientEsim::create([
-            'nom_raison_sociale' => $nom_raison_sociale,
-            'prenom' => $prenom,
+            'nom_raison_sociale' => strtoupper($nom_raison_sociale),
+            'prenom' => ucwords($prenom),
             'email' => $email,
             'numero_telephone' => $numero_telephone,
         ]);
 
-        $clientesim->esim()->associate($esim);
-        $clientesim->save();
-        $clientesim->esim->saveQrcode();
-        $clientesim->save();
+        //$clientesim->esim()->associate($esim);
+       //$clientesim->save();
+        //$clientesim->esim->saveQrcode();
+        //$clientesim->save();
 
-        $esim->setStatutAttribue();
+        //$esim->setStatutAttribue();
 
-        return $clientesim->load(['esim','esim.qrcode']);;
+        return $clientesim;
     }
 
     public function updateOne($esim_id, $nom_raison_sociale, $prenom, $email, $numero_telephone)
@@ -129,10 +141,10 @@ class ClientEsim extends BaseModel implements Auditable
         $post_link = "http://192.168.5.174/clientesims.sendmail";
         $directory = "esim_fichier_qrcode";
 
-        $this->esim->saveQrcode();
-        
-        $file_name = public_path('/') . config('app.' . $directory) . '/' . $this->esim->qrcode->qrcode_img;
-        
+        $this->latestPhonenum->esim->saveQrcode();
+
+        $file_name = public_path('/') . config('app.' . $directory) . '/' . $this->latestPhonenum->esim->qrcode->qrcode_img;
+
         $qrcode_img = $file_name;
 
         $client = new Client(['headers' => ['Authorization' => 'auth_trusted_header']]);
@@ -145,13 +157,13 @@ class ClientEsim extends BaseModel implements Auditable
                     'filename' => 'qrcode_image.png',
                 ],
                 ['name' => 'nom', 'contents' => $this->nom_raison_sociale . ' ' .$this->prenom],
-                ['name' => 'email', 'contents' => $this->email,],
-                ['name' => 'telephone', 'contents' => $this->numero_telephone,],
-                ['name' => 'imsi', 'contents' => $this->esim->imsi,],
-                ['name' => 'iccid', 'contents' => $this->esim->iccid,],
-                ['name' => 'pin', 'contents' => $this->esim->pin,],
-                ['name' => 'puk', 'contents' => $this->esim->puk,],
-                ['name' => 'ac', 'contents' => $this->esim->ac,],
+                ['name' => 'email', 'contents' => $this->latestEmailAddress->email,],
+                ['name' => 'telephone', 'contents' => $this->latestPhonenum->numero,],
+                ['name' => 'imsi', 'contents' => $this->latestPhonenum->esim->imsi,],
+                ['name' => 'iccid', 'contents' => $this->latestPhonenum->esim->iccid,],
+                ['name' => 'pin', 'contents' => $this->latestPhonenum->esim->pin,],
+                ['name' => 'puk', 'contents' => $this->latestPhonenum->esim->puk,],
+                ['name' => 'ac', 'contents' => $this->latestPhonenum->esim->ac,],
             ]
         ];
 

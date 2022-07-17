@@ -2,16 +2,44 @@
 
 namespace App\Http\Resources\Esims;
 
+use App\Http\Resources\Employes\EmailAddressResource;
+use App\Http\Resources\Employes\PhoneNumResource;
 use App\Http\Resources\StatusResource;
+use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Carbon;
+use JsonSerializable;
 
+/**
+ * Class ClientEsimResource
+ * @package App\Http\Resources\Esims
+ *
+ * @property integer $id
+ *
+ * @property string $uuid
+ * @property bool $is_default
+ * @property string|null $tags
+ *
+ * @property string $nom_raison_sociale
+ * @property string $prenom
+ * @property string $email
+ * @property string $numero_telephone
+ * @property string $pin
+ * @property string $puk
+ *
+ * @property integer|null $esim_id
+ *
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ */
 class ClientEsimResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
+     * @param  Request  $request
+     * @return array|Arrayable|JsonSerializable
      */
     public function toArray($request)
     {
@@ -26,14 +54,21 @@ class ClientEsimResource extends JsonResource
             'pin' => $this->pin,
             'puk' => $this->puk,
 
+            'latestPhonenum' => PhoneNumResource::make($this->latestPhonenum),
+            'oldestPhonenum' => PhoneNumResource::make($this->oldestPhonenum),
+            'phonenums' => PhoneNumResource::collection($this->phonenums),
+
+            'latestEmailAddress' => EmailAddressResource::make($this->latestEmailAddress),
+            'oldestEmailAddress' => EmailAddressResource::make($this->oldestEmailAddress),
+            'emailaddresses' => EmailAddressResource::collection($this->emailaddresses),
+
             'status' => StatusResource::make($this->status),
-            'esim' => EsimResource::make($this->esim),
 
             'esim_id' => $this->esim_id,
             'created_at' => $this->created_at,
 
-            'show_url' => route('clientesims.show', $this->uuid), 
-            'edit_url' => route('clientesims.edit', $this->uuid), 
+            'show_url' => route('clientesims.show', $this->uuid),
+            'edit_url' => route('clientesims.edit', $this->uuid),
             'destroy_url' => route('clientesims.destroy', $this->uuid),
         ];
     }

@@ -48,11 +48,9 @@
                     <div class="card-body p-0" v-else>
                         <h5 class="tw-text-blue-600 tw-text-sm tw-font-bold tw-mb-3 tw-border-b tw-border-gray-400 tw-pb-2">
                             <span class="text text-align-left">Creer une E-sim pour un client existant</span>
-                            <span class="text text-align-right">
-                            <b-button size="is-small" type="is-info is-light" @click="$emit('create_new_clientesim', -1)" v-if="clientsMatchedSelected">Valider</b-button>
-                            </span>
-                            <span>
-                                {{ clientsMatchedSelected }}
+                            <span class="text text-align-right" v-if="clientesimForm.client_matched_selected">
+                                <b-button size="is-small" type="is-info is-light" @click="createClientEsim()">Valider</b-button>
+                                <b-button size="is-small" type="is-danger is-light" rounded @click="resetClientsMatchedSelected()">Annuler</b-button>
                             </span>
                         </h5>
                         <div class="card-body table-responsive p-0" style="min-height: 200px;">
@@ -68,8 +66,10 @@
                                 <tbody>
                                 <tr v-for="(client, index) in clientsMatched" :key="client.id" class="text text-xs">
                                     <td>
-                                        <b-radio v-model="clientsMatchedSelected" size="is-small" :native-value="client.uuid" type="is-info is-light">
-                                        </b-radio>
+                                        <div class="text border-right">
+                                            <b-radio @input="clientMatchedSelectChanged()" v-model="clientesimForm.client_matched_selected" size="is-small" :native-value="client.uuid" type="is-info is-light">
+                                            </b-radio>
+                                        </div>
                                     </td>
                                     <td><div class="text border-right">{{ client.nom_raison_sociale }}</div></td>
                                     <td><div class="text border-right">{{ client.prenom }}</div></td>
@@ -83,10 +83,13 @@
 
                 </div>
                 <div class="modal-footer justify-content-between">
-                    <b-button type="is-dark" size="is-small" @click="closeForm()">Fermer</b-button>
+                    <div class="buttons">
+                        <b-button type="is-dark" size="is-small" @click="closeForm()">Fermer</b-button>
+                        <b-button type="is-info" size="is-small" rounded @click="resetClientsMatched()" v-if="clientsMatched.length > 0">Retour</b-button>
+                    </div>
                     <b-button type="is-primary" size="is-small" :loading="loading" @click="updateClientEsim()" :disabled="!isValidCreateForm" v-if="editing">Enregistrer</b-button>
-                    <b-button type="is-danger" size="is-small" :loading="loading" @click="createClientEsim()" :disabled="!isValidCreateForm" v-else-if="clientsMatched.length > 0">Creer Nouveau Client</b-button>
-                    <b-button type="is-primary" size="is-small" :loading="loading" @click="checkBeforeCreate()" :disabled="!isValidCreateForm" v-else>Creer Client</b-button>
+                    <b-button type="is-primary" size="is-small" :loading="loading" @click="checkBeforeCreate()" :disabled="!isValidCreateForm" v-else-if="clientsMatched.length === 0">Creer Client</b-button>
+                    <b-button type="is-danger" size="is-small" :loading="loading" @click="createClientEsim()" :disabled="!isValidCreateForm" v-else-if="! clientesimForm.client_matched_selected">Creer Nouveau Client</b-button>
                 </div>
             </div>
             <!-- /.modal-content -->
@@ -97,7 +100,6 @@
 
 <script>
     import Multiselect from 'vue-multiselect'
-
     import ClientEsimBus from "./clientesimBus";
 
     class ClientEsim {
@@ -107,6 +109,7 @@
             this.numero_telephone = clientesim.numero_telephone || ''
             this.email = clientesim.email || ''
             this.esim_id = clientesim.esim_id || ''
+            this.client_matched_selected = clientesim.client_matched_selected || null
         }
     }
     export default {
@@ -155,7 +158,6 @@
                 loading: false,
                 clientesimtypes: [],
                 clientsMatched: [],
-                clientsMatchedSelected: null,
                 searchClientsMatched: "",
             }
         },
@@ -165,10 +167,16 @@
                 $('#addUpdateClientEsim').modal('hide')
             },
             resetForm() {
-                this.clientesimtypes = []
-                this.clientsMatched = [];
-                this.clientsMatchedSelected = null;
+
+                //this.clientesimForm.client_matched_selected = null;
                 this.clientesimForm.reset();
+            },
+            resetClientsMatched() {
+                this.clientsMatched = [];
+                this.resetClientsMatchedSelected();
+            },
+            resetClientsMatchedSelected() {
+                this.clientesimForm.client_matched_selected = null;
             },
             formKeyEnter() {
                 if (this.editing) {
@@ -181,17 +189,26 @@
             },
             checkBeforeCreate() {
                 this.loading = true
-                this.clientesimFormCheck = this.clientesimForm
+                this.clientesim = {
+                    'nom_raison_sociale': this.clientesimForm.nom_raison_sociale,
+                    'prenom': this.clientesimForm.prenom,
+                    'numero_telephone': this.clientesimForm.numero_telephone,
+                    'email': this.clientesimForm.email,
+                    'esim_id': this.clientesimForm.esim_id,
+                    'client_matched_selected': this.clientesimForm.client_matched_selected
+                }
+                this.clientesimFormCheck = new Form(this.clientesim)
 
-                this.clientesimFormCheck
+                this.clientesimForm
                     .post('/clientesims.checkbeforecreate')
                     .then(resp => {
                         this.loading = false
 
-                        console.log(resp)
-
                         if (resp.data.action_type === 1) {
                             this.clientsMatched = resp.data.val
+                            this.clientesimForm = this.clientesimFormCheck
+                        } else {
+                            this.clientSuccessfullyCreated(resp.data.val)
                         }
                     }).catch(error => {
                     this.loading = false
@@ -202,22 +219,26 @@
 
                 this.clientesimForm
                     .post('/clientesims')
-                    .then(newclientesim => {
+                    .then(resp => {
                         this.loading = false
                         //this.$parent.$emit('new_clientesim_created', newclientesim)
-                        this.$swal({
-                            html: '<small>Client cree avec Succes !</small>',
-                            icon: 'success',
-                            timer: 3000
-                        }).then(() => {
-                            $('#addUpdateClientEsim').modal('hide')
-                            this.resetForm()
-                            window.location = '/clientesims.previewpdf/' + newclientesim.id
-                        })
-
+                        this.clientSuccessfullyCreated(resp)
                     }).catch(error => {
                     this.loading = false
                 });
+            },
+            clientSuccessfullyCreated(resp) {
+                console.log(resp)
+                this.$swal({
+                    html: '<small>Client cree avec Succes !</small>',
+                    icon: 'success',
+                    timer: 3000
+                }).then(() => {
+                    $('#addUpdateClientEsim').modal('hide')
+                    this.resetForm()
+                    let phonenum = resp[1]
+                    window.location = '/clientesims.previewpdf/' + phonenum.id
+                })
             },
             updateClientEsim() {
                 this.loading = true
@@ -239,6 +260,9 @@
                     }).catch(error => {
                     this.loading = false
                 });
+            },
+            clientMatchedSelectChanged() {
+                console.log(this.clientesimForm.client_matched_selected)
             }
         },
         computed: {

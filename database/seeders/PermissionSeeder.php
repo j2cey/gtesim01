@@ -24,12 +24,12 @@ class PermissionSeeder extends Seeder
             ['statutesim-create', 3],
             ['statutesim-edit', 3],
             ['statutesim-delete', 3],
-            
+
             ['technologieesim-list', 4],
             ['technologieesim-create', 3],
             ['technologieesim-edit', 3],
             ['technologieesim-delete', 3],
-            
+
             ['clientesim-list', 4],
             ['clientesim-show', 4],
             ['clientesim-create', 3],
@@ -38,6 +38,7 @@ class PermissionSeeder extends Seeder
             ['clientesim-print', 4],
             ['clientesim-esim-attach', 3],
             ['clientesim-esim-dettach', 3],
+            ['clientesim-addphone', 3],
 
             ['esim-list', 4],
             ['esim-show', 4],

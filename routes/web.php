@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\EmailAddressController;
+use App\Http\Controllers\PhoneNumController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PDFController;
@@ -72,6 +74,18 @@ Route::get('users.online', [UserController::class, 'onlineusers'])
 
 #endregion
 
+#region Email Adresses
+
+Route::resource('emailaddresses',EmailAddressController::class)->middleware('auth');
+
+#endregion
+
+#region Phone Nums
+
+Route::resource('phonenums',PhoneNumController::class)->middleware('auth');
+
+#endregion
+
 Route::resource('statuses',StatusController::class);
 Route::get('statuses.fetch',[StatusController::class,'fetch'])
     ->name('statuses.fetch')
@@ -131,6 +145,9 @@ Route::get('clientesims.preprintpdf/{id}',[ClientEsimController::class,'preprint
 ->middleware('auth');
 Route::get('clientesims.mailtest/{id}',[ClientEsimController::class,'mailtest'])
 ->name('clientesims.mailtest')
+->middleware('auth');
+Route::post('clientesims.phonenums',[ClientEsimController::class,'phonenumstore'])
+->name('clientesims.phonenums')
 ->middleware('auth');
 
 Route::get('clientesims.sendmail/{id}',[ClientEsimController::class,'sendMail'])

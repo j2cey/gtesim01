@@ -3,8 +3,13 @@
 namespace App\Http\Requests\ClientEsim;
 
 use App\Models\Esims\ClientEsim;
-use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Class StoreClientEsimRequest
+ * @package App\Http\Requests\ClientEsim
+ *
+ * @property ClientEsim $client_matched_selected
+ */
 class StoreClientEsimRequest extends ClientEsimRequest
 {
     /**
@@ -25,5 +30,17 @@ class StoreClientEsimRequest extends ClientEsimRequest
     public function rules()
     {
         return ClientEsim::createRules();
+    }
+
+    /**
+     * Prepare the data for validation.
+     *
+     * @return void
+     */
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'client_matched_selected' => is_null($this->input('client_matched_selected')) ? null : $this->setRelevantClientEsim( ['uuid' => $this->input('client_matched_selected')], 'uuid'),
+        ]);
     }
 }

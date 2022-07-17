@@ -12,13 +12,28 @@ trait HasPhoneNums
         return $this->morphMany(PhoneNum::class, 'hasphonenum');
     }
 
-    public function addNewPhoneNum($num)
+    public function latestPhonenum()
+    {
+        return $this->morphOne(PhoneNum::class, 'hasphonenum')->latest('id');
+    }
+
+    public function oldestPhonenum()
+    {
+        return $this->morphOne(Phonenum::class, 'hasphonenum')->oldest('id');
+    }
+
+    public function addNewPhoneNum($num, $attach_esim = false, $esim_id = null) : ?Phonenum
     {
         // TODO: Valider le numéro de Phone
         if (empty($num)) {
-            return false;
+            return null;
         }
-        
+
+        $phonenum = $this->phonenums()->where('numero', $num)->first();
+        if ($phonenum) {
+            return $phonenum;
+        }
+
         $phonenum_count = $this->phonenums()->count();
 
         $phonenum = $this->phonenums()->create([
@@ -26,45 +41,46 @@ trait HasPhoneNums
             'posi' => $phonenum_count,
             'status_id' => Status::active()->first()->id,
         ]);
-        
-        return true;
-    }
 
-    public function addNewPhoneNum_old($num)
-    {
-        // TODO: Valider le numéro de Phone
-        if (empty($num)) {
-            return false;
+        if ($attach_esim) {
+            $phonenum->attachEsim($esim_id);
         }
 
-        $elem_type = get_called_class();
+        return $phonenum;
+    }
 
-        $phonenum = PhoneNum::create([
-            'numero' => $num,
-            'status_id' => Status::active()->first()->id,
-        ]);
+    public function hasThisPhone($num) {
+        if ( $this->phonenums()->where('numero', $num)->count() > 0 ) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
-        $phonenum_count = $this->phonenums()->count();
-
-        $this->phonenums()->attach($phonenum->id, [
-            'model_type' => $elem_type,
-            'model_id' => $this->id,
-            'posi' => $phonenum_count,
-        ]);
-        return true;
+    public function removePhonenum($num) {
+        $phonenum = $this->phonenums()->where('numero', $num)->first();
+        if ($phonenum) {
+            $phonenum->delete();
+        }
+    }
+    public function removePhonenumsAll() {
+        $this->phonenums()->each( function($phonenum) {
+            $phonenum->delete();
+        });
     }
 
     /**
-     * Renvoie les numéros de phone (phonenums) de ce model.
+     * Add, dynamically, Eloquent relation (eager loading) to this model
      */
-    public function phonenums_old()
+    protected function initializeHasPhoneNums()
     {
-        $elem_type = get_called_class();
-        return $this->belongsToMany(PhoneNum::class, 'model_has_phone_nums', 'model_id', 'phone_num_id')
-            //return $this->belongsToMany('App\Models\Role', 'role_user', 'user_id', 'role_id');
-            ->wherePivot('model_type', $elem_type)
-            ->withPivot('posi')
-            ->withTimestamps()
-            ->orderBy('posi', 'asc');
+        $this->with = array_unique(array_merge($this->with, ['phonenums','latestPhonenum','oldestPhonenum']));
+    }
+
+    public static function bootHasPhoneNums()
+    {
+        static::deleting(function ($model) {
+            $model->removePhonenumsAll();
+        });
     }
 }

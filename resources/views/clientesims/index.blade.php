@@ -114,9 +114,8 @@
                                         <th class="tw-px-4 tw-py-2">#</th>
                                         <th class="tw-px-4 tw-py-2">Nom</th>
                                         <th class="tw-px-4 tw-py-2">Prenom</th>
-					<th class="tw-px-4 tw-py-2">Num. Phone</th>
-					<th class="tw-px-4 tw-py-2">ICCID</th>
-                                        <th class="tw-px-4 tw-py-2">Email</th>
+                                        <th class="tw-px-4 tw-py-2">Numéros Téléphone</th>
+                                        <th class="tw-px-4 tw-py-2">Adresses mail</th>
                                         <th class="tw-px-4 tw-py-2">Status</th>
                                         <th class="tw-px-4 tw-py-2">Details</th>
                                     </tr>
@@ -136,13 +135,46 @@
                                             <span class="tw-text-sm">@{{ record.prenom }}</span>
                                         </td>
                                         <td class="tw-px-4 tw-py-2">
-                                            <span class="tw-text-sm">@{{ record.numero_telephone }}</span>
-					</td>
-					<td class="tw-px-4 tw-py-2">
-                                            <span class="tw-text-sm">@{{ record.esim.iccid }}</span>
+                                            <span class="tw-text-xs" v-if="record.phonenums">
+                                                <div class="overflow-x">
+                                                    <table class="table-auto tw-bg-gray-200 overflow-scroll w-full">
+                                                        <thead>
+                                                        <tr>
+                                                            <th class="tw-px-2 tw-py-2"><span class="tw-text-xs">Numéro</span></th>
+                                                            <th class="tw-px-2 tw-py-2"><span class="tw-text-xs">ICCID</span></th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr v-for="phonenum in record.phonenums" :key="phonenum.id">
+                                                                <td class="tw-px-2 tw-py-2">
+                                                                    <span class="tw-text-xs">@{{ phonenum.numero }}</span>
+                                                                </td>
+                                                                <td class="tw-px-2 tw-py-2">
+                                                                    <span class="tw-text-xs">@{{ phonenum.esim.iccid }}</span>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                        </table>
+                                                    </div>
+                                            </span>
                                         </td>
                                         <td class="tw-px-4 tw-py-2">
-                                            <span class="tw-text-sm">@{{ record.email }}</span>
+                                            <span class="tw-text-xs" v-if="record.emailaddresses">
+                                                <table class="table-auto tw-bg-gray-200">
+                                                    <thead>
+                                                    <tr>
+                                                        <th class="tw-px-4 tw-py-2">e-mail</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr v-for="emailaddress in record.emailaddresses" :key="emailaddress.id">
+                                                            <td class="tw-px-4 tw-py-2">
+                                                                <span class="tw-text-xs">@{{ emailaddress.email }}</span>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </span>
                                         </td>
                                         <td class="tw-px-6 tw-py-2">
                                             <span class="tw-text-sm" v-if="record.status">
