@@ -164,7 +164,7 @@ class ClientEsimController extends Controller
         $clientesim->addNewEmailAddress($request->email);
         $phonenum = $clientesim->addNewPhoneNum($request->numero_telephone,true,$request->esim_id);
 
-        //ClientEsimSendMailJob::dispatch($clientesim);
+        ClientEsimSendMailJob::dispatch($phonenum);
 
         return [new ClientEsimResource($clientesim),$phonenum];
     }

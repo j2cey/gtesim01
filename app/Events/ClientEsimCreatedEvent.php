@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use App\Models\Employes\PhoneNum;
 use App\Models\Esims\ClientEsim;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Queue\SerializesModels;
@@ -15,17 +16,17 @@ class ClientEsimCreatedEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $clientesim;
+    public $phonenum;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct(ClientEsim $clientesim)
+    public function __construct(PhoneNum $phonenum)
     {
-        \Log::info("clientesim received ClientEsimCreatedEvent : " . json_encode( $clientesim ) );
-        $this->clientesim = $clientesim;
+        \Log::info("clientesim received ClientEsimCreatedEvent : " . json_encode( $phonenum ) );
+        $this->phonenum = $phonenum;
     }
 
     /**

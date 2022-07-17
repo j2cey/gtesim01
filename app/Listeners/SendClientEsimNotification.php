@@ -27,6 +27,7 @@ class SendClientEsimNotification
     public function handle(ClientEsimCreatedEvent $event)
     {
         \Log::info("event received SendClientEsimNotification : " . json_encode( $event ) );
-        $event->clientesim->sendmailprofile();
+        $client = $event->phonenum->hasphonenum;
+        $client->sendmailprofile($event->phonenum);
     }
 }

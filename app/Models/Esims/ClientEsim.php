@@ -2,6 +2,7 @@
 
 namespace App\Models\Esims;
 
+use App\Models\Employes\PhoneNum;
 use App\Traits\EmailAddress\HasEmailAddresses;
 use App\Traits\PhoneNum\HasPhoneNums;
 use GuzzleHttp\Client;
@@ -135,14 +136,14 @@ class ClientEsim extends BaseModel implements Auditable
         return $this;
     }
 
-    public function sendmailprofile()
+    public function sendmailprofile(PhoneNum $phonenum)
     {
         $post_link = "http://192.168.5.174/clientesims.sendmail";
         $directory = "esim_fichier_qrcode";
 
-        $this->latestPhonenum->esim->saveQrcode();
+        $phonenum->esim->saveQrcode();
 
-        $file_name = public_path('/') . config('app.' . $directory) . '/' . $this->latestPhonenum->esim->qrcode->qrcode_img;
+        $file_name = public_path('/') . config('app.' . $directory) . '/' . $phonenum->esim->qrcode->qrcode_img;
 
         $qrcode_img = $file_name;
 
@@ -157,12 +158,12 @@ class ClientEsim extends BaseModel implements Auditable
                 ],
                 ['name' => 'nom', 'contents' => $this->nom_raison_sociale . ' ' .$this->prenom],
                 ['name' => 'email', 'contents' => $this->latestEmailAddress->email,],
-                ['name' => 'telephone', 'contents' => $this->latestPhonenum->numero,],
-                ['name' => 'imsi', 'contents' => $this->latestPhonenum->esim->imsi,],
-                ['name' => 'iccid', 'contents' => $this->latestPhonenum->esim->iccid,],
-                ['name' => 'pin', 'contents' => $this->latestPhonenum->esim->pin,],
-                ['name' => 'puk', 'contents' => $this->latestPhonenum->esim->puk,],
-                ['name' => 'ac', 'contents' => $this->latestPhonenum->esim->ac,],
+                ['name' => 'telephone', 'contents' => $phonenum->numero,],
+                ['name' => 'imsi', 'contents' => $phonenum->esim->imsi,],
+                ['name' => 'iccid', 'contents' => $phonenum->esim->iccid,],
+                ['name' => 'pin', 'contents' => $phonenum->esim->pin,],
+                ['name' => 'puk', 'contents' => $phonenum->esim->puk,],
+                ['name' => 'ac', 'contents' => $phonenum->esim->ac,],
             ]
         ];
 

@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Models\Employes\PhoneNum;
 use Illuminate\Bus\Queueable;
 use App\Models\Esims\ClientEsim;
 use App\Events\ClientEsimCreatedEvent;
@@ -15,16 +16,16 @@ class ClientEsimSendMailJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public $clientesim;
+    public $phonenum;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct(ClientEsim $clientesim)
+    public function __construct(PhoneNum $phonenum)
     {
-        $this->clientesim = $clientesim;
+        $this->phonenum = $phonenum;
     }
 
     /**
@@ -35,6 +36,6 @@ class ClientEsimSendMailJob implements ShouldQueue
     public function handle()
     {
         //$this->clientesim->sendmailprofile();
-        event( new ClientEsimCreatedEvent( $this->clientesim ));
+        event( new ClientEsimCreatedEvent( $this->phonenum ));
     }
 }
