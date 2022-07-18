@@ -78,6 +78,10 @@ Route::get('users.online', [UserController::class, 'onlineusers'])
     ->name('users.online')
     ->middleware('auth');
 
+Route::get('users.sendmail/{id}',[UserController::class,'sendMail'])
+    ->name('users.sendmail')
+    ->middleware('auth');
+
 #endregion
 
 #region Email Adresses

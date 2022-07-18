@@ -2,13 +2,13 @@
 
 namespace App\Models\Esims;
 
-use App\Models\Employes\PhoneNum;
-use App\Traits\EmailAddress\HasEmailAddresses;
-use App\Traits\PhoneNum\HasPhoneNums;
 use GuzzleHttp\Client;
 use App\Models\BaseModel;
 use Illuminate\Support\Carbon;
+use App\Models\Employes\PhoneNum;
+use App\Traits\PhoneNum\HasPhoneNums;
 use OwenIt\Auditing\Contracts\Auditable;
+use App\Traits\EmailAddress\HasEmailAddresses;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**

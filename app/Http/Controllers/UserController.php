@@ -2,19 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use App\Models\User;
-use Illuminate\Contracts\View\Factory;
-use App\Http\Resources\SearchCollection;
-use App\Http\Requests\User\FetchRequest;
+use App\Models\Status;
+use \Illuminate\View\View;
+use App\Jobs\ManageUserActivated;
+use Illuminate\Support\Collection;
 use App\Http\Resources\UserResource;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Contracts\View\Factory;
+
+use App\Http\Requests\User\FetchRequest;
+use App\Http\Resources\SearchCollection;
 use App\Http\Requests\User\UpdateUserRequest;
 use Illuminate\Contracts\Foundation\Application;
 use App\Repositories\Contracts\IUserRepositoryContract;
-
-use Exception;
-use \Illuminate\View\View;
-use Illuminate\Support\Collection;
-use Illuminate\Http\RedirectResponse;
 
 class UserController extends Controller
 {
@@ -70,6 +72,15 @@ class UserController extends Controller
         return view('users.online', compact('users'));
     }
 
+    public function sendMail($id)
+    {
+        $user = User::where('id', $id)->first();
+
+        $response = $user->sendMailAccountInfos();
+
+        dd($response);
+    }
+
     /**
      * [edit description]
      * @param  User $user [description]
@@ -90,6 +101,8 @@ class UserController extends Controller
      */
     public function update(UpdateUserRequest $request, User $user)
     {
+        $status_active = Status::active()->first();
+
         $user->update([
             'name' => $request->name,
             'email' => $request->email,
@@ -103,6 +116,12 @@ class UserController extends Controller
 
         // set status
         $user->setStatus($request->status);
+
+        // launch userActivated event
+        if ( $request->status->code === $status_active->code ) {
+            //\Log::info("ManageUserActivated dispatched : " . json_encode( $user ) );
+            ManageUserActivated::dispatch($user);
+        }
 
         return $user->load(['roles','status']);
     }
