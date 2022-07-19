@@ -101,9 +101,9 @@
 
                 </div>
                 <div class="modal-footer justify-content-between">
-                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Fermer</button>
-                    <button type="button" class="btn btn-primary btn-sm" @click="updateUser()" :disabled="!isValidForm" v-if="editing">Enregistrer</button>
-                    <button type="button" class="btn btn-primary btn-sm" @click="createUser()" :disabled="!isValidForm" v-else>Valider</button>
+                    <b-button type="is-dark" size="is-small" data-dismiss="modal">Fermer</b-button>
+                    <b-button type="is-primary" size="is-small" :loading="loading" @click="updateUser()" :disabled="!isValidForm" v-if="editing">Enregistrer</b-button>
+                    <b-button type="is-primary" size="is-small" :loading="loading" @click="createUser()" :disabled="!isValidForm" v-else>Valider</b-button>
                 </div>
             </div>
             <!-- /.modal-content -->

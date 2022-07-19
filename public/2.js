@@ -802,44 +802,60 @@ var render = function () {
             ),
           ]),
           _vm._v(" "),
-          _c("div", { staticClass: "modal-footer justify-content-between" }, [
-            _c(
-              "button",
-              {
-                staticClass: "btn btn-secondary btn-sm",
-                attrs: { type: "button", "data-dismiss": "modal" },
-              },
-              [_vm._v("Fermer")]
-            ),
-            _vm._v(" "),
-            _vm.editing
-              ? _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-primary btn-sm",
-                    attrs: { type: "button", disabled: !_vm.isValidForm },
-                    on: {
-                      click: function ($event) {
-                        return _vm.updateUser()
+          _c(
+            "div",
+            { staticClass: "modal-footer justify-content-between" },
+            [
+              _c(
+                "b-button",
+                {
+                  attrs: {
+                    type: "is-dark",
+                    size: "is-small",
+                    "data-dismiss": "modal",
+                  },
+                },
+                [_vm._v("Fermer")]
+              ),
+              _vm._v(" "),
+              _vm.editing
+                ? _c(
+                    "b-button",
+                    {
+                      attrs: {
+                        type: "is-primary",
+                        size: "is-small",
+                        loading: _vm.loading,
+                        disabled: !_vm.isValidForm,
+                      },
+                      on: {
+                        click: function ($event) {
+                          return _vm.updateUser()
+                        },
                       },
                     },
-                  },
-                  [_vm._v("Enregistrer")]
-                )
-              : _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-primary btn-sm",
-                    attrs: { type: "button", disabled: !_vm.isValidForm },
-                    on: {
-                      click: function ($event) {
-                        return _vm.createUser()
+                    [_vm._v("Enregistrer")]
+                  )
+                : _c(
+                    "b-button",
+                    {
+                      attrs: {
+                        type: "is-primary",
+                        size: "is-small",
+                        loading: _vm.loading,
+                        disabled: !_vm.isValidForm,
+                      },
+                      on: {
+                        click: function ($event) {
+                          return _vm.createUser()
+                        },
                       },
                     },
-                  },
-                  [_vm._v("Valider")]
-                ),
-          ]),
+                    [_vm._v("Valider")]
+                  ),
+            ],
+            1
+          ),
         ]),
       ]),
     ]
