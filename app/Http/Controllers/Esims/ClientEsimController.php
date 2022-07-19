@@ -2,18 +2,19 @@
 
 namespace App\Http\Controllers\Esims;
 
-use App\Http\Requests\ClientEsim\StoreClientEsimPhonenumRequest;
-use App\Models\Employes\PhoneNum;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Response;
 use PDF;
 use \Illuminate\View\View;
+use Illuminate\Http\Response;
+use Illuminate\Validation\Rule;
 use App\Models\Esims\ClientEsim;
+use App\Models\Employes\PhoneNum;
 use Illuminate\Support\Collection;
 use App\Jobs\ClientEsimSendMailJob;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Contracts\View\Factory;
 use App\Http\Resources\SearchCollection;
+use Illuminate\Support\Facades\Validator;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use App\Http\Requests\ClientEsim\FetchRequest;
 use App\Http\Resources\Esims\ClientEsimResource;
@@ -21,6 +22,7 @@ use Illuminate\Contracts\Foundation\Application;
 use App\Http\Requests\ClientEsim\StoreClientEsimRequest;
 use App\Http\Requests\ClientEsim\UpdateClientEsimRequest;
 use App\Repositories\Contracts\IClientEsimRepositoryContract;
+use App\Http\Requests\ClientEsim\StoreClientEsimPhonenumRequest;
 
 class ClientEsimController extends Controller
 {
@@ -151,6 +153,18 @@ class ClientEsimController extends Controller
     }
 
     public function storeclientesim(StoreClientEsimRequest $request) {
+
+        /*
+        Validator::make($request->all(), [
+            'numero_telephone' => Rule::unique('phone_nums', 'numero')
+                ->where(function ($query, $request) {
+                    $query->where('numero', $request->numero_telephone) ->where('hasphonenum_type', ClientEsim::class);
+                })->ignore($request->numero_telephone),
+        ]);
+        */
+
+        dd($request);
+
         if ( is_null($request->client_matched_selected) ) {
             $clientesim = ClientEsim::createNew(
                 $request->nom_raison_sociale,

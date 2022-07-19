@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\ClientEsim;
 
+use Illuminate\Validation\Rule;
 use App\Models\Esims\ClientEsim;
 
 /**
@@ -29,7 +30,14 @@ class StoreClientEsimRequest extends ClientEsimRequest
      */
     public function rules()
     {
-        return ClientEsim::createRules();
+        return array_merge(ClientEsim::createRules($this->numero_telephone), [
+            /*
+            'numero_telephone' => Rule::unique('phone_nums', 'numero')
+                ->where(function ($query) {
+                    $query->where('numero', $this->numero_telephone) ->where('hasphonenum_type', ClientEsim::class);
+                })->ignore($this->numero_telephone),
+            */
+        ]);
     }
 
     /**

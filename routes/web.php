@@ -167,6 +167,9 @@ Route::get('clientesims.sendmail/{id}',[ClientEsimController::class,'sendMail'])
 Route::post('clientesims.checkbeforecreate',[ClientEsimController::class,'checkbeforecreate'])
 ->name('clientesims.checkbeforecreate')
 ->middleware('auth');
+Route::get('clientesims.checkbeforecreate',[ClientEsimController::class,'checkbeforecreate'])
+->name('clientesims.checkbeforecreate')
+->middleware('auth');
 
 Route::get('pdf/preview', [PDFController::class, 'preview'])->name('pdf.preview');
 Route::get('pdf/generate', [PDFController::class, 'generatePDF'])->name('pdf.generate');

@@ -5,6 +5,7 @@ namespace App\Models\Esims;
 use GuzzleHttp\Client;
 use App\Models\BaseModel;
 use Illuminate\Support\Carbon;
+use Illuminate\Validation\Rule;
 use App\Models\Employes\PhoneNum;
 use App\Traits\PhoneNum\HasPhoneNums;
 use OwenIt\Auditing\Contracts\Auditable;
@@ -47,13 +48,24 @@ class ClientEsim extends BaseModel implements Auditable
             'email' => ['required','email'],
         ];
     }
-    public static function createRules() {
+    public static function createRules($numero) {
         return array_merge(self::defaultRules(), [
             'numero_telephone' => [
                 'required',
                 'regex:/^([0-9\s\-\+\(\)]*)$/',
                 'min:8',
-                'unique:phone_nums,numero,NULL,id',
+                //'unique:phone_nums,numero,NULL,id',
+                //'unique:phone_nums,numero,NULL,id','hasphonenum_type', 'App\Models\Esims\ClientEsim',
+                /*
+                Rule::unique('phone_nums')->where(function ($query) use($numero) {
+                    return $query->where('hasphonenum_type', ClientEsim::class)
+                        ->where('numero', $numero);
+                }),
+                */
+                Rule::unique('phone_nums', 'numero')
+                    ->where(function ($query) use($numero) {
+                        $query->where('numero', $numero) ->where('hasphonenum_type', ClientEsim::class);
+                    })->ignore($numero),
             ],
         ]);
     }
