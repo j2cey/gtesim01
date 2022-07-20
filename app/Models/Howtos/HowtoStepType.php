@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\HowTo;
+namespace App\Models\Howtos;
 
 use App\Models\BaseModel;
 use Illuminate\Support\Carbon;

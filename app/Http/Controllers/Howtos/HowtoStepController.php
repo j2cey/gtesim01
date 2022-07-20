@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Howtos;
 
-use App\Http\Requests\StoreHowtoStepRequest;
-use App\Http\Requests\UpdateHowtoStepRequest;
-use App\Models\HowtoStep;
+use App\Models\Howtos\HowtoStep;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\HowtoStep\StoreHowtoStepRequest;
+use App\Http\Requests\HowtoStep\UpdateHowtoStepRequest;
 
 class HowtoStepController extends Controller
 {
@@ -31,8 +32,8 @@ class HowtoStepController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreHowtoStepRequest  $request
-     * @return \Illuminate\Http\Response
+     * @param StoreHowtoStepRequest $request
+     * @return void
      */
     public function store(StoreHowtoStepRequest $request)
     {
@@ -42,10 +43,10 @@ class HowtoStepController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\HowtoStep  $howtoStep
-     * @return \Illuminate\Http\Response
+     * @param HowtoStep $howtostep
+     * @return void
      */
-    public function show(HowtoStep $howtoStep)
+    public function show(HowtoStep $howtostep)
     {
         //
     }
@@ -53,10 +54,10 @@ class HowtoStepController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\HowtoStep  $howtoStep
-     * @return \Illuminate\Http\Response
+     * @param HowtoStep $howtostep
+     * @return void
      */
-    public function edit(HowtoStep $howtoStep)
+    public function edit(HowtoStep $howtostep)
     {
         //
     }
@@ -64,11 +65,11 @@ class HowtoStepController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdateHowtoStepRequest  $request
-     * @param  \App\Models\HowtoStep  $howtoStep
-     * @return \Illuminate\Http\Response
+     * @param UpdateHowtoStepRequest $request
+     * @param HowtoStep $howtostep
+     * @return void
      */
-    public function update(UpdateHowtoStepRequest $request, HowtoStep $howtoStep)
+    public function update(UpdateHowtoStepRequest $request, HowtoStep $howtostep)
     {
         //
     }
@@ -76,10 +77,10 @@ class HowtoStepController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\HowtoStep  $howtoStep
-     * @return \Illuminate\Http\Response
+     * @param HowtoStep $howtostep
+     * @return void
      */
-    public function destroy(HowtoStep $howtoStep)
+    public function destroy(HowtoStep $howtostep)
     {
         //
     }

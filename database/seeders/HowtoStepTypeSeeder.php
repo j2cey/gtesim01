@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\HowTo\HowtoStepType;
+use App\Models\Howtos\HowtoStepType;
 
 class HowtoStepTypeSeeder extends Seeder
 {

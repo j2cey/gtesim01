@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\HowtoStep;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Models\Howtos\HowtoStep;
 
-class UpdateHowtoStepTypeRequest extends FormRequest
+class StoreHowtoStepRequest extends HowtoStepRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,7 +13,7 @@ class UpdateHowtoStepTypeRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,8 +23,6 @@ class UpdateHowtoStepTypeRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            //
-        ];
+        return HowtoStep::createRules();
     }
 }

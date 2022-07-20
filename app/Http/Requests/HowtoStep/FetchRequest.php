@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests\ClientEsim;
+namespace App\Http\Requests\HowtoStep;
 
 use App\Http\Requests\SearchRequest;
 use App\Http\Requests\ISearchFormRequest;
 
-class FetchRequest extends ClientEsimRequest implements ISearchFormRequest
+class FetchRequest extends HowtoStepRequest implements ISearchFormRequest
 {
     use SearchRequest;
 
@@ -14,7 +14,7 @@ class FetchRequest extends ClientEsimRequest implements ISearchFormRequest
      */
     protected function orderByFields(): array
     {
-        return ['id','nom_raison_sociale'];//return ['nom_raison_sociale', 'email'];
+        return ['id','title'];
     }
 
     /**
@@ -22,7 +22,7 @@ class FetchRequest extends ClientEsimRequest implements ISearchFormRequest
      */
     protected function defaultOrderByField(): string
     {
-        return 'nom_raison_sociale';
+        return 'title';
     }
 
     protected function getCustomPayload()

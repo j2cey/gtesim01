@@ -7,15 +7,13 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Schema\Blueprint;
 use App\Repositories\Eloquent\UserRepository;
 use Illuminate\Http\Resources\Json\JsonResource;
-use App\Repositories\Eloquent\SubjectRepository;
+use App\Repositories\Eloquent\HowtoStepRepository;
 use App\Repositories\Contracts\IUserRepositoryContract;
-use App\Repositories\Eloquent\ReportRepositoryContract;
-use App\Repositories\Contracts\IReportRepositoryContract;
-use App\Repositories\Contracts\ISubjectRepositoryContract;
 
 use App\Repositories\Eloquent\EsimRepository;
-use App\Repositories\Contracts\IEsimRepositoryContract;
 use App\Repositories\Eloquent\ClientEsimRepository;
+use App\Repositories\Contracts\IEsimRepositoryContract;
+use App\Repositories\Contracts\IHowtoStepRepositoryContract;
 use App\Repositories\Contracts\IClientEsimRepositoryContract;
 
 class AppServiceProvider extends ServiceProvider
@@ -31,6 +29,7 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->bind(IEsimRepositoryContract::class, EsimRepository::class);
         $this->app->bind(IClientEsimRepositoryContract::class, ClientEsimRepository::class);
+        $this->app->bind(IHowtoStepRepositoryContract::class, HowtoStepRepository::class);
     }
 
     /**

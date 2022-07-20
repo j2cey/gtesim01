@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\HowTo;
+namespace App\Models\Howtos;
 
 use Spatie\Tags\HasTags;
 use App\Models\BaseModel;
@@ -9,7 +9,7 @@ use OwenIt\Auditing\Contracts\Auditable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
- * Class HowtoStep
+ * Class Howtos
  * @package App\Models
  *
  * @property integer $id
