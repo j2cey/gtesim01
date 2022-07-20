@@ -21,7 +21,7 @@ class CreateEsimsTable extends Migration
     {
         Schema::create($this->table_name, function (Blueprint $table) {
             $table->id();
-            
+
             $table->string('imsi')->comment('imsi');
             $table->string('iccid')->comment('iccid');
             $table->string('pin')->default("0000")->comment('pin');
@@ -43,6 +43,7 @@ class CreateEsimsTable extends Migration
 
             $table->baseFields();
         });
+        $this->setTableComment($this->table_name,$this->table_comment);
     }
 
     /**

@@ -163,8 +163,6 @@ class ClientEsimController extends Controller
         ]);
         */
 
-        dd($request);
-
         if ( is_null($request->client_matched_selected) ) {
             $clientesim = ClientEsim::createNew(
                 $request->nom_raison_sociale,
