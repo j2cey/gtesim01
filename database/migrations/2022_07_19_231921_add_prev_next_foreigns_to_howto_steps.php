@@ -23,7 +23,6 @@ class AddPrevNextForeignsToHowtoSteps extends Migration
                 ->comment('next howto_step reference')
                 ->constrained('howto_step_types')->onDelete('set null');
         });
-        $this->setTableComment($this->table_name,$this->table_comment);
     }
 
     /**

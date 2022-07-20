@@ -2,8 +2,8 @@
 
 namespace App\Models\HowTo;
 
+use Spatie\Tags\HasTags;
 use App\Models\BaseModel;
-use App\Traits\Tag\HasTags;
 use Illuminate\Support\Carbon;
 use OwenIt\Auditing\Contracts\Auditable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

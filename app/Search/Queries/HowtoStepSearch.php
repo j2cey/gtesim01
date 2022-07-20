@@ -18,8 +18,8 @@ class HowtoStepSearch extends Search
 
         if ($this->params->search->hasFilter()) {
             $query
-                ->where('name', 'like', '%'.$this->params->search->search.'%')
-                ->orWhere('email', 'like', '%'.$this->params->search->search.'%')
+                ->where('title', 'like', '%'.$this->params->search->search.'%')
+                ->orWhere('description', 'like', '%'.$this->params->search->search.'%')
                 ->orWhere('username', 'like', '%'.$this->params->search->search.'%');
         }
 
