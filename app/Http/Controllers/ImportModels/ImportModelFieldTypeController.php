@@ -1,17 +1,19 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\ImportModels;
 
+use Illuminate\Http\Response;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreImportModelFieldTypeRequest;
 use App\Http\Requests\UpdateImportModelFieldTypeRequest;
-use App\Models\ImportModelFieldType;
+use App\Models\ImportModels\ImportModelFieldType;
 
 class ImportModelFieldTypeController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function index()
     {
@@ -21,7 +23,7 @@ class ImportModelFieldTypeController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function create()
     {
@@ -31,8 +33,8 @@ class ImportModelFieldTypeController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreImportModelFieldTypeRequest  $request
-     * @return \Illuminate\Http\Response
+     * @param StoreImportModelFieldTypeRequest $request
+     * @return Response
      */
     public function store(StoreImportModelFieldTypeRequest $request)
     {
@@ -42,8 +44,8 @@ class ImportModelFieldTypeController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\ImportModelFieldType  $importModelFieldType
-     * @return \Illuminate\Http\Response
+     * @param ImportModelFieldType $importModelFieldType
+     * @return void
      */
     public function show(ImportModelFieldType $importModelFieldType)
     {
@@ -53,8 +55,8 @@ class ImportModelFieldTypeController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\ImportModelFieldType  $importModelFieldType
-     * @return \Illuminate\Http\Response
+     * @param ImportModelFieldType $importModelFieldType
+     * @return void
      */
     public function edit(ImportModelFieldType $importModelFieldType)
     {
@@ -64,9 +66,9 @@ class ImportModelFieldTypeController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdateImportModelFieldTypeRequest  $request
-     * @param  \App\Models\ImportModelFieldType  $importModelFieldType
-     * @return \Illuminate\Http\Response
+     * @param UpdateImportModelFieldTypeRequest $request
+     * @param ImportModelFieldType $importModelFieldType
+     * @return void
      */
     public function update(UpdateImportModelFieldTypeRequest $request, ImportModelFieldType $importModelFieldType)
     {
@@ -76,8 +78,8 @@ class ImportModelFieldTypeController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\ImportModelFieldType  $importModelFieldType
-     * @return \Illuminate\Http\Response
+     * @param ImportModelFieldType $importModelFieldType
+     * @return void
      */
     public function destroy(ImportModelFieldType $importModelFieldType)
     {

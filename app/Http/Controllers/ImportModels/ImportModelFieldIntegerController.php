@@ -1,17 +1,18 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\ImportModels;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreImportModelFieldIntegerRequest;
 use App\Http\Requests\UpdateImportModelFieldIntegerRequest;
-use App\Models\ImportModelFieldInteger;
+use App\Models\ImportModels\ImportModelFieldInteger;
 
 class ImportModelFieldIntegerController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return void
      */
     public function index()
     {
@@ -21,7 +22,7 @@ class ImportModelFieldIntegerController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return void
      */
     public function create()
     {
@@ -31,8 +32,8 @@ class ImportModelFieldIntegerController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreImportModelFieldIntegerRequest  $request
-     * @return \Illuminate\Http\Response
+     * @param StoreImportModelFieldIntegerRequest $request
+     * @return void
      */
     public function store(StoreImportModelFieldIntegerRequest $request)
     {
@@ -42,8 +43,8 @@ class ImportModelFieldIntegerController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\ImportModelFieldInteger  $importModelFieldInteger
-     * @return \Illuminate\Http\Response
+     * @param ImportModelFieldInteger $importModelFieldInteger
+     * @return void
      */
     public function show(ImportModelFieldInteger $importModelFieldInteger)
     {
@@ -53,8 +54,8 @@ class ImportModelFieldIntegerController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\ImportModelFieldInteger  $importModelFieldInteger
-     * @return \Illuminate\Http\Response
+     * @param ImportModelFieldInteger $importModelFieldInteger
+     * @return void
      */
     public function edit(ImportModelFieldInteger $importModelFieldInteger)
     {
@@ -64,9 +65,9 @@ class ImportModelFieldIntegerController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdateImportModelFieldIntegerRequest  $request
-     * @param  \App\Models\ImportModelFieldInteger  $importModelFieldInteger
-     * @return \Illuminate\Http\Response
+     * @param UpdateImportModelFieldIntegerRequest $request
+     * @param ImportModelFieldInteger $importModelFieldInteger
+     * @return void
      */
     public function update(UpdateImportModelFieldIntegerRequest $request, ImportModelFieldInteger $importModelFieldInteger)
     {
@@ -76,8 +77,8 @@ class ImportModelFieldIntegerController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\ImportModelFieldInteger  $importModelFieldInteger
-     * @return \Illuminate\Http\Response
+     * @param ImportModelFieldInteger $importModelFieldInteger
+     * @return void
      */
     public function destroy(ImportModelFieldInteger $importModelFieldInteger)
     {

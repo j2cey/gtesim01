@@ -25,5 +25,7 @@ class DatabaseSeeder extends Seeder
         $this->call(StatutEsimSeeder::class);
         $this->call(TechnologieEsimSeeder::class);
         $this->call(ImportModelFieldTypeSeeder::class);
+
+        $this->call(HowtoStepTypeSeeder::class);
     }
 }

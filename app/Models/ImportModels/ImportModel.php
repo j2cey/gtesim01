@@ -8,7 +8,7 @@ use OwenIt\Auditing\Contracts\Auditable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
- * Class ImportModel
+ * Class ImportModels
  * @package App\Models\ImportModels
  *
  * @property integer $id
@@ -26,7 +26,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  *
  * @property string $targetmodel_type
  * @property string $filemodel_type
- * 
+ *
  * @property string $hasimportmodel_type
  * @property integer $hasimportmodel_id
  *
