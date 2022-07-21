@@ -45,7 +45,7 @@ trait HasImportModels
             'title' => $title,
             'code' => $code,
             'description' => $description,
-        ]);                                                 // create and attach a new ImportModel to the current model object
+        ]);                                                 // create and attach a new ImportModels to the current model object
 
         return $importmodel;
     }

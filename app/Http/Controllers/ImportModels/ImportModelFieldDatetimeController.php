@@ -1,17 +1,18 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\ImportModels;
 
+use App\Http\Controllers\Controller;
+use App\Models\ImportModels\ImportModelFieldDatetime;
 use App\Http\Requests\StoreImportModelFieldDatetimeRequest;
 use App\Http\Requests\UpdateImportModelFieldDatetimeRequest;
-use App\Models\ImportModelFieldDatetime;
 
 class ImportModelFieldDatetimeController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return void
      */
     public function index()
     {
@@ -21,7 +22,7 @@ class ImportModelFieldDatetimeController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return void
      */
     public function create()
     {
@@ -31,8 +32,8 @@ class ImportModelFieldDatetimeController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreImportModelFieldDatetimeRequest  $request
-     * @return \Illuminate\Http\Response
+     * @param StoreImportModelFieldDatetimeRequest $request
+     * @return void
      */
     public function store(StoreImportModelFieldDatetimeRequest $request)
     {
@@ -42,8 +43,8 @@ class ImportModelFieldDatetimeController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\ImportModelFieldDatetime  $importModelFieldDatetime
-     * @return \Illuminate\Http\Response
+     * @param ImportModelFieldDatetime $importModelFieldDatetime
+     * @return void
      */
     public function show(ImportModelFieldDatetime $importModelFieldDatetime)
     {
@@ -53,8 +54,8 @@ class ImportModelFieldDatetimeController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\ImportModelFieldDatetime  $importModelFieldDatetime
-     * @return \Illuminate\Http\Response
+     * @param ImportModelFieldDatetime $importModelFieldDatetime
+     * @return void
      */
     public function edit(ImportModelFieldDatetime $importModelFieldDatetime)
     {
@@ -64,9 +65,9 @@ class ImportModelFieldDatetimeController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdateImportModelFieldDatetimeRequest  $request
-     * @param  \App\Models\ImportModelFieldDatetime  $importModelFieldDatetime
-     * @return \Illuminate\Http\Response
+     * @param UpdateImportModelFieldDatetimeRequest $request
+     * @param ImportModelFieldDatetime $importModelFieldDatetime
+     * @return void
      */
     public function update(UpdateImportModelFieldDatetimeRequest $request, ImportModelFieldDatetime $importModelFieldDatetime)
     {
@@ -76,8 +77,8 @@ class ImportModelFieldDatetimeController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\ImportModelFieldDatetime  $importModelFieldDatetime
-     * @return \Illuminate\Http\Response
+     * @param ImportModelFieldDatetime $importModelFieldDatetime
+     * @return void
      */
     public function destroy(ImportModelFieldDatetime $importModelFieldDatetime)
     {

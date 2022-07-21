@@ -1,17 +1,18 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\ImportModels;
 
+use App\Http\Controllers\Controller;
+use App\Models\ImportModels\ImportModelField;
 use App\Http\Requests\StoreImportModelFieldRequest;
 use App\Http\Requests\UpdateImportModelFieldRequest;
-use App\Models\ImportModelField;
 
 class ImportModelFieldController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return void
      */
     public function index()
     {
@@ -21,7 +22,7 @@ class ImportModelFieldController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return void
      */
     public function create()
     {
@@ -31,8 +32,8 @@ class ImportModelFieldController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreImportModelFieldRequest  $request
-     * @return \Illuminate\Http\Response
+     * @param StoreImportModelFieldRequest $request
+     * @return void
      */
     public function store(StoreImportModelFieldRequest $request)
     {
@@ -42,8 +43,8 @@ class ImportModelFieldController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\ImportModelField  $importModelField
-     * @return \Illuminate\Http\Response
+     * @param ImportModelField $importModelField
+     * @return void
      */
     public function show(ImportModelField $importModelField)
     {
@@ -53,8 +54,8 @@ class ImportModelFieldController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\ImportModelField  $importModelField
-     * @return \Illuminate\Http\Response
+     * @param ImportModelField $importModelField
+     * @return void
      */
     public function edit(ImportModelField $importModelField)
     {
@@ -64,9 +65,9 @@ class ImportModelFieldController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdateImportModelFieldRequest  $request
-     * @param  \App\Models\ImportModelField  $importModelField
-     * @return \Illuminate\Http\Response
+     * @param UpdateImportModelFieldRequest $request
+     * @param ImportModelField $importModelField
+     * @return void
      */
     public function update(UpdateImportModelFieldRequest $request, ImportModelField $importModelField)
     {
@@ -76,8 +77,8 @@ class ImportModelFieldController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\ImportModelField  $importModelField
-     * @return \Illuminate\Http\Response
+     * @param ImportModelField $importModelField
+     * @return void
      */
     public function destroy(ImportModelField $importModelField)
     {

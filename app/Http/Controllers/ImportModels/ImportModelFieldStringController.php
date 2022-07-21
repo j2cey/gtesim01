@@ -1,17 +1,19 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\ImportModels;
 
+use Illuminate\Http\Response;
+use App\Http\Controllers\Controller;
+use App\Models\ImportModels\ImportModelFieldString;
 use App\Http\Requests\StoreImportModelFieldStringRequest;
 use App\Http\Requests\UpdateImportModelFieldStringRequest;
-use App\Models\ImportModelFieldString;
 
 class ImportModelFieldStringController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return void
      */
     public function index()
     {
@@ -21,7 +23,7 @@ class ImportModelFieldStringController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return void
      */
     public function create()
     {
@@ -31,8 +33,8 @@ class ImportModelFieldStringController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreImportModelFieldStringRequest  $request
-     * @return \Illuminate\Http\Response
+     * @param StoreImportModelFieldStringRequest $request
+     * @return Response
      */
     public function store(StoreImportModelFieldStringRequest $request)
     {
@@ -42,8 +44,8 @@ class ImportModelFieldStringController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\ImportModelFieldString  $importModelFieldString
-     * @return \Illuminate\Http\Response
+     * @param ImportModelFieldString $importModelFieldString
+     * @return void
      */
     public function show(ImportModelFieldString $importModelFieldString)
     {
@@ -53,8 +55,8 @@ class ImportModelFieldStringController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\ImportModelFieldString  $importModelFieldString
-     * @return \Illuminate\Http\Response
+     * @param ImportModelFieldString $importModelFieldString
+     * @return void
      */
     public function edit(ImportModelFieldString $importModelFieldString)
     {
@@ -64,9 +66,9 @@ class ImportModelFieldStringController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdateImportModelFieldStringRequest  $request
-     * @param  \App\Models\ImportModelFieldString  $importModelFieldString
-     * @return \Illuminate\Http\Response
+     * @param UpdateImportModelFieldStringRequest $request
+     * @param ImportModelFieldString $importModelFieldString
+     * @return void
      */
     public function update(UpdateImportModelFieldStringRequest $request, ImportModelFieldString $importModelFieldString)
     {
@@ -76,8 +78,8 @@ class ImportModelFieldStringController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\ImportModelFieldString  $importModelFieldString
-     * @return \Illuminate\Http\Response
+     * @param ImportModelFieldString $importModelFieldString
+     * @return void
      */
     public function destroy(ImportModelFieldString $importModelFieldString)
     {

@@ -1,17 +1,18 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\ImportModels;
 
+use App\Http\Controllers\Controller;
+use App\Models\ImportModels\ImportModel;
 use App\Http\Requests\StoreImportModelRequest;
 use App\Http\Requests\UpdateImportModelRequest;
-use App\Models\ImportModel;
 
 class ImportModelController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return void
      */
     public function index()
     {
@@ -21,7 +22,7 @@ class ImportModelController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return void
      */
     public function create()
     {
@@ -31,8 +32,8 @@ class ImportModelController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreImportModelRequest  $request
-     * @return \Illuminate\Http\Response
+     * @param StoreImportModelRequest $request
+     * @return void
      */
     public function store(StoreImportModelRequest $request)
     {
@@ -42,8 +43,8 @@ class ImportModelController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\ImportModel  $importModel
-     * @return \Illuminate\Http\Response
+     * @param ImportModel $importModel
+     * @return void
      */
     public function show(ImportModel $importModel)
     {
@@ -53,8 +54,8 @@ class ImportModelController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\ImportModel  $importModel
-     * @return \Illuminate\Http\Response
+     * @param ImportModel $importModel
+     * @return void
      */
     public function edit(ImportModel $importModel)
     {
@@ -64,9 +65,9 @@ class ImportModelController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdateImportModelRequest  $request
-     * @param  \App\Models\ImportModel  $importModel
-     * @return \Illuminate\Http\Response
+     * @param UpdateImportModelRequest $request
+     * @param ImportModel $importModel
+     * @return void
      */
     public function update(UpdateImportModelRequest $request, ImportModel $importModel)
     {
@@ -76,8 +77,8 @@ class ImportModelController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\ImportModel  $importModel
-     * @return \Illuminate\Http\Response
+     * @param ImportModel $importModel
+     * @return void
      */
     public function destroy(ImportModel $importModel)
     {
