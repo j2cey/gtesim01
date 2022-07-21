@@ -14,7 +14,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Contracts\View\Factory;
 use App\Http\Resources\SearchCollection;
-use Illuminate\Support\Facades\Validator;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use App\Http\Requests\ClientEsim\FetchRequest;
 use App\Http\Resources\Esims\ClientEsimResource;
@@ -29,7 +28,7 @@ class ClientEsimController extends Controller
     /**
      * @var IClientEsimRepositoryContract
      */
-    private $repository;
+    private IClientEsimRepositoryContract $repository;
 
     /**
      * ClientEsimController constructor.
@@ -50,7 +49,7 @@ class ClientEsimController extends Controller
             ->with('phonenum', $phonenum);
     }
 
-    public function generatePDF($id)
+    public function generatePDF($id): Response
     {
         //$client = new ClientEsimResource(ClientEsim::where('id', $id)->first());
         $phonenum = PhoneNum::with('hasphonenum')->where('id', $id)->first();
@@ -71,7 +70,7 @@ class ClientEsimController extends Controller
         return $pdf->download('clientesims.pdf');
     }
 
-    public function preprintPDF($id)
+    public function preprintPDF($id): Response
     {
         //$client = new ClientEsimResource(ClientEsim::where('id', $id)->first());
         $phonenum = PhoneNum::with('hasphonenum')->where('id', $id)->first();
@@ -182,19 +181,17 @@ class ClientEsimController extends Controller
     }
 
     public function phonenumstore(StoreClientEsimPhonenumRequest $request) {
-        $phonenum = $request->client_esim->addNewPhoneNum($request->numero,true);
-
-        return $phonenum;
+        return $request->client_esim->addNewPhoneNum($request->numero,true);
     }
 
-    public function mailtest($id)
+    public function mailtest($id): void
     {
         $clientesim = ClientEsim::where('id', $id)->first();
         $clientesim->esim->saveQrcode();
         //Mail::to($clientesim->email)->send(new NotifyProfileEsim($clientesim));
     }
 
-    public function sendMail($id)
+    public function sendMail($id): void
     {
         $clientesim = ClientEsim::where('id', $id)->first();
 

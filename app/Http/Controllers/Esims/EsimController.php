@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Esims;
 
 use Exception;
-use App\Models\Esims\Esim;
 use \Illuminate\View\View;
+use App\Models\Esims\Esim;
 
 use Illuminate\Http\Request;
 use App\Models\Esims\StatutEsim;
@@ -12,14 +12,14 @@ use Illuminate\Support\Collection;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Contracts\View\Factory;
-use App\Http\Requests\Esim\StoreEsimRequest;
 use App\Http\Requests\Esim\FetchRequest;
+use App\Http\Requests\Esim\StoreEsimRequest;
 
-use App\Http\Requests\Esim\UpdateEsimRequest;
+use App\Models\Esims\EsimHeadFile;
+use App\Models\Esims\EsimBodyFile;
 use App\Http\Resources\SearchCollection;
 use App\Http\Resources\Esims\EsimResource;
-use App\Models\Esims\EsimBodyFile;
-use App\Models\Esims\EsimHeadFile;
+use App\Http\Requests\Esim\UpdateEsimRequest;
 use Illuminate\Contracts\Foundation\Application;
 use App\Repositories\Contracts\IEsimRepositoryContract;
 
@@ -28,7 +28,7 @@ class EsimController extends Controller
     /**
      * @var IEsimRepositoryContract
      */
-    private $repository;
+    private IEsimRepositoryContract $repository;
 
     /**
      * EsimController constructor.
@@ -73,7 +73,7 @@ class EsimController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return void
      */
     public function create()
     {
@@ -83,10 +83,10 @@ class EsimController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreEsimRequest  $request
-     * @return \Illuminate\Http\Response
+     * @param StoreEsimRequest $request
+     * @return EsimResource
      */
-    public function store(StoreEsimRequest $request)
+    public function store(StoreEsimRequest $request): EsimResource
     {
         $esim = Esim::createNew(
             $request->imsi,
@@ -101,10 +101,10 @@ class EsimController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Esim  $esim
-     * @return \Illuminate\Http\Response
+     * @param Esim $esim
+     * @return void
      */
-    public function show(Esim $esim)
+    public function show(Esim $esim): void
     {
         //
     }
@@ -112,10 +112,10 @@ class EsimController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Esim  $esim
-     * @return \Illuminate\Http\Response
+     * @param Esim $esim
+     * @return void
      */
-    public function edit(Esim $esim)
+    public function edit(Esim $esim): void
     {
         //
     }
@@ -123,11 +123,11 @@ class EsimController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdateEsimRequest  $request
-     * @param  \App\Models\Esim  $esim
-     * @return \Illuminate\Http\Response
+     * @param UpdateEsimRequest $request
+     * @param Esim $esim
+     * @return void
      */
-    public function update(UpdateEsimRequest $request, Esim $esim)
+    public function update(UpdateEsimRequest $request, Esim $esim): void
     {
         //
     }
@@ -135,20 +135,20 @@ class EsimController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Esim  $esim
-     * @return \Illuminate\Http\Response
+     * @param Esim $esim
+     * @return void
      */
-    public function destroy(Esim $esim)
+    public function destroy(Esim $esim): void
     {
         //
     }
-    
+
     public function headfiles()
     {
         return view('esims.headfiles');
     }
-    
-    public function headfilespost(Request $request)
+
+    public function headfilespost(Request $request): void
     {
         $formInput = $request->all();
 
@@ -161,7 +161,7 @@ class EsimController extends Controller
     {
         return view('esims.bodyfiles');
     }
-    
+
     public function bodyfilespost(Request $request)
     {
         $formInput = $request->all();

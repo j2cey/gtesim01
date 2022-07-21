@@ -5,6 +5,13 @@ namespace App\Http\Requests\Esim;
 use App\Models\Esims\Esim;
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * @property mixed imsi
+ * @property mixed iccid
+ * @property mixed ac
+ * @property mixed pin
+ * @property mixed puk
+ */
 class StoreEsimRequest extends EsimRequest
 {
     /**
@@ -12,7 +19,7 @@ class StoreEsimRequest extends EsimRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return true;
     }
