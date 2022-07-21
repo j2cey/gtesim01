@@ -8,22 +8,42 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
  * Class ImportModelFieldType
+ *
  * @package App\Models\ImportModels
- *
  * @property integer $id
- *
  * @property string $uuid
  * @property bool $is_default
  * @property string|null $tags
  * @property integer|null $status_id
- *
  * @property string $name
  * @property string|IInnerImportModelFieldType $model_type
  * @property string $view_name
  * @property string $description
- *
  * @property Carbon $created_at
  * @property Carbon $updated_at
+ * @property int|null $created_by user creator reference
+ * @property int|null $updated_by user updator reference
+ * @property-read \Illuminate\Database\Eloquent\Collection|\OwenIt\Auditing\Models\Audit[] $audits
+ * @property-read int|null $audits_count
+ * @method static \Illuminate\Database\Eloquent\Builder|BaseModel default($exclude = [])
+ * @method static \Illuminate\Database\Eloquent\Builder|ImportModelFieldType newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ImportModelFieldType newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ImportModelFieldType query()
+ * @method static \Illuminate\Database\Eloquent\Builder|ImportModelFieldType whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ImportModelFieldType whereCreatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ImportModelFieldType whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ImportModelFieldType whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ImportModelFieldType whereIsDefault($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ImportModelFieldType whereModelType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ImportModelFieldType whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ImportModelFieldType whereStatusId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ImportModelFieldType whereTags($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ImportModelFieldType whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ImportModelFieldType whereUpdatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ImportModelFieldType whereUuid($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ImportModelFieldType whereViewName($value)
+ * @mixin \Eloquent
+ * @property-read \App\Models\Status|null $status
  */
 class ImportModelFieldType extends BaseModel implements Auditable
 {

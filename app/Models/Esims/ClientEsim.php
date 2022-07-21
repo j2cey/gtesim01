@@ -14,25 +14,57 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
  * Class ClientEsim
+ *
  * @package App\Models\Esims
- *
  * @property integer $id
- *
  * @property string $uuid
  * @property bool $is_default
  * @property string|null $tags
- *
  * @property string $nom_raison_sociale
  * @property string $prenom
  * @property string $email
  * @property string $numero_telephone
  * @property string $pin
  * @property string $puk
- *
  * @property integer|null $esim_id
- *
  * @property Carbon $created_at
  * @property Carbon $updated_at
+ * @property int|null $status_id status reference
+ * @property int|null $created_by user creator reference
+ * @property int|null $updated_by user updator reference
+ * @property-read \Illuminate\Database\Eloquent\Collection|\OwenIt\Auditing\Models\Audit[] $audits
+ * @property-read int|null $audits_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Employes\EmailAddress[] $emailaddresses
+ * @property-read int|null $emailaddresses_count
+ * @property-read \App\Models\Esims\Esim|null $esim
+ * @property-read \App\Models\Employes\EmailAddress|null $latestEmailAddress
+ * @property-read PhoneNum|null $latestPhonenum
+ * @property-read \App\Models\Employes\EmailAddress|null $oldestEmailAddress
+ * @property-read PhoneNum|null $oldestPhonenum
+ * @property-read \Illuminate\Database\Eloquent\Collection|PhoneNum[] $phonenums
+ * @property-read int|null $phonenums_count
+ * @method static \Illuminate\Database\Eloquent\Builder|BaseModel default($exclude = [])
+ * @method static \Illuminate\Database\Eloquent\Builder|ClientEsim newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ClientEsim newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ClientEsim query()
+ * @method static \Illuminate\Database\Eloquent\Builder|ClientEsim whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClientEsim whereCreatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClientEsim whereEmail($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClientEsim whereEsimId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClientEsim whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClientEsim whereIsDefault($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClientEsim whereNomRaisonSociale($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClientEsim whereNumeroTelephone($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClientEsim wherePin($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClientEsim wherePrenom($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClientEsim wherePuk($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClientEsim whereStatusId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClientEsim whereTags($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClientEsim whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClientEsim whereUpdatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ClientEsim whereUuid($value)
+ * @mixin \Eloquent
+ * @property-read \App\Models\Status|null $status
  */
 class ClientEsim extends BaseModel implements Auditable
 {

@@ -9,27 +9,51 @@ use App\Contracts\ImportModels\IInnerImportModelFieldType;
 
 /**
  * Class ImportModelField
+ *
  * @package App\Models\ImportModels
- *
  * @property integer $id
- *
  * @property string $uuid
  * @property bool $is_default
  * @property string|null $tags
  * @property integer|null $status_id
- *
  * @property string $title
  * @property string $mapped_field
  * @property string $description
- *
  * @property string $innerfieldtype_type
  * @property integer $innerfieldtype_id
- * 
  * @property integer|null $import_model_id
  * @property integer|null $import_model_field_type_id
- *
  * @property Carbon $created_at
  * @property Carbon $updated_at
+ * @property int|null $created_by user creator reference
+ * @property int|null $updated_by user updator reference
+ * @property-read \Illuminate\Database\Eloquent\Collection|\OwenIt\Auditing\Models\Audit[] $audits
+ * @property-read int|null $audits_count
+ * @property-read \App\Models\ImportModels\ImportModelFieldType|null $fieldtype
+ * @property-read \App\Models\ImportModels\ImportModel|null $importmodel
+ * @property-read \Illuminate\Database\Eloquent\Model|\Eloquent $innerfieldtype
+ * @method static \Illuminate\Database\Eloquent\Builder|BaseModel default($exclude = [])
+ * @method static \Illuminate\Database\Eloquent\Builder|ImportModelField newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ImportModelField newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ImportModelField query()
+ * @method static \Illuminate\Database\Eloquent\Builder|ImportModelField whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ImportModelField whereCreatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ImportModelField whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ImportModelField whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ImportModelField whereImportModelFieldTypeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ImportModelField whereImportModelId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ImportModelField whereInnerfieldtypeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ImportModelField whereInnerfieldtypeType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ImportModelField whereIsDefault($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ImportModelField whereMappedField($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ImportModelField whereStatusId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ImportModelField whereTags($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ImportModelField whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ImportModelField whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ImportModelField whereUpdatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ImportModelField whereUuid($value)
+ * @mixin \Eloquent
+ * @property-read \App\Models\Status|null $status
  */
 class ImportModelField extends BaseModel implements Auditable
 {

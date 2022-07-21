@@ -10,8 +10,8 @@ use App\Traits\ReflexiveRelationship\HasReflexivePath;
 
 /**
  * Class Setting
- * @package App\Models
  *
+ * @package App\Models
  * @property integer $id
  * @property string $group_id
  * @property string $name
@@ -20,9 +20,32 @@ use App\Traits\ReflexiveRelationship\HasReflexivePath;
  * @property string $type
  * @property string $array_sep
  * @property string|null $description
- *
  * @property Carbon $created_at
  * @property Carbon $updated_at
+ * @property int|null $created_by user creator reference
+ * @property int|null $updated_by user updator reference
+ * @property-read \Illuminate\Database\Eloquent\Collection|\OwenIt\Auditing\Models\Audit[] $audits
+ * @property-read int|null $audits_count
+ * @property-read Setting|null $group
+ * @property-read \Illuminate\Database\Eloquent\Collection|Setting[] $subsettings
+ * @property-read int|null $subsettings_count
+ * @method static \Database\Factories\SettingFactory factory(...$parameters)
+ * @method static \Illuminate\Database\Eloquent\Builder|Setting newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Setting newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Setting query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Setting whereArraySep($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Setting whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Setting whereCreatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Setting whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Setting whereFullPath($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Setting whereGroupId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Setting whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Setting whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Setting whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Setting whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Setting whereUpdatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Setting whereValue($value)
+ * @mixin \Eloquent
  */
 class Setting extends Model implements Auditable
 {

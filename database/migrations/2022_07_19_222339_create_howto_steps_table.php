@@ -23,6 +23,8 @@ class CreateHowtoStepsTable extends Migration
             $table->id();
 
             $table->string('title')->comment('step title');
+            $table->string('code')->comment('step code');
+            $table->integer('posi')->default(0)->comment('step posi');
             $table->string('view')->nullable()->comment('step view');
             $table->string('description')->nullable()->comment('step description');
 

@@ -10,15 +10,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
  * Class Employe
+ *
  * @package App\Models\Employes
- *
  * @property integer $id
- *
  * @property string $uuid
  * @property bool $is_default
  * @property string|null $tags
  * @property integer|null $status_id
- *
  * @property string $nom
  * @property string|null $matricule
  * @property string|null $prenom
@@ -26,12 +24,50 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @property string|null $adresse
  * @property string|null $objectguid
  * @property string|null $thumbnailphoto
- *
  * @property integer|null $fonction_employe_id
  * @property integer|null $departement_id
- *
  * @property Carbon $created_at
  * @property Carbon $updated_at
+ * @property int|null $created_by user creator reference
+ * @property int|null $updated_by user updator reference
+ * @property-read \Illuminate\Database\Eloquent\Collection|\OwenIt\Auditing\Models\Audit[] $audits
+ * @property-read int|null $audits_count
+ * @property-read \App\Models\Employes\Departement|null $departement
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Employes\Departement[] $departementsResponsable
+ * @property-read int|null $departements_responsable_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Employes\EmailAddress[] $emailaddresses
+ * @property-read int|null $emailaddresses_count
+ * @property-read \App\Models\Employes\FonctionEmploye|null $fonction
+ * @property-read \App\Models\Employes\EmailAddress|null $latestEmailAddress
+ * @property-read \App\Models\Employes\PhoneNum|null $latestPhonenum
+ * @property-read \App\Models\Employes\EmailAddress|null $oldestEmailAddress
+ * @property-read \App\Models\Employes\PhoneNum|null $oldestPhonenum
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Employes\PhoneNum[] $phonenums
+ * @property-read int|null $phonenums_count
+ * @method static \Illuminate\Database\Eloquent\Builder|BaseModel default($exclude = [])
+ * @method static \Illuminate\Database\Eloquent\Builder|Employe newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Employe newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Employe query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Employe whereAdresse($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Employe whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Employe whereCreatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Employe whereDepartementId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Employe whereFonctionEmployeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Employe whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Employe whereIsDefault($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Employe whereMatricule($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Employe whereNom($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Employe whereNomComplet($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Employe whereObjectguid($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Employe wherePrenom($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Employe whereStatusId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Employe whereTags($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Employe whereThumbnailphoto($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Employe whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Employe whereUpdatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Employe whereUuid($value)
+ * @mixin \Eloquent
+ * @property-read \App\Models\Status|null $status
  */
 class Employe extends BaseModel implements Auditable
 {

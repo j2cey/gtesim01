@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Howtos;
 
+
 use \Illuminate\View\View;
 use App\Models\Howtos\HowtoStep;
 use Illuminate\Support\Collection;
@@ -63,7 +64,7 @@ class HowtoStepController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return void
+     * @return Response
      */
     public function create()
     {

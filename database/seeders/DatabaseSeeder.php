@@ -27,5 +27,6 @@ class DatabaseSeeder extends Seeder
         $this->call(ImportModelFieldTypeSeeder::class);
 
         $this->call(HowtoStepTypeSeeder::class);
+        $this->call(HowtoStepSeeder::class);
     }
 }
