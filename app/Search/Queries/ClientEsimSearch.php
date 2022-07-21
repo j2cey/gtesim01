@@ -3,7 +3,6 @@
 namespace App\Search\Queries;
 
 use App\Models\Esims\ClientEsim;
-use App\Models\Employes\PhoneNum;
 use Illuminate\Database\Eloquent\Builder;
 
 class ClientEsimSearch extends Search

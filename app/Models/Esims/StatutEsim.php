@@ -9,20 +9,40 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
  * Class StatutEsim
+ *
  * @package App\Models\Esims
- *
  * @property integer $id
- *
  * @property string $uuid
  * @property bool $is_default
  * @property string|null $tags
- *
  * @property string $libelle
- * @property string $code 
+ * @property string $code
  * @property string $description
- *
  * @property Carbon $created_at
  * @property Carbon $updated_at
+ * @property int|null $status_id status reference
+ * @property int|null $created_by user creator reference
+ * @property int|null $updated_by user updator reference
+ * @property-read \Illuminate\Database\Eloquent\Collection|\OwenIt\Auditing\Models\Audit[] $audits
+ * @property-read int|null $audits_count
+ * @method static \Illuminate\Database\Eloquent\Builder|BaseModel default($exclude = [])
+ * @method static \Illuminate\Database\Eloquent\Builder|StatutEsim newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|StatutEsim newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|StatutEsim query()
+ * @method static \Illuminate\Database\Eloquent\Builder|StatutEsim whereCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|StatutEsim whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|StatutEsim whereCreatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|StatutEsim whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|StatutEsim whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|StatutEsim whereIsDefault($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|StatutEsim whereLibelle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|StatutEsim whereStatusId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|StatutEsim whereTags($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|StatutEsim whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|StatutEsim whereUpdatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|StatutEsim whereUuid($value)
+ * @mixin \Eloquent
+ * @property-read \App\Models\Status|null $status
  */
 class StatutEsim extends BaseModel implements Auditable
 {

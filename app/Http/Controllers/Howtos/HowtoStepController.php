@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Howtos;
 
+use Illuminate\Http\Response;
 use App\Models\Howtos\HowtoStep;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\HowtoStep\StoreHowtoStepRequest;
@@ -12,7 +13,7 @@ class HowtoStepController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function index()
     {
@@ -22,7 +23,7 @@ class HowtoStepController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function create()
     {

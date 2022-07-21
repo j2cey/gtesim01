@@ -27,4 +27,21 @@ class CreateTagTables extends Migration
             $table->unique(['tag_id', 'taggable_id', 'taggable_type']);
         });
     }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::table('taggables', function (Blueprint $table) {
+            $table->dropForeign(['tag_id']);
+        });
+        Schema::dropIfExists('taggables');
+
+        Schema::table('tags', function (Blueprint $table) {
+        });
+        Schema::dropIfExists('tags');
+    }
 }

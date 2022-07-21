@@ -5,6 +5,7 @@ namespace App\Search\Queries;
 
 use Spatie\Tags\Tag;
 use App\Models\Howtos\HowtoStep;
+use Illuminate\Database\Eloquent\Builder;
 
 class HowtoStepSearch extends Search
 {
@@ -13,10 +14,10 @@ class HowtoStepSearch extends Search
     /**
      * @inheritDoc
      */
-    protected function query() //: Builder
+    protected function query() : Builder
     {
         $query = HowtoStep::query();
-        $tags = Tag::containing($this->params->search->search)->get()->pluck('name')->toArray();
+        $tags = is_null($this->params->search->search) ? [] : Tag::containing($this->params->search->search)->get()->pluck('name')->toArray();
 
         if ($this->params->search->hasFilter()) {
             $query->withAnyTags($tags)

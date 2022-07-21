@@ -8,25 +8,53 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
  * Class Departement
+ *
  * @package App\Models\Employes
- *
  * @property integer $id
- *
  * @property string $uuid
  * @property bool $is_default
  * @property string|null $tags
  * @property integer|null $status_id
- *
  * @property string $intitule
  * @property string|null $chemin_complet
  * @property string|null $description
- *
  * @property integer|null $type_departement_id
  * @property integer|null $departement_parent_id
  * @property integer|null $employe_responsable_id
- *
  * @property Carbon $created_at
  * @property Carbon $updated_at
+ * @property int|null $created_by user creator reference
+ * @property int|null $updated_by user updator reference
+ * @property-read \Illuminate\Database\Eloquent\Collection|\OwenIt\Auditing\Models\Audit[] $audits
+ * @property-read int|null $audits_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|Departement[] $departementenfants
+ * @property-read int|null $departementenfants_count
+ * @property-read \App\Models\Employes\Employe|null $employeResponsable
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Employes\Employe[] $employes
+ * @property-read int|null $employes_count
+ * @property-read Departement|null $parent
+ * @property-read \App\Models\Employes\TypeDepartement|null $typedepartement
+ * @method static \Illuminate\Database\Eloquent\Builder|BaseModel default($exclude = [])
+ * @method static \Illuminate\Database\Eloquent\Builder|Departement newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Departement newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Departement query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Departement whereCheminComplet($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Departement whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Departement whereCreatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Departement whereDepartementParentId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Departement whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Departement whereEmployeResponsableId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Departement whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Departement whereIntitule($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Departement whereIsDefault($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Departement whereStatusId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Departement whereTags($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Departement whereTypeDepartementId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Departement whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Departement whereUpdatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Departement whereUuid($value)
+ * @mixin \Eloquent
+ * @property-read \App\Models\Status|null $status
  */
 class Departement extends BaseModel implements Auditable
 {

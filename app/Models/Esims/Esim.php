@@ -9,31 +9,61 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
  * Class Esim
+ *
  * @package App\Models\Esims
- *
  * @property integer $id
- *
  * @property string $uuid
  * @property bool $is_default
  * @property string|null $tags
- *
  * @property string $imsi
- * @property string $iccid 
- * @property string $ac 
+ * @property string $iccid
+ * @property string $ac
  * @property string $pin
  * @property string $puk
- * 
  * @property string $eki
  * @property string $pin2
  * @property string $puk2
  * @property string $adm1
  * @property string $opc
- * 
- * @property integer|null $statut_esim_id 
- * @property integer|null $technologie_esim_id 
- *
+ * @property integer|null $statut_esim_id
+ * @property integer|null $technologie_esim_id
  * @property Carbon $created_at
  * @property Carbon $updated_at
+ * @property int|null $status_id status reference
+ * @property int|null $created_by user creator reference
+ * @property int|null $updated_by user updator reference
+ * @property-read \Illuminate\Database\Eloquent\Collection|\OwenIt\Auditing\Models\Audit[] $audits
+ * @property-read int|null $audits_count
+ * @property-read \App\Models\Esims\EsimQrcode|null $qrcode
+ * @property-read \App\Models\Esims\StatutEsim|null $statutesim
+ * @property-read \App\Models\Esims\TechnologieEsim|null $technologieesim
+ * @method static \Illuminate\Database\Eloquent\Builder|BaseModel default($exclude = [])
+ * @method static \Illuminate\Database\Eloquent\Builder|Esim newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Esim newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Esim query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Esim whereAc($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Esim whereAdm1($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Esim whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Esim whereCreatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Esim whereEki($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Esim whereIccid($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Esim whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Esim whereImsi($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Esim whereIsDefault($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Esim whereOpc($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Esim wherePin($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Esim wherePin2($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Esim wherePuk($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Esim wherePuk2($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Esim whereStatusId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Esim whereStatutEsimId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Esim whereTags($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Esim whereTechnologieEsimId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Esim whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Esim whereUpdatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Esim whereUuid($value)
+ * @mixin \Eloquent
+ * @property-read \App\Models\Status|null $status
  */
 class Esim extends BaseModel implements Auditable
 {

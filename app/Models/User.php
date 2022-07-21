@@ -18,15 +18,13 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 /**
  * Class User
+ *
  * @package App\Models
- *
  * @property integer $id
- *
  * @property string $uuid
  * @property bool $is_default
  * @property string|null $tags
  * @property integer|null $status_id
- *
  * @property string $name
  * @property string $email
  * @property string $username
@@ -36,11 +34,54 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @property boolean $is_local
  * @property boolean $is_ldap
  * @property string|null $objectguid
- *
  * @property string $login_type
- *
  * @property Carbon $created_at
  * @property Carbon $updated_at
+ * @property string|null $last_seen if user login then it will update last_seen time and add key for online in cache
+ * @property string|null $remember_token
+ * @property int|null $ldap_account_id reference du compte LDAP
+ * @property int|null $created_by user creator reference
+ * @property int|null $updated_by user updator reference
+ * @property-read \Illuminate\Database\Eloquent\Collection|\OwenIt\Auditing\Models\Audit[] $audits
+ * @property-read int|null $audits_count
+ * @property-read mixed $all_permissions
+ * @property-read LdapAccount|null $ldapaccount
+ * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
+ * @property-read int|null $notifications_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|Permission[] $permissions
+ * @property-read int|null $permissions_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\Permission\Models\Role[] $roles
+ * @property-read int|null $roles_count
+ * @property-read \App\Models\Status|null $status
+ * @method static \Database\Factories\UserFactory factory(...$parameters)
+ * @method static \Illuminate\Database\Eloquent\Builder|User newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|User newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|User permission($permissions)
+ * @method static \Illuminate\Database\Eloquent\Builder|User query()
+ * @method static \Illuminate\Database\Eloquent\Builder|User role($roles, $guard = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereCreatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereEmail($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereEmailVerifiedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereImage($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereIsDefault($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereIsLdap($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereIsLocal($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereLastSeen($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereLdapAccountId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereLoginType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereObjectguid($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User wherePassword($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereRememberToken($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereStatusId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereTags($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereUsername($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereUuid($value)
+ * @mixin \Eloquent
  */
 class User extends Authenticatable implements Auditable
 {

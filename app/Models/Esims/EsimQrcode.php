@@ -10,21 +10,43 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
  * Class Esim
+ *
  * @package App\Models\Esims
- *
  * @property integer $id
- *
  * @property string $uuid
  * @property bool $is_default
  * @property string|null $tags
- * 
  * @property string|null $raw_value
  * @property string|null $qrcode_img
- * 
  * @property integer|null $esim_id
- *
  * @property Carbon $created_at
  * @property Carbon $updated_at
+ * @property int|null $status_id status reference
+ * @property int|null $created_by user creator reference
+ * @property int|null $updated_by user updator reference
+ * @property-read \Illuminate\Database\Eloquent\Collection|\OwenIt\Auditing\Models\Audit[] $audits
+ * @property-read int|null $audits_count
+ * @property-read \App\Models\Esims\Esim|null $esim
+ * @property-read mixed $image_folderpath
+ * @property-read mixed $image_fullpath
+ * @method static \Illuminate\Database\Eloquent\Builder|BaseModel default($exclude = [])
+ * @method static \Illuminate\Database\Eloquent\Builder|EsimQrcode newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|EsimQrcode newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|EsimQrcode query()
+ * @method static \Illuminate\Database\Eloquent\Builder|EsimQrcode whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|EsimQrcode whereCreatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|EsimQrcode whereEsimId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|EsimQrcode whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|EsimQrcode whereIsDefault($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|EsimQrcode whereQrcodeImg($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|EsimQrcode whereRawValue($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|EsimQrcode whereStatusId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|EsimQrcode whereTags($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|EsimQrcode whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|EsimQrcode whereUpdatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|EsimQrcode whereUuid($value)
+ * @mixin \Eloquent
+ * @property-read \App\Models\Status|null $status
  */
 class EsimQrcode extends BaseModel implements Auditable
 {

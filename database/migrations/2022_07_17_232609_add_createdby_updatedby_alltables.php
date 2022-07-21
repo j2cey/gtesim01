@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Schema;
 
 class AddCreatedbyUpdatedbyAlltables extends Migration
 {
-    public $exclude_tables = ["migrations","failed_jobs","ldap_account_imports","password_resets","jobs","audits"];
+    public $exclude_tables = ["migrations","failed_jobs","ldap_account_imports","password_resets","jobs","audits","tags","taggables"];
 
     /**
      * Run the migrations.
