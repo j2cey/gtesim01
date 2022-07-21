@@ -32,7 +32,7 @@ trait HasImportModel
             $importmodel = ImportModel::create($vals);
         } else {
             $importmodel = $this->importmodel->update($vals);
-        }                                                 // create and attach a new ImportModel to the current model object
+        }                                                 // create and attach a new ImportModels to the current model object
 
         return $importmodel;
     }

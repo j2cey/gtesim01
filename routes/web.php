@@ -14,7 +14,9 @@ use App\Http\Controllers\Esims\EsimController;
 use App\Http\Controllers\EmailAddressController;
 use App\Http\Controllers\Esims\StatutEsimController;
 use App\Http\Controllers\Esims\ClientEsimController;
+use App\Http\Controllers\Howtos\HowtoStepController;
 use App\Http\Controllers\Authorization\RoleController;
+use App\Http\Controllers\Howtos\HowtoStepTypeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -173,3 +175,19 @@ Route::get('clientesims.checkbeforecreate',[ClientEsimController::class,'checkbe
 
 Route::get('pdf/preview', [PDFController::class, 'preview'])->name('pdf.preview');
 Route::get('pdf/generate', [PDFController::class, 'generatePDF'])->name('pdf.generate');
+
+Route::resource('howtosteptypes',HowtoStepTypeController::class)->middleware('auth');
+Route::get('howtosteptypes.fetch',[HowtoStepTypeController::class,'fetch'])
+    ->name('howtosteptypes.fetch')
+    ->middleware('auth');
+Route::get('howtosteptypes.fetchall',[HowtoStepTypeController::class,'fetchall'])
+    ->name('howtosteptypes.fetchall')
+    ->middleware('auth');
+
+Route::resource('howtosteps',HowtoStepController::class)->middleware('auth');
+Route::get('howtosteps.fetch',[HowtoStepController::class,'fetch'])
+    ->name('howtosteps.fetch')
+    ->middleware('auth');
+Route::get('howtosteps.fetchall',[HowtoStepController::class,'fetchall'])
+    ->name('howtosteps.fetchall')
+    ->middleware('auth');

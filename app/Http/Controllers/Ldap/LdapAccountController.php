@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Howtos;
+namespace App\Http\Controllers\Ldap;
 
 use App\Http\Controllers\Controller;
-use App\Models\Howtos\HowtoStepType;
-use App\Http\Requests\HowtoStepType\StoreHowtoStepTypeRequest;
-use App\Http\Requests\HowtoStepType\UpdateHowtoStepTypeRequest;
+use App\Http\Requests\StoreLdapAccountRequest;
+use App\Http\Requests\UpdateLdapAccountRequest;
+use App\Models\Ldap\LdapAccount;
 
-class HowtoStepTypeController extends Controller
+class LdapAccountController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -32,10 +32,10 @@ class HowtoStepTypeController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param StoreHowtoStepTypeRequest $request
+     * @param StoreLdapAccountRequest $request
      * @return void
      */
-    public function store(StoreHowtoStepTypeRequest $request)
+    public function store(StoreLdapAccountRequest $request)
     {
         //
     }
@@ -43,10 +43,10 @@ class HowtoStepTypeController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param HowtoStepType $howtosteptype
+     * @param LdapAccount $ldapaccount
      * @return void
      */
-    public function show(HowtoStepType $howtosteptype)
+    public function show(LdapAccount $ldapaccount)
     {
         //
     }
@@ -54,10 +54,10 @@ class HowtoStepTypeController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param HowtoStepType $howtosteptype
+     * @param LdapAccount $ldapaccount
      * @return void
      */
-    public function edit(HowtoStepType $howtosteptype)
+    public function edit(LdapAccount $ldapaccount)
     {
         //
     }
@@ -65,11 +65,11 @@ class HowtoStepTypeController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param UpdateHowtoStepTypeRequest $request
-     * @param HowtoStepType $howtosteptype
+     * @param UpdateLdapAccountRequest $request
+     * @param LdapAccount $ldapaccount
      * @return void
      */
-    public function update(UpdateHowtoStepTypeRequest $request, HowtoStepType $howtosteptype)
+    public function update(UpdateLdapAccountRequest $request, LdapAccount $ldapaccount)
     {
         //
     }
@@ -77,10 +77,10 @@ class HowtoStepTypeController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param HowtoStepType $howtosteptype
+     * @param LdapAccount $ldapaccount
      * @return void
      */
-    public function destroy(HowtoStepType $howtosteptype)
+    public function destroy(LdapAccount $ldapaccount)
     {
         //
     }

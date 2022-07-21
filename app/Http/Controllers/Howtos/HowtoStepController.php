@@ -2,22 +2,63 @@
 
 namespace App\Http\Controllers\Howtos;
 
-use Illuminate\Http\Response;
+
+use \Illuminate\View\View;
 use App\Models\Howtos\HowtoStep;
+use Illuminate\Support\Collection;
 use App\Http\Controllers\Controller;
+use Illuminate\Contracts\View\Factory;
+use App\Http\Resources\SearchCollection;
+use App\Http\Requests\HowtoStep\FetchRequest;
+use Illuminate\Contracts\Foundation\Application;
+use App\Http\Resources\Howtos\HowtoStepResource;
 use App\Http\Requests\HowtoStep\StoreHowtoStepRequest;
 use App\Http\Requests\HowtoStep\UpdateHowtoStepRequest;
+use App\Repositories\Contracts\IHowtoStepRepositoryContract;
 
 class HowtoStepController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * @var IHowtoStepRepositoryContract
+     */
+    private $repository;
+
+    /**
+     * ClientEsimController constructor.
      *
-     * @return Response
+     * @param IHowtoStepRepositoryContract $repository [description]
+     */
+    public function __construct(IHowtoStepRepositoryContract $repository) {
+        $this->repository = $repository;
+    }
+
+    /**
+     * Fetch records.
+     *
+     * @param  FetchRequest     $request [description]
+     * @return SearchCollection          [description]
+     */
+    public function fetch(FetchRequest $request): SearchCollection
+    {
+        return new SearchCollection(
+            $this->repository->search($request), HowtoStepResource::class
+        );
+    }
+
+    public function fetchall() {
+        return HowtoStep::all();
+    }
+
+    /**
+     * Display products page.
+     *
+     * @return Application|Factory|\Illuminate\Contracts\View\View|View
      */
     public function index()
     {
-        //
+        return view('howtosteps.index')
+            ->with('perPage', new Collection(config('system.per_page')))
+            ->with('defaultPerPage', config('system.default_per_page'));
     }
 
     /**
