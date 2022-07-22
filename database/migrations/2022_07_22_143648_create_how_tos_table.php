@@ -5,13 +5,12 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 use App\Traits\Migrations\BaseMigrationTrait;
 
-class CreateHowtoStepsTable extends Migration
+class CreateHowTosTable extends Migration
 {
     use BaseMigrationTrait;
 
-    public $table_name = 'howto_steps';
-    public $table_comment = 'howto steps';
-
+    public $table_name = 'how_tos';
+    public $table_comment = 'how tos';
     /**
      * Run the migrations.
      *
@@ -24,13 +23,8 @@ class CreateHowtoStepsTable extends Migration
 
             $table->string('title')->comment('step title');
             $table->string('code')->comment('step code');
-            $table->integer('posi')->default(0)->comment('step posi');
             $table->string('view')->nullable()->comment('step view');
             $table->string('description')->nullable()->comment('step description');
-
-            $table->foreignId('howto_step_type_id')->nullable()
-                ->comment('howto_step_type reference')
-                ->constrained('howto_step_types')->onDelete('set null');
 
             $table->foreignId('created_by')->nullable()
                 ->comment('user creator reference')
@@ -42,12 +36,12 @@ class CreateHowtoStepsTable extends Migration
 
             $table->baseFields();
         });
-
+        $this->setTableComment($this->table_name,$this->table_comment);
     }
 
     /**
      * Reverse the migrations.
-     *$this->setTableComment($this->table_name,$this->table_comment);
+     *
      * @return void
      */
     public function down()
@@ -56,7 +50,6 @@ class CreateHowtoStepsTable extends Migration
             $table->dropBaseForeigns();
             $table->dropForeign(['created_by']);
             $table->dropForeign(['updated_by']);
-            $table->dropForeign(['howto_step_type_id']);
         });
         Schema::dropIfExists($this->table_name);
     }

@@ -29,23 +29,12 @@
                             per_page: {{ $defaultPerPage }},
                             page: 1,
                             order_by: 'id:desc',
-                            createdat_from: '',
-                            createdat_to: '',
                             status: '',
                             }"
                         v-slot="{ params, update, change, clear, processing }"
                     >
 
-                        <form class="tw-grid tw-grid-cols-10 tw-col-gap-4 tw-pb-3 tw-border-b tw-border-gray-400">
-                            <div class="tw-col-span-4 md:tw-col-span-2">
-
-                            </div>
-
-                            <div class="tw-col-span-4 md:tw-col-span-2">
-
-                            </div>
-
-                            {{--                            TODO: PB de rafraichissement des parametres de filtre--}}
+                        <form class="tw-grid tw-grid-cols-8 tw-col-gap-4 tw-pb-3 tw-border-b tw-border-gray-400">
 
                             <div class="tw-col-span-4 md:tw-col-span-6">
                                 <label class="tw-block tw-uppercase tw-tracking-wide tw-text-gray-700 tw-text-xs tw-font-bold tw-mb-2" for="search">
@@ -86,14 +75,14 @@
 
                         <div class="tw-text-sm">
 
-                            <div class="tw-flex tw-flex-wrap tw-p-4 tw-bg-gray-700 tw-text-white tw-rounded-sm">
+                            <div class="tw-flex tw-flex-wrap tw-p-1 tw-bg-gray-500 tw-text-white tw-rounded-sm">
                                 <div class="tw-flex-auto tw-pr-3">Total : @{{ total }}</div>
                             </div>
 
                             <template v-if="records.length">
 
                                 <div class="container tw-mt-4 tw-mx-auto">
-                                    <div class="tw-grid tw-grid-cols-1 tw-sm:grid-cols-2 tw-md:grid-cols-3 tw-lg:grid-cols-4">
+                                    <div class="tw-grid tw-grid-cols-3 tw-sm:grid-cols-2 tw-md:grid-cols-3 tw-lg:grid-cols-4">
                                         <div class="card tw-m-2 tw-cursor-pointer tw-border tw-border-gray-400 tw-rounded-lg tw-hover:shadow-md tw-hover:border-opacity-0 tw-transform tw-hover:-translate-y-1 tw-transition-all tw-duration-200">
                                             <div class="tw-m-3">
                                                 <h2 class="tw-text-lg tw-mb-2">Title
