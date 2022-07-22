@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
  * Class ImportModel
+ *
  * @package App\Models\ImportModels
  * @property integer $id
  * @property string $uuid

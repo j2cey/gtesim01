@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreTypeDepartementRequest;
-use App\Http\Requests\UpdateTypeDepartementRequest;
-use App\Models\TypeDepartement;
+use App\Http\Requests\StoreHowToRequest;
+use App\Http\Requests\UpdateHowToRequest;
+use App\Models\HowTo;
 
-class TypeDepartementController extends Controller
+class HowToController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -31,10 +31,10 @@ class TypeDepartementController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreTypeDepartementRequest  $request
+     * @param  \App\Http\Requests\StoreHowToRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreTypeDepartementRequest $request)
+    public function store(StoreHowToRequest $request)
     {
         //
     }
@@ -42,10 +42,10 @@ class TypeDepartementController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\TypeDepartement  $typeDepartement
+     * @param  \App\Models\HowTo  $howTo
      * @return \Illuminate\Http\Response
      */
-    public function show(TypeDepartement $typeDepartement)
+    public function show(HowTo $howTo)
     {
         //
     }
@@ -53,10 +53,10 @@ class TypeDepartementController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\TypeDepartement  $typeDepartement
+     * @param  \App\Models\HowTo  $howTo
      * @return \Illuminate\Http\Response
      */
-    public function edit(TypeDepartement $typeDepartement)
+    public function edit(HowTo $howTo)
     {
         //
     }
@@ -64,11 +64,11 @@ class TypeDepartementController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdateTypeDepartementRequest  $request
-     * @param  \App\Models\TypeDepartement  $typeDepartement
+     * @param  \App\Http\Requests\UpdateHowToRequest  $request
+     * @param  \App\Models\HowTo  $howTo
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateTypeDepartementRequest $request, TypeDepartement $typeDepartement)
+    public function update(UpdateHowToRequest $request, HowTo $howTo)
     {
         //
     }
@@ -76,10 +76,10 @@ class TypeDepartementController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\TypeDepartement  $typeDepartement
+     * @param  \App\Models\HowTo  $howTo
      * @return \Illuminate\Http\Response
      */
-    public function destroy(TypeDepartement $typeDepartement)
+    public function destroy(HowTo $howTo)
     {
         //
     }

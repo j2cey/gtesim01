@@ -29,23 +29,12 @@
                             per_page: {{ $defaultPerPage }},
                             page: 1,
                             order_by: 'id:desc',
-                            createdat_from: '',
-                            createdat_to: '',
                             status: '',
                             }"
                         v-slot="{ params, update, change, clear, processing }"
                     >
 
-                        <form class="tw-grid tw-grid-cols-10 tw-col-gap-4 tw-pb-3 tw-border-b tw-border-gray-400">
-                            <div class="tw-col-span-4 md:tw-col-span-2">
-
-                            </div>
-
-                            <div class="tw-col-span-4 md:tw-col-span-2">
-
-                            </div>
-
-                            {{--                            TODO: PB de rafraichissement des parametres de filtre--}}
+                        <form class="tw-grid tw-grid-cols-8 tw-col-gap-4 tw-pb-3 tw-border-b tw-border-gray-400">
 
                             <div class="tw-col-span-4 md:tw-col-span-6">
                                 <label class="tw-block tw-uppercase tw-tracking-wide tw-text-gray-700 tw-text-xs tw-font-bold tw-mb-2" for="search">
@@ -86,52 +75,23 @@
 
                         <div class="tw-text-sm">
 
-                            <div class="tw-flex tw-flex-wrap tw-p-4 tw-bg-gray-700 tw-text-white tw-rounded-sm">
+                            <div class="tw-flex tw-flex-wrap tw-p-1 tw-bg-gray-500 tw-text-white tw-rounded-sm">
                                 <div class="tw-flex-auto tw-pr-3">Total : @{{ total }}</div>
                             </div>
 
                             <template v-if="records.length">
 
-                                <table class="table-auto">
-                                    <thead>
-                                    <tr>
-                                        <th class="tw-px-4 tw-py-2">#</th>
-                                        <th class="tw-px-4 tw-py-2">Rubrique</th>
-                                        <th class="tw-px-4 tw-py-2">Description</th>
-                                        <th class="tw-px-4 tw-py-2"></th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr v-for="record in records"
-                                        :key="record.id"
-                                        class="tw-px-4 tw-border-b tw-border-dashed tw-border-gray-400 tw-text-gray-700 hover:tw-bg-gray-100"
-                                    >
-                                        <td class="tw-px-4 tw-py-2">
-                                            <span class="tw-text-sm">@{{ record.id }}</span>
-                                        </td>
-                                        <td class="tw-px-4 tw-py-2">
-                                            <span class="tw-text-sm">@{{ record.title }}</span>
-                                        </td>
-                                        <td class="tw-px-4 tw-py-2">
-                                            <span class="tw-text-sm">@{{ record.description }}</span>
-                                        </td>
-
-                                        <td class="tw-px-4 tw-py-2">
-                                            @can('howtostep-edit')
-                                                <a @click="$emit('edit_howtostep', record)" class="tw-inline-block tw-mr-3 tw-text-green-500">
-                                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                                                </a>
-                                            @endcan
-                                            @can('howtostep-show')
-                                                <a :href="record.show_url" class="tw-inline-block tw-mr-3 tw-text-orange-500">
-                                                    <i class="fa fa-eye" aria-hidden="true"></i>
-                                                </a>
-                                            @endcan
-                                        </td>
-                                    </tr>
-
-                                    </tbody>
-                                </table>
+                                <div class="container tw-mt-4 tw-mx-auto">
+                                    <div class="tw-grid tw-grid-cols-3 tw-sm:grid-cols-2 tw-md:grid-cols-3 tw-lg:grid-cols-4">
+                                        <div class="card tw-m-2 tw-cursor-pointer tw-border tw-border-gray-400 tw-rounded-lg tw-hover:shadow-md tw-hover:border-opacity-0 tw-transform tw-hover:-translate-y-1 tw-transition-all tw-duration-200">
+                                            <div class="tw-m-3">
+                                                <h2 class="tw-text-lg tw-mb-2">Title
+                                                    <span class="tw-text-sm tw-text-teal-800 tw-font-mono tw-bg-teal-100 tw-inline tw-rounded-full tw-px-2 align-top float-right tw-animate-pulse">Tag</span></h2>
+                                                <p class="tw-font-light tw-font-mono tw-text-sm tw-text-gray-700 tw-hover:text-gray-900 tw-transition-all tw-duration-200">Space, the final frontier. These are the voyages of the Starship Enterprise. Its five-year mission: to explore strange new worlds.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 
                             </template>
 
