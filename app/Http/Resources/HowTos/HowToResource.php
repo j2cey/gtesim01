@@ -58,6 +58,8 @@ class HowToResource extends JsonResource
 
             'show_url' => route('howtos.show', $this->uuid),
             'edit_url' => route('howtos.edit', $this->uuid),
+            'edithtml_url' => route('howtos.edithtml', $this->id),
+            'readhtml_url' => route('howtos.readhtml', $this->id),
             'destroy_url' => route('howtos.destroy', $this->uuid),
         ];
     }

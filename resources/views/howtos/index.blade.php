@@ -86,10 +86,20 @@
                                         <div v-for="record in records"
                                              :key="record.id" class="card tw-m-2 tw-border tw-border-gray-400 tw-rounded-lg hover:tw-shadow-md hover:tw-border-opacity-0 transform hover:tw--translate-y-1 tw-transition-all tw-duration-200">
                                             <div class="tw-m-3">
-                                                <h5 class="tw-text-sm tw-mb-2 tw-cursor-pointer">@{{ record.title }}
+                                                <h5 class="tw-text-sm tw-mb-2 tw-cursor-pointer">
+                                                    <a :href="record.readhtml_url" class="tw-inline-block tw-mr-3">
+                                                    @{{ record.title }}
+                                                    </a>
                                                     <span class="tw-text-xs tw-text-teal-800 tw-font-mono tw-bg-teal-100 tw-inline tw-rounded-full tw-px-2 align-top float-right tw-animate-pulse">
                                                         @can('howto-edit')
-                                                        <i class="fa fa-pencil-square-o" @click="$emit('edit_howto', record)"></i>
+                                                        <span class="tw-inline-block tw-mr-3 tw-text-green-500">
+                                                            <i class="fa fa-pencil-square-o" @click="$emit('edit_howto', record)"></i>
+                                                        </span>
+                                                        @endcan
+                                                        @can('howto-edithtml')
+                                                        <a :href="record.edithtml_url" class="tw-inline-block tw-mr-3 tw-text-red-500">
+                                                            <i class="fa fa-file-code-o" aria-hidden="true"></i>
+                                                        </a>
                                                         @endcan
                                                     </span>
                                                 </h5>

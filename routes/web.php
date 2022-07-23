@@ -192,6 +192,15 @@ Route::get('howtos.fetch',[HowToController::class,'fetch'])
 Route::get('howtos.fetchall',[HowToController::class,'fetchall'])
     ->name('howtos.fetchall')
     ->middleware('auth');
+Route::get('howtos.edithtml/{id}',[HowToController::class,'edithtml'])
+    ->name('howtos.edithtml')
+    ->middleware('auth');
+Route::post('howtos.storehtml',[HowToController::class,'storehtml'])
+    ->name('howtos.storehtml')
+    ->middleware('auth');
+Route::get('howtos.readhtml/{id}',[HowToController::class,'readhtml'])
+    ->name('howtos.readhtml')
+    ->middleware('auth');
 
 Route::get('tags.fetchall',[TagController::class,'fetchall'])
     ->name('tags.fetchall')

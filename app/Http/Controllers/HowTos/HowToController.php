@@ -4,6 +4,7 @@ namespace App\Http\Controllers\HowTos;
 
 use \Illuminate\View\View;
 use App\Models\HowTos\HowTo;
+use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use App\Http\Controllers\Controller;
 use Illuminate\Contracts\View\Factory;
@@ -46,6 +47,61 @@ class HowToController extends Controller
 
     public function fetchall() {
         return HowTo::all();
+    }
+
+    public function edithtml($id) {
+        $howto = HowTo::where('id', $id)->first();
+        return view('howtos.edithtml')
+            ->with('howto', $howto);
+    }
+
+    public function storehtml(Request $request) {
+        $body = $request->body;
+        $images = $request->images;
+        $howto_id = $request->howto;
+
+        // get and save HowTo
+        $howto = HowTo::where('id', $howto_id)->first();
+        $howto->update([
+            'htmlbody' => $body
+        ]);
+
+        // If images not empty
+        if ($images) {
+            foreach ($images as $image)
+            {
+                // Create a new image from base64 string and attach it to article in article-images collection
+                $howto->addMediaFromBase64($image)->toMediaCollection('howto-images');
+
+                // Get all images as we will need the last one uploaded
+                $mediaItems = $howto->load('media')->getMedia('howto-images');
+
+                // Replace the base64 string in article body with the url of the last uploaded image
+                $howto->htmlbody = str_replace($image, $mediaItems[count($mediaItems) - 1]->getFullUrl(), $howto->htmlbody);
+            }
+        }
+
+        $howto->save();
+        $this->removeImagesNotPresent($howto, $howto->htmlbody);
+
+        return response()->json('Success');
+    }
+
+    private function removeImagesNotPresent($howto, $htmlbody): void
+    {
+        $mediaItems = $howto->load('media')->getMedia('howto-images');
+        foreach ($mediaItems as $mediaItem)
+        {
+            if ( ! str_contains($htmlbody, $mediaItem->getFullUrl()) ) {
+                $mediaItem->delete();
+            }
+        }
+    }
+
+    public function readhtml($id) {
+        $howto = HowTo::where('id', $id)->first();
+        return view('howtos.readhtml')
+            ->with('howto', $howto);
     }
 
     /**

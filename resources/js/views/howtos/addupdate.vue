@@ -192,7 +192,7 @@
                             $('#addUpdateHowTo').modal('hide')
                             this.$parent.$emit('new_howto_created', resp)
                             this.resetForm()
-                            window.location = '/howtos/' + resp.uuid
+                            window.location = '/howtos.edithtml/' + resp.id
                         })
                     }).catch(error => {
                     this.loading = false

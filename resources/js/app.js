@@ -169,6 +169,7 @@ Vue.component("esims-file-upload", require("./views/esims/fileUpload").default);
 Vue.component("uuid-generator", require("./views/uuid/generator").default);
 
 Vue.component("howto-addupdate", require("./views/howtos/addupdate").default);
+Vue.component("howto-edithtml", require("./views/howtos/edithtml").default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

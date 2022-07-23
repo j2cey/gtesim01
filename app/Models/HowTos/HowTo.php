@@ -6,8 +6,9 @@ use Spatie\Tags\HasTags;
 use App\Models\BaseModel;
 use App\Traits\Code\HasCode;
 use Illuminate\Support\Carbon;
+use App\Contracts\Media\IHasMedia;
 use Illuminate\Support\Facades\Auth;
-use OwenIt\Auditing\Contracts\Auditable;
+use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -22,6 +23,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @property string $title
  * @property string $code
  * @property string|null $view
+ * @property string|null $htmlbody
  * @property string $description
  * @property int|null $how_to_type_id howto_step_type reference
  * @property int|null $status_id status reference
@@ -61,12 +63,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @method static \Illuminate\Database\Eloquent\Builder|HowTo whereUuid($value)
  * @method static \Illuminate\Database\Eloquent\Builder|HowTo whereView($value)
  */
-class HowTo extends BaseModel implements Auditable
+class HowTo extends BaseModel implements IHasMedia
 {
-    use HasTags, HasCode, HasFactory, \OwenIt\Auditing\Auditable;
+    use HasMediaTrait, HasTags, HasCode, HasFactory, \OwenIt\Auditing\Auditable;
 
     protected $guarded = [];
     protected $with = ['tags'];
+
+    protected $auditExclude = [
+        'htmlbody',
+    ];
 
     #region Validation Rules
 
