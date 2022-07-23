@@ -40,7 +40,11 @@ class Form {
      */
     reset() {
         for (let field in this.originalData) {
-            this[field] = '';
+            if (this[field] instanceof Array) {
+                this[field] = [];
+            } else {
+                this[field] = '';
+            }
         }
 
         this.errors.clear();

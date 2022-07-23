@@ -11,7 +11,7 @@ class DatabaseSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         // \App\Models\UserResource::factory(10)->create();
         $this->call(SettingSeeder::class);
@@ -26,7 +26,7 @@ class DatabaseSeeder extends Seeder
         $this->call(TechnologieEsimSeeder::class);
         $this->call(ImportModelFieldTypeSeeder::class);
 
-        $this->call(HowtoStepTypeSeeder::class);
-        $this->call(HowtoStepSeeder::class);
+        $this->call(HowToTypeSeeder::class);
+        $this->call(HowToSeeder::class);
     }
 }

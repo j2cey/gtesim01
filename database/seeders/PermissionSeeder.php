@@ -53,10 +53,11 @@ class PermissionSeeder extends Seeder
             ['esimqrcode-edit', 3],
             ['esimqrcode-delete', 3],
 
-            ['howtostep-list', 4],
-            ['howtostep-create', 3],
-            ['howtostep-edit', 3],
-            ['howtostep-delete', 3]
+            ['howto-list', 4],
+            ['howto-create', 3],
+            ['howto-edit', 3],
+            ['howto-delete', 3],
+            ['howto-update-code', 1]
         ];
 
         foreach ($permissions as $permission) {

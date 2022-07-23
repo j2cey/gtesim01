@@ -4,19 +4,20 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PDFController;
+use App\Http\Controllers\TagController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UuidController;
 use App\Http\Controllers\StatusController;
 use App\Http\Controllers\SystemController;
 use App\Http\Controllers\SettingController;
-use App\Http\Controllers\PhoneNumController;
 use App\Http\Controllers\Esims\EsimController;
-use App\Http\Controllers\EmailAddressController;
+use App\Http\Controllers\HowTos\HowToController;
 use App\Http\Controllers\Esims\StatutEsimController;
 use App\Http\Controllers\Esims\ClientEsimController;
-use App\Http\Controllers\Howtos\HowtoStepController;
+use App\Http\Controllers\HowTos\HowToTypeController;
+use App\Http\Controllers\Employes\PhoneNumController;
 use App\Http\Controllers\Authorization\RoleController;
-use App\Http\Controllers\Howtos\HowtoStepTypeController;
+use App\Http\Controllers\Employes\EmailAddressController;
 
 /*
 |--------------------------------------------------------------------------
@@ -176,18 +177,22 @@ Route::get('clientesims.checkbeforecreate',[ClientEsimController::class,'checkbe
 Route::get('pdf/preview', [PDFController::class, 'preview'])->name('pdf.preview');
 Route::get('pdf/generate', [PDFController::class, 'generatePDF'])->name('pdf.generate');
 
-Route::resource('howtosteptypes',HowtoStepTypeController::class)->middleware('auth');
-Route::get('howtosteptypes.fetch',[HowtoStepTypeController::class,'fetch'])
-    ->name('howtosteptypes.fetch')
+Route::resource('howtotypes',HowToTypeController::class)->middleware('auth');
+Route::get('howtotypes.fetch',[HowToTypeController::class,'fetch'])
+    ->name('howtotypes.fetch')
     ->middleware('auth');
-Route::get('howtosteptypes.fetchall',[HowtoStepTypeController::class,'fetchall'])
-    ->name('howtosteptypes.fetchall')
+Route::get('howtotypes.fetchall',[HowToTypeController::class,'fetchall'])
+    ->name('howtotypes.fetchall')
     ->middleware('auth');
 
-Route::resource('howtosteps',HowtoStepController::class)->middleware('auth');
-Route::get('howtosteps.fetch',[HowtoStepController::class,'fetch'])
-    ->name('howtosteps.fetch')
+Route::resource('howtos',HowToController::class)->middleware('auth');
+Route::get('howtos.fetch',[HowToController::class,'fetch'])
+    ->name('howtos.fetch')
     ->middleware('auth');
-Route::get('howtosteps.fetchall',[HowtoStepController::class,'fetchall'])
-    ->name('howtosteps.fetchall')
+Route::get('howtos.fetchall',[HowToController::class,'fetchall'])
+    ->name('howtos.fetchall')
+    ->middleware('auth');
+
+Route::get('tags.fetchall',[TagController::class,'fetchall'])
+    ->name('tags.fetchall')
     ->middleware('auth');
