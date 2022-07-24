@@ -8,6 +8,7 @@
       <w>clientesims</w>
       <w>clientsesims</w>
       <w>departement</w>
+      <w>edithtml</w>
       <w>employe</w>
       <w>employes</w>
       <w>esim</w>
@@ -19,6 +20,8 @@
       <w>headfilespost</w>
       <w>howto</w>
       <w>howtos</w>
+      <w>howtothread</w>
+      <w>howtothreads</w>
       <w>howtotype</w>
       <w>howtotypes</w>
       <w>htmlbody</w>
@@ -30,8 +33,10 @@
       <w>phonenum</w>
       <w>phonenumstore</w>
       <w>prenom</w>
+      <w>readhtml</w>
       <w>statutesims</w>
       <w>storeclientesim</w>
+      <w>storehtml</w>
       <w>typedepartement</w>
     </words>
   </dictionary>

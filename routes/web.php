@@ -17,6 +17,7 @@ use App\Http\Controllers\Esims\ClientEsimController;
 use App\Http\Controllers\HowTos\HowToTypeController;
 use App\Http\Controllers\Employes\PhoneNumController;
 use App\Http\Controllers\Authorization\RoleController;
+use App\Http\Controllers\HowTos\HowToThreadController;
 use App\Http\Controllers\Employes\EmailAddressController;
 
 /*
@@ -200,6 +201,17 @@ Route::post('howtos.storehtml',[HowToController::class,'storehtml'])
     ->middleware('auth');
 Route::get('howtos.readhtml/{id}',[HowToController::class,'readhtml'])
     ->name('howtos.readhtml')
+    ->middleware('auth');
+
+Route::resource('howtothreads',HowToThreadController::class)->middleware('auth');
+Route::get('howtothreads.fetch',[HowToThreadController::class,'fetch'])
+    ->name('howtothreads.fetch')
+    ->middleware('auth');
+Route::get('howtothreads.fetchall',[HowToThreadController::class,'fetchall'])
+    ->name('howtothreads.fetchall')
+    ->middleware('auth');
+Route::get('howtothreads.read/{id}/{posi}',[HowToThreadController::class,'read'])
+    ->name('howtothreads.read')
     ->middleware('auth');
 
 Route::get('tags.fetchall',[TagController::class,'fetchall'])

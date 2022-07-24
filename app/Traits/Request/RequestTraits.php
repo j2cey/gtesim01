@@ -12,6 +12,19 @@ use Spatie\Permission\Models\Role;
 
 trait RequestTraits
 {
+    public function getTagsAsAray($tags_arr): array
+    {
+        $out_arr = [];
+        foreach ($tags_arr as $item) {
+            if ( is_string($item) ) {
+                $out_arr[] = $item;
+            } elseif ( is_array($item) ) {
+                $out_arr[] = $item['name']['en'];
+            }
+        }
+        return $out_arr;
+    }
+
     public function getCheckValue($field): int
     {
         $formInput = $this->all();

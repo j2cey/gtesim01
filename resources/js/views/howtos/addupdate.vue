@@ -46,7 +46,7 @@
                                     <span class="invalid-feedback d-block text-xs" role="alert" v-if="howtoForm.errors.has('code')" v-text="howtoForm.errors.get('code')"></span>
                                 </div>
                             </div>
-                            <div class="form-group row">
+                            <div class="form-group row" hidden>
                                 <label for="view" class="col-sm-2 col-form-label text-xs">Vue</label>
                                 <div class="col-sm-10">
                                     <input @keyup.enter="formKeyEnter()" type="text" class="form-control text-xs" id="view" name="posi" required autocomplete="view" autofocus placeholder="Vue" v-model="howtoForm.view">
@@ -173,7 +173,7 @@
                 if (this.editing) {
                     this.updateHowTo()
                 } else {
-                    this.checkBeforeCreate()
+                    this.createHowTo()
                 }
             },
             createHowTo() {

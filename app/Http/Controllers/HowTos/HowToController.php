@@ -137,9 +137,8 @@ class HowToController extends Controller
         $howto = HowTo::createNew(
             $request->howtotype,
             $request->title,
-            $request->view,
+            null,//$request->view,
             $request->description,
-            null,
             $request->code,
             $request->tags
         );
@@ -180,9 +179,8 @@ class HowToController extends Controller
         $howto->updateOne(
             $request->howtotype,
             $request->title,
-            $request->view,
+            null,//$request->view,
             $request->description,
-            null,
             $request->code,
             $request->tags
         );

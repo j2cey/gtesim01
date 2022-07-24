@@ -1,4 +1,4 @@
-@extends('app', ['page_title' => "Comment Faire ?"])
+@extends('app', ['page_title' => "Rubrique Pour file de Tutos"])
 
 @section('app_content')
 
@@ -11,7 +11,7 @@
                 <div class="tw-mb-4">
 
                     <h5 class="tw-text-blue-600 tw-text-sm tw-font-bold tw-mb-3 tw-border-b tw-border-gray-400 tw-pb-2">
-                        <span class="text text-align-left">Trucs & Astuces pour Prendre la Main</span>
+                        <span class="text text-align-left">Rubriques de Tutos</span>
                         <span class="text text-align-right">
                             @can('howto-create')
                                 <b-button size="is-small" type="is-info is-light" @click="$emit('create_new_howto', -1)"><i class="fas fa-plus"></i></b-button>

@@ -58,7 +58,13 @@ class PermissionSeeder extends Seeder
             ['howto-edit', 3],
             ['howto-delete', 3],
             ['howto-update-code', 1],
-            ['howto-edithtml', 1]
+            ['howto-edithtml', 1],
+
+            ['howtothread-list', 4],
+            ['howtothread-create', 3],
+            ['howtothread-edit', 3],
+            ['howtothread-delete', 3],
+            ['howtothread-update-code', 1],
         ];
 
         foreach ($permissions as $permission) {

@@ -123,14 +123,13 @@ class HowTo extends BaseModel implements IHasMedia
      * @param null $tags
      * @return HowTo
      */
-    public static function createNew(HowToType $howtotype, $title, $view, $description, $htmlbody = null, $code = null, $tags = null) : HowTo
+    public static function createNew(HowToType $howtotype, $title, $view, $description, $code = null, $tags = null) : HowTo
     {
         $howto = self::create([
             'title' => $title,
             'code' => $code,
             'view' => $view,
             'description' => $description,
-            'htmlbody' => $htmlbody,
         ]);
 
         $howto->howtotype()
@@ -144,7 +143,7 @@ class HowTo extends BaseModel implements IHasMedia
         return $howto;
     }
 
-    public function updateOne(HowToType $howtotype, $title, $view, $description, $htmlbody = null, $code = null, $tags = null) : HowTo
+    public function updateOne(HowToType $howtotype, $title, $view, $description, $code = null, $tags = null) : HowTo
     {
         //dd($tags);
         $current_user = Auth::user();
@@ -152,7 +151,6 @@ class HowTo extends BaseModel implements IHasMedia
             'title' => $title,
             'view' => $view,
             'description' => $description,
-            'htmlbody' => $htmlbody,
         ]);
 
         $this->howtotype()

@@ -53,17 +53,4 @@ class HowToRequest extends FormRequest
     {
         return HowTo::messagesRules();
     }
-
-    public function getTagsAsAray($tags_arr): array
-    {
-        $out_arr = [];
-        foreach ($tags_arr as $item) {
-            if ( is_string($item) ) {
-                $out_arr[] = $item;
-            } elseif ( is_array($item) ) {
-                $out_arr[] = $item['name']['en'];
-            }
-        }
-        return $out_arr;
-    }
 }

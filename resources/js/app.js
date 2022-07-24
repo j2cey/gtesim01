@@ -171,6 +171,8 @@ Vue.component("uuid-generator", require("./views/uuid/generator").default);
 Vue.component("howto-addupdate", require("./views/howtos/addupdate").default);
 Vue.component("howto-edithtml", require("./views/howtos/edithtml").default);
 
+Vue.component("howtothread-addupdate", require("./views/howtothreads/addupdate").default);
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
