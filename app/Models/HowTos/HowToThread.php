@@ -73,7 +73,15 @@ class HowToThread extends BaseModel implements Auditable
 
     public function steps() {
         return $this->belongsToMany(HowTo::class, 'how_to_thread_steps', 'how_to_thread_id', 'how_to_id')
-            ->withPivot('posi');
+            ->withPivot('posi','description');
+    }
+
+    public function laststep() {
+        return $this->steps()->wherePivot('posi', 1);
+    }
+
+    public function lateststep() {
+        return $this->steps()->latest();
     }
 
     #endregion
@@ -131,6 +139,20 @@ class HowToThread extends BaseModel implements Auditable
         }
 
         return $this;
+    }
+
+    public function addStep(HowTo $howto, $posi, $step_title = null, $description = null) {
+        $title = is_null($step_title) ? $howto->title : $step_title;
+        $this->steps()
+            ->attach($howto->id, [
+                'step_title' => $title,
+                'posi' => $posi,
+                'description' => $description,
+            ]);
+
+        $this->save();
+
+        return $this->lateststep;
     }
 
     #endregion

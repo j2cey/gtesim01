@@ -6,8 +6,10 @@ namespace App\Traits\Request;
 use JsonException;
 use App\Models\User;
 use App\Models\Status;
+use App\Models\HowTos\HowTo;
 use App\Models\Esims\ClientEsim;
 use App\Models\HowTos\HowToType;
+use App\Models\HowTos\HowToThread;
 use Spatie\Permission\Models\Role;
 
 trait RequestTraits
@@ -104,6 +106,26 @@ trait RequestTraits
             $value = $this->decodeJsonField($value);
         }
         return $value ? HowToType::where($field, $value[$field])->first() : null;
+    }
+    
+    public function setRelevantHowTo($value, $field = 'id', $json_decode_before = false) {
+        if (is_null($value)) {
+            return null;
+        }
+        if ($json_decode_before || is_string($value)) {
+            $value = $this->decodeJsonField($value);
+        }
+        return $value ? HowTo::where($field, $value[$field])->first() : null;
+    }
+    
+    public function setRelevantHowToThread($value, $field = 'id', $json_decode_before = false) {
+        if (is_null($value)) {
+            return null;
+        }
+        if ($json_decode_before || is_string($value)) {
+            $value = $this->decodeJsonField($value);
+        }
+        return $value ? HowToThread::where($field, $value[$field])->first() : null;
     }
 
     public function setRelevantStatus($value, $field = 'id', $json_decode_before = false) {
