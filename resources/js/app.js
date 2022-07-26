@@ -172,6 +172,7 @@ Vue.component("howto-addupdate", require("./views/howtos/addupdate").default);
 Vue.component("howto-edithtml", require("./views/howtos/edithtml").default);
 
 Vue.component("howtothread-addupdate", require("./views/howtothreads/addupdate").default);
+Vue.component("howtothread-show", require("./views/howtothreads/show").default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
