@@ -25,6 +25,7 @@ class CreateHowToThreadStepsTable extends Migration
 
             $table->integer('posi')->default(1)->comment('step (child) position in children list');
             $table->string('step_title')->nullable()->comment('step (child) title');
+            $table->string('description')->nullable()->comment('step description');
 
             $table->foreignId('how_to_id')->nullable()
                 ->comment('how_to child reference')
