@@ -15,6 +15,7 @@ class PermissionSeeder extends Seeder
     public function run()
     {
         $permissions = [
+
             ['role-list', 2],
             ['role-create', 1],
             ['role-edit', 1],
@@ -53,10 +54,18 @@ class PermissionSeeder extends Seeder
             ['esimqrcode-edit', 3],
             ['esimqrcode-delete', 3],
 
-            ['howtostep-list', 4],
-            ['howtostep-create', 3],
-            ['howtostep-edit', 3],
-            ['howtostep-delete', 3]
+            ['howto-list', 4],
+            ['howto-create', 3],
+            ['howto-edit', 3],
+            ['howto-delete', 3],
+            ['howto-update-code', 1],
+            ['howto-edithtml', 1],
+
+            ['howtothread-list', 4],
+            ['howtothread-create', 3],
+            ['howtothread-edit', 3],
+            ['howtothread-delete', 3],
+            ['howtothread-update-code', 1],
         ];
 
         foreach ($permissions as $permission) {

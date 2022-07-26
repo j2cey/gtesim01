@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Employes;
 
 use App\Models\Employes\Employe;
-use App\Http\Controllers\Controller;c
+use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreEmployeRequest;
 use App\Http\Requests\UpdateEmployeRequest;
 

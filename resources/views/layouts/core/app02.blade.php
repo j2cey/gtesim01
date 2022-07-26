@@ -49,6 +49,8 @@
 
     <vue-noty></vue-noty>
     <uuid-generator></uuid-generator>
+    <howto-addupdate></howto-addupdate>
+    <howtothread-addupdate></howtothread-addupdate>
 </div>
 <!-- ./wrapper -->
 

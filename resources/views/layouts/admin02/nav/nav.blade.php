@@ -99,7 +99,13 @@
 
                 @role('Admin')
                 <li class="nav-item dropdown">
-                    <a class="button is-warning" size="is-small" href="/howtosteps">Comment Faire &nbsp;<i class="fa fa-lightbulb"></i> </a>
+                    <a class="button is-warning" size="is-small" href="/howtothreads">Comment Faire &nbsp;<i class="fa fa-lightbulb"></i> </a>
+                </li>
+                @endrole
+
+                @role('Admin')
+                <li class="nav-item dropdown">
+                    <a class="button is-success" size="is-small" href="/howtos">Détails de Tutos &nbsp;<i class="fa fa-book"></i> </a>
                 </li>
                 @endrole
 
