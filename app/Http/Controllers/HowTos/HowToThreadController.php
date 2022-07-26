@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\HowTos;
 
 use Illuminate\View\View;
+use Illuminate\Http\Request;
 use App\Models\HowTos\HowToThread;
 use Illuminate\Support\Collection;
 use App\Http\Controllers\Controller;
@@ -11,6 +12,7 @@ use App\Http\Resources\SearchCollection;
 use App\Http\Requests\HowToThread\FetchRequest;
 use Illuminate\Contracts\Foundation\Application;
 use App\Http\Resources\HowTos\HowToThreadResource;
+use App\Http\Requests\HowToStep\StoreHowToStepRequest;
 use App\Http\Requests\HowToThread\StoreHowToThreadRequest;
 use App\Http\Requests\HowToThread\UpdateHowToThreadRequest;
 use App\Repositories\Contracts\IHowToThreadRepositoryContract;
@@ -53,6 +55,16 @@ class HowToThreadController extends Controller
         return view('howtothreads.read')
             ->with('howtothread', $howtothread)
             ->with('posi', $posi);
+    }
+
+    public function posimax($id) {
+        $howtothread = HowToThread::where('id', $id)->first()->load('steps');
+        return $howtothread->steps()->count();
+    }
+
+    public function storestep(StoreHowToStepRequest $request) {
+        $howtothread = $request->howtothread;
+        return $howtothread->addStep($request->howto, $request->posi, $request->step_title = null, $request->description = null);
     }
 
     /**

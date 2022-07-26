@@ -214,6 +214,13 @@ Route::get('howtothreads.read/{id}/{posi}',[HowToThreadController::class,'read']
     ->name('howtothreads.read')
     ->middleware('auth');
 
+Route::get('howtothreads.posimax/{id}',[HowToThreadController::class,'posimax'])
+    ->name('howtothreads.posimax')
+    ->middleware('auth');
+Route::get('howtothreads.storestep',[HowToThreadController::class,'storestep'])
+    ->name('howtothreads.storestep')
+    ->middleware('auth');
+
 Route::get('tags.fetchall',[TagController::class,'fetchall'])
     ->name('tags.fetchall')
     ->middleware('auth');
