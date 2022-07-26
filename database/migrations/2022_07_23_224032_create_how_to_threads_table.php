@@ -35,6 +35,7 @@ class CreateHowToThreadsTable extends Migration
 
             $table->baseFields();
         });
+        $this->setTableComment($this->table_name,$this->table_comment);
     }
 
     /**

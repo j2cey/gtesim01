@@ -63,8 +63,7 @@ class HowToThreadController extends Controller
     }
 
     public function storestep(StoreHowToStepRequest $request) {
-        $howtothread = $request->howtothread;
-        return $howtothread->addStep($request->howto, $request->posi, $request->step_title = null, $request->description = null);
+        return $request->howtothread->addStep($request->howto, $request->posi, $request->step_title = null, $request->description = null);
     }
 
     /**

@@ -1,0 +1,24 @@
+
+# create and switch to new branch
+git checkout -b home_desktop_work
+
+# stage changes
+git add .
+
+# commit changes
+git commit -m "howtos changes till view side"
+
+# push and create new home_desktop_work to remote repository
+git push origin -u home_desktop_work:home_desktop_work
+
+# checkout previous branch (main)
+git checkout -
+
+# update local main from origin
+git pull origin main
+
+# switch to local home_desktop_work branch
+git checkout home_desktop_work
+
+# reset local branch to match origin/main (remote main)
+git reset --hard origin/main

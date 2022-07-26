@@ -6,7 +6,6 @@ use Spatie\Tags\HasTags;
 use App\Models\BaseModel;
 use App\Traits\Code\HasCode;
 use Illuminate\Support\Carbon;
-use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -37,7 +36,7 @@ class HowToThread extends BaseModel implements Auditable
     use HasTags, HasCode, HasFactory, \OwenIt\Auditing\Auditable;
 
     protected $guarded = [];
-    protected $with = ['tags'];
+    protected $with = ['tags','steps'];
 
     #region Validation Rules
 
@@ -68,20 +67,19 @@ class HowToThread extends BaseModel implements Auditable
     #region Eloquent Relationships
 
     public function firststep() {
-        return $this->steps()->wherePivot('posi', 1);
+        return $this->steps()->where('posi', 1);
     }
 
     public function steps() {
-        return $this->belongsToMany(HowTo::class, 'how_to_thread_steps', 'how_to_thread_id', 'how_to_id')
-            ->withPivot('posi','description');
+        return $this->hasMany(HowToStep::class);
     }
 
     public function laststep() {
-        return $this->steps()->wherePivot('posi', 1);
+        return $this->hasOne(HowToStep::class)->ofMany('posi', 'max');
     }
 
     public function lateststep() {
-        return $this->steps()->latest();
+        return $this->hasOne(HowToStep::class)->latestOfMany();
     }
 
     #endregion
@@ -93,7 +91,7 @@ class HowToThread extends BaseModel implements Auditable
         if ( $this->steps()->count() < $next_step_posi ) {
             return null;
         }
-        return $this->steps()->wherePivot('posi', $next_step_posi)->first();
+        return $this->steps()->where('posi', $next_step_posi)->first();
     }
 
     public function prevStep($posi) {
@@ -101,7 +99,7 @@ class HowToThread extends BaseModel implements Auditable
         if ( $prev_step_posi === 0 ) {
             return null;
         }
-        return $this->steps()->wherePivot('posi', $prev_step_posi)->first();
+        return $this->steps()->where('posi', $prev_step_posi)->first();
     }
 
     public static function createNew($title, $description, $code = null, $tags = null) : HowToThread
@@ -141,18 +139,8 @@ class HowToThread extends BaseModel implements Auditable
         return $this;
     }
 
-    public function addStep(HowTo $howto, $posi, $step_title = null, $description = null) {
-        $title = is_null($step_title) ? $howto->title : $step_title;
-        $this->steps()
-            ->attach($howto->id, [
-                'step_title' => $title,
-                'posi' => $posi,
-                'description' => $description,
-            ]);
-
-        $this->save();
-
-        return $this->lateststep;
+    public function addNewStep(HowTo $howto, $posi, $step_title = null, $description = null) {
+        return HowToStep::createNew($this, $howto, $posi, $step_title, $description);
     }
 
     #endregion

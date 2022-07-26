@@ -217,7 +217,7 @@ Route::get('howtothreads.read/{id}/{posi}',[HowToThreadController::class,'read']
 Route::get('howtothreads.posimax/{id}',[HowToThreadController::class,'posimax'])
     ->name('howtothreads.posimax')
     ->middleware('auth');
-Route::get('howtothreads.storestep',[HowToThreadController::class,'storestep'])
+Route::post('howtothreads.storestep',[HowToThreadController::class,'storestep'])
     ->name('howtothreads.storestep')
     ->middleware('auth');
 

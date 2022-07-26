@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * Class HowTos
  *
  * @package App\Models
+ *
  * @property integer $id
  * @property string $uuid
  * @property bool $is_default

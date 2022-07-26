@@ -160,7 +160,7 @@
                             $('#addUpdateHowToThread').modal('hide')
                             this.$parent.$emit('new_howtothread_created', resp)
                             this.resetForm()
-                            window.location = '/howtothreads.show/' + resp.uuid
+                            window.location = '/howtothreads/' + resp.uuid
                         })
                     }).catch(error => {
                     this.loading = false
@@ -182,7 +182,7 @@
                         }).then(() => {
                             HowtothreadBus.$emit('howtothread_updated', resp)
                             $('#addUpdateHowToThread').modal('hide')
-                            window.location = '/howtothreads.show/' + resp.uuid
+                            window.location = '/howtothreads/' + resp.uuid
                         })
                     }).catch(error => {
                     this.loading = false

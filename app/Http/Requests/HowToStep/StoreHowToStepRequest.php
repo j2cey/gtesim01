@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\HowToStep;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Models\HowTos\HowToStep;
 
 class StoreHowToStepRequest extends HowToStepRequest
 {
@@ -23,9 +23,7 @@ class StoreHowToStepRequest extends HowToStepRequest
      */
     public function rules()
     {
-        return [
-            //
-        ];
+        return HowToStep::createRules();
     }
 
     /**
@@ -36,8 +34,8 @@ class StoreHowToStepRequest extends HowToStepRequest
     protected function prepareForValidation(): void
     {
         $this->merge([
-            'howtothread' => $this->setRelevantHowToThread( $this->input('howtothread')),
-            'howto' => $this->setRelevantHowTo( $this->input('howto')),
+            'howtothread' => $this->setRelevantHowToThread( [ 'id' => $this->input('how_to_thread_id') ] ),
+            'howto' => $this->setRelevantHowTo( $this->input('howto') ),
         ]);
     }
 }

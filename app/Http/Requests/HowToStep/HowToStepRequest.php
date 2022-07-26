@@ -3,6 +3,7 @@
 namespace App\Http\Requests\HowToStep;
 
 use App\Models\HowTos\HowTo;
+use App\Models\HowTos\HowToStep;
 use App\Models\HowTos\HowToThread;
 use App\Traits\Request\RequestTraits;
 use Illuminate\Foundation\Http\FormRequest;
@@ -14,9 +15,10 @@ use Illuminate\Foundation\Http\FormRequest;
  * @property string $title
  * @property string $posi
  * @property string $description
- * 
+ *
  * @property HowToThread $howtothread
  * @property HowTo $howto
+ * @property HowToStep $howtostep
  */
 class HowToStepRequest extends FormRequest
 {
@@ -39,8 +41,6 @@ class HowToStepRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            //
-        ];
+        return HowToStep::defaultRules();
     }
 }

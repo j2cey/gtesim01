@@ -15,15 +15,15 @@
                             <div class="form-group row">
                                 <label for="step_title" class="col-sm-2 col-form-label text-xs">Titre Etape</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control text-xs" id="step_title" name="step_title" autocomplete="step_title" autofocus placeholder="Titre Etape" v-model="howtostepForm.step_title">
-                                    <span class="invalid-feedback d-block text-xs" role="alert" v-if="howtostepForm.errors.has('step_title')" v-text="howtostepForm.errors.get('step_title')"></span>
+                                    <input type="text" class="form-control text-xs" id="step_title" name="title" autocomplete="title" autofocus placeholder="Titre Etape" v-model="howtostepForm.title">
+                                    <span class="invalid-feedback d-block text-xs" role="alert" v-if="howtostepForm.errors.has('title')" v-text="howtostepForm.errors.get('title')"></span>
                                 </div>
                             </div>
                             <div class="form-group row">
-                              <label for="m_select_howto" class="col-sm-2 col-form-label text-xs">Rubrique</label>
+                              <label for="m_select_step_howto" class="col-sm-2 col-form-label text-xs">Rubrique</label>
                               <div class="col-sm-10 text-xs">
                                   <multiselect class="text text-xs"
-                                    id="m_select_howto"
+                                    id="m_select_step_howto"
                                     v-model="howtostepForm.howto"
                                     selected.sync="howtostepForm.howto"
                                     value=""
@@ -40,9 +40,9 @@
                               </div>
                             </div>
                             <div class="form-group row">
-                                <label for="description" class="col-sm-2 col-form-label text-xs">Position</label>
+                                <label for="step_position" class="col-sm-2 col-form-label text-xs">Position</label>
                                 <div class="col-sm-10">
-                                    <b-field>
+                                    <b-field id="step_position">
                                         <b-select size="is-small" expanded placeholder="Select a posi" v-model="howtostepForm.posi">
                                             <option v-for="option in getPositons" :value="option" :key="option">
                                                 {{ option }}
@@ -52,13 +52,13 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="description" class="col-sm-2 col-form-label text-xs">Description</label>
+                                <label for="step_description" class="col-sm-2 col-form-label text-xs">Description</label>
                                 <div class="col-sm-10">
-                                    <input @keyup.enter="formKeyEnter()" type="text" class="form-control text-xs" id="description" name="posi" required autocomplete="description" autofocus placeholder="Description" v-model="howtostepForm.description">
+                                    <input @keyup.enter="formKeyEnter()" type="text" class="form-control text-xs" id="step_description" name="posi" required autocomplete="description" autofocus placeholder="Description" v-model="howtostepForm.description">
                                     <span class="invalid-feedback d-block text-xs" role="alert" v-if="howtostepForm.errors.has('description')" v-text="howtostepForm.errors.get('description')"></span>
                                 </div>
                             </div>
-                            
+
                         </div>
                     </form>
 
@@ -81,10 +81,10 @@
 
     class HowToStep {
         constructor(howtostep) {
-            this.step_title = howtostep.step_title || ''
+            this.title = howtostep.title || ''
             this.posi = howtostep.posi || 1
             this.description = howtostep.description || ''
-            this.howtothread = howtostep.howtothread || {}
+            this.how_to_thread_id = howtostep.how_to_thread_id || {}
             this.howto = howtostep.howto || {}
         }
     }
@@ -94,15 +94,15 @@
         },
         components: { Multiselect },
         mounted() {
-            this.$parent.$on('create_new_howtostep', ({ howtothread }) => {
+            this.$parent.$on('create_new_howtostep', ({ howtothreadId }) => {
 
-                this.howtothread = howtothread;
+                this.how_to_thread_id = howtothreadId;
 
-                this.setPositionMax(howtothread);
-                
+                this.setPositionMax(howtothreadId);
+
                 this.editing = false
                 this.howtostep = new HowToStep({
-                    'howtothread': howtothread
+                    'how_to_thread_id': howtothreadId
                 })
                 this.howtostepForm = new Form(this.howtostep)
 
@@ -133,7 +133,7 @@
                 howtostep: {},
                 howtostepForm: new Form(new HowToStep({})),
 
-                howtothread: null,
+                how_to_thread_id: null,
                 howto: null,
                 max_posi: 1,
                 howtos: [],
@@ -158,27 +158,28 @@
                     this.createHowToStep()
                 }
             },
-            async setPositionMax(howtothread) {
-              axios.get(`/howtothreads.posimax/${howtothread.id}`)
+            async setPositionMax(how_to_thread_id) {
+              axios.get(`/howtothreads.posimax/${how_to_thread_id}`)
                 .then(({data}) => this.max_posi = data);
             },
             createHowToStep() {
                 this.loading = true
 
                 this.howtostepForm
-                    .post('/howtothreads.storestep')
+                    .post('/howtosteps')
                     .then(resp => {
                         this.loading = false
 
                         this.$swal({
-                            html: '<small>Tuto créé avec Succes !</small>',
+                            html: '<small>Etape Tuto créée avec Succes !</small>',
                             icon: 'success',
                             timer: 3000
                         }).then(() => {
                             $('#addUpdateHowToStep').modal('hide')
                             this.$parent.$emit('new_howtostep_created', resp)
+                            console.log()
                             this.resetForm()
-                            window.location = '/howtosteps.show/' + resp.uuid
+                            console.log("how to step created resp: ", resp)
                         })
                     }).catch(error => {
                     this.loading = false
@@ -200,7 +201,7 @@
                         }).then(() => {
                             HowtothreadBus.$emit('howtostep_updated', resp)
                             $('#addUpdateHowToStep').modal('hide')
-                            window.location = '/howtosteps.show/' + resp.uuid
+                            console.log("how to step updated resp: ", resp)
                         })
                     }).catch(error => {
                     this.loading = false

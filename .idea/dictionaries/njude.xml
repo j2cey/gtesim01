@@ -15,11 +15,14 @@
       <w>esimheadfile</w>
       <w>esims</w>
       <w>fetchall</w>
+      <w>fonction</w>
       <w>hasphonenum</w>
       <w>headfiles</w>
       <w>headfilespost</w>
       <w>howto</w>
       <w>howtos</w>
+      <w>howtostep</w>
+      <w>howtosteps</w>
       <w>howtothread</w>
       <w>howtothreads</w>
       <w>howtotype</w>
@@ -33,10 +36,13 @@
       <w>phonenum</w>
       <w>phonenumstore</w>
       <w>prenom</w>
+      <w>qrcode</w>
       <w>readhtml</w>
+      <w>statut</w>
       <w>statutesims</w>
       <w>storeclientesim</w>
       <w>storehtml</w>
+      <w>technologie</w>
       <w>typedepartement</w>
     </words>
   </dictionary>

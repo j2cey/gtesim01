@@ -48,6 +48,7 @@ class HowToThreadResource extends JsonResource
             'title' => $this->title,
             'code' => $this->code,
             'description' => $this->description,
+            'steps' => $this->steps,
             'tags' => $this->tags,
 
             'status' => StatusResource::make($this->status),

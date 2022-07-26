@@ -44,46 +44,19 @@
 
             <div class="row">
                 <div class="col">
-                    <div class="card" :id="'howtostep_' + howtothread.id">
-                    <header>
-                        <div class="card-header-title row">
-                            <div class="col-md-6 col-sm-8 col-12">
-                                <span class="text-olive text-xs" @click="collapseHowtostepsGroupClicked()" data-toggle="collapse" :data-parent="'#howtostepsgroup_' + howtothread.id" :href="'#collapse-howtostepsgroup-'+howtothread.id">
-                                    Rubriques
-                                </span>
-                                <b-button size="is-small" type="is-ghost" @click="createHowToStep()"><i class="fas fa-plus"></i></b-button>
-                            </div>
-                            <div class="col-md-6 col-sm-4 col-12 text-right">
-                                    <span class="text text-sm">
-                                        <a type="button" class="btn btn-tool" @click="collapseHowtostepsGroupClicked()" data-toggle="collapse" :data-parent="'#howtostepsgroup_' + howtothread.id" :href="'#collapse-howtostepsgroup-'+howtothread.id">
-                                            <i :class="currentHowtostepsGroupCollapseIcon"></i>
-                                        </a>
-                                    </span>
-                            </div>
-                        </div>
-                    </header>
-                    <!-- /.card-header -->
-                    <div :id="'collapse-howtostepsgroup-'+howtothread.id" class="card-content panel-collapse collapse in">
-
-                        
-
-                    </div>
-                    <!-- /.card-body -->
+                    <HowToStepList :howtothread_prop="howtothread" :howtosteps_prop="howtothread.steps" list_title_prop="Etapes" list_color_prop="success"></HowToStepList>
                 </div>
-            </div>
-
             </div>
 
         </div>
         <!-- /.card-body -->
-        <AddUpdateHowtostep></AddUpdateHowtostep>
     </div>
 </template>
 
 <script>
-    import AddUpdateHowtostep from "./steps/addupdate";
     import HowToStepBus from "./steps/stepBus";
     import HowToThreadBus from "./howtothreadBus";
+    import HowToStepList from "./steps/list";
 
     export default {
         name: "howtothread-show",
@@ -91,7 +64,7 @@
             howtothread_prop: {}
         },
         components: {
-            AddUpdateHowtostep
+            HowToStepList
         },
         mounted() {
             HowToThreadBus.$on('howtothread_updated', (updhowtothread) => {
