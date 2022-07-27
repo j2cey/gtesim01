@@ -44,7 +44,7 @@
 
             <div class="row">
                 <div class="col">
-                    <HowToStepList :howtothread_prop="howtothread" :howtosteps_prop="howtothread.steps" list_title_prop="Etapes" list_color_prop="success"></HowToStepList>
+                    <HowToStepList :key="stepslist_key"  :howtothread_prop="howtothread" :howtosteps_prop="howtothread.steps" list_title_prop="Etapes" list_color_prop="success"></HowToStepList>
                 </div>
             </div>
 
@@ -72,6 +72,12 @@
                     this.howtothread = updhowtothread
                 }
             })
+
+            HowToThreadBus.$on('new_howtostep_created', (howtostep) => {
+                if (this.howtothread.id === howtostep.how_to_thread_id) {
+                    this.reloadHowToThread()
+                }
+            })
         },
         created() {
         },
@@ -79,11 +85,17 @@
             return {
                 howtothread: this.howtothread_prop,
                 index: this.index_prop,
+                commom_key: 0,
+                stepslist_key: this.howtothread_prop.id + '_' + 0,
                 collapse_icon: 'fas fa-chevron-down',
                 howtostepsgroup_collapse_icon: 'fas fa-chevron-down',
             }
         },
         methods: {
+            forceRerenderStepsList() {
+                this.commom_key += 1;
+                this.stepslist_key = this.howtothread.id + '_' + this.commom_key;
+            },
             editHowToThread(howtothread) {
                 this.$emit('edit_howtothread', howtothread)
             },
@@ -118,9 +130,16 @@
                     }
                 })
             },
-            createHowToStep() {
-                let howtothread = this.howtothread
-                this.$emit('create_new_howtostep', { howtothread })
+            reloadHowToThread() {
+                axios.get(`/howtothreads.fetchone/${this.howtothread.id}`)
+                    .then((result => {
+                        this.analysisrule = result.data;
+                        this.forceRerenderStepsList()
+                        this.$emit('howtothread_reloaded', { 'howtothread':result.data });
+                    }))
+                    .catch(error => {
+                    window.handleErrors(error)
+                });
             },
             collapseClicked() {
                 if (this.collapse_icon === 'fas fa-chevron-down') {

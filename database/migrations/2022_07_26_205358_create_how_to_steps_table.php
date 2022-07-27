@@ -26,13 +26,21 @@ class CreateHowToStepsTable extends Migration
                 ->comment('how_to_thread reference')
                 ->constrained('how_to_threads')->onDelete('set null');
 
-            $table->integer('posi')->default(1)->comment('step (child) position in children list');
-            $table->string('step_title')->nullable()->comment('step (child) title');
+            $table->integer('posi')->default(1)->comment('step position in children list');
+            $table->string('title')->nullable()->comment('step title');
             $table->string('description')->nullable()->comment('step description');
 
             $table->foreignId('how_to_id')->nullable()
                 ->comment('how_to child reference')
                 ->constrained('how_tos')->onDelete('set null');
+
+            $table->foreignId('created_by')->nullable()
+                ->comment('user creator reference')
+                ->constrained('users')->onDelete('set null');
+
+            $table->foreignId('updated_by')->nullable()
+                ->comment('user updator reference')
+                ->constrained('users')->onDelete('set null');
 
             $table->baseFields();
         });
@@ -50,6 +58,8 @@ class CreateHowToStepsTable extends Migration
             $table->dropBaseForeigns();
             $table->dropForeign(['how_to_thread_id']);
             $table->dropForeign(['how_to_id']);
+            $table->dropForeign(['created_by']);
+            $table->dropForeign(['updated_by']);
         });
         Schema::dropIfExists($this->table_name);
     }

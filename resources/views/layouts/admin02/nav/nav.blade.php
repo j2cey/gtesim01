@@ -105,7 +105,7 @@
 
                 @role('Admin')
                 <li class="nav-item dropdown">
-                    <a class="button is-success" size="is-small" href="/howtos">Détails de Tutos &nbsp;<i class="fa fa-book"></i> </a>
+                    <a class="button is-success" size="is-small" href="/howtos">Rubriques de Tutos &nbsp;<i class="fa fa-book"></i> </a>
                 </li>
                 @endrole
 

@@ -66,6 +66,10 @@ class HowToThreadController extends Controller
         return $request->howtothread->addStep($request->howto, $request->posi, $request->step_title = null, $request->description = null);
     }
 
+    public function fetchone($id) {
+        return new HowToThreadResource(HowToThread::find($id));
+    }
+
     /**
      * Display products page.
      *
@@ -114,7 +118,7 @@ class HowToThreadController extends Controller
     public function show(HowToThread $howtothread)
     {
         return view('howtothreads.show')
-            ->with('howtothread', $howtothread);
+            ->with( 'howtothread', new HowToThreadResource($howtothread) );
     }
 
     /**

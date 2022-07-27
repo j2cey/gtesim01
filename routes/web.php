@@ -12,8 +12,9 @@ use App\Http\Controllers\SystemController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\Esims\EsimController;
 use App\Http\Controllers\HowTos\HowToController;
-use App\Http\Controllers\Esims\StatutEsimController;
 use App\Http\Controllers\Esims\ClientEsimController;
+use App\Http\Controllers\Esims\StatutEsimController;
+use App\Http\Controllers\HowTos\HowToStepController;
 use App\Http\Controllers\HowTos\HowToTypeController;
 use App\Http\Controllers\Employes\PhoneNumController;
 use App\Http\Controllers\Authorization\RoleController;
@@ -210,6 +211,9 @@ Route::get('howtothreads.fetch',[HowToThreadController::class,'fetch'])
 Route::get('howtothreads.fetchall',[HowToThreadController::class,'fetchall'])
     ->name('howtothreads.fetchall')
     ->middleware('auth');
+Route::get('howtothreads.fetchone/{id}',[HowToThreadController::class,'fetchone'])
+    ->name('howtothreads.fetchone')
+    ->middleware('auth');
 Route::get('howtothreads.read/{id}/{posi}',[HowToThreadController::class,'read'])
     ->name('howtothreads.read')
     ->middleware('auth');
@@ -219,6 +223,14 @@ Route::get('howtothreads.posimax/{id}',[HowToThreadController::class,'posimax'])
     ->middleware('auth');
 Route::post('howtothreads.storestep',[HowToThreadController::class,'storestep'])
     ->name('howtothreads.storestep')
+    ->middleware('auth');
+
+Route::resource('howtosteps',HowToStepController::class)->middleware('auth');
+Route::get('howtosteps.fetch',[HowToStepController::class,'fetch'])
+    ->name('howtosteps.fetch')
+    ->middleware('auth');
+Route::get('howtosteps.fetchall',[HowToStepController::class,'fetchall'])
+    ->name('howtosteps.fetchall')
     ->middleware('auth');
 
 Route::get('tags.fetchall',[TagController::class,'fetchall'])

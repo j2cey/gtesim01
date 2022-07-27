@@ -80,6 +80,9 @@ class HowToStep extends BaseModel implements Auditable
     {
         $step_title = is_null($title) ? $howto->title : $title;
 
+        // Move steps down if any
+        $howtothread->shiftStepsFrom($posi);
+
         $howtostep = self::create([
             'title' => $step_title,
             'posi' => $posi,
@@ -101,6 +104,9 @@ class HowToStep extends BaseModel implements Auditable
 
     public function updateOne(HowTo $howto, $title, $posi, $description, $tags = null) : HowToStep
     {
+        // Move steps down if any
+        $this->howtothread->shiftStepsFrom($posi);
+
         $this->update([
             'title' => $title,
             'posi' => $posi,
@@ -117,6 +123,21 @@ class HowToStep extends BaseModel implements Auditable
 
         return $this;
     }
+
+    public function mooveUp() {
+        $this->update([
+            'posi' => $this->posi - 1,
+        ]);
+        return $this;
+    }
+
+    public function mooveDown() {
+        $this->update([
+            'posi' => $this->posi + 1,
+        ]);
+        return $this;
+    }
+
 
     #endregion
 }

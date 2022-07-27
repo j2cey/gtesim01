@@ -31,7 +31,7 @@
                     <thead v-if="howtosteps">
                     <tr class="text text-sm">
                         <th>#</th>
-                        <th>Posi</th>
+                        <th>Num. Ordre</th>
                         <th>Titre Etape</th>
                         <th>Titre Rubrique</th>
                         <th>Description</th>
@@ -49,8 +49,8 @@
                         <td>{{ howtostep.description }}</td>
                         <td>
                             <div class="block">
-                                <span class="fa fa-pencil-square-o text-warning" @click="editHighlit(howtostep)"></span>
-                                <span class="fa fa-trash text-danger" @click="deleteHighlit(howtostep)"></span>
+                                <span type="button" class="btn btn-tool" @click="editHighlit(howtostep)"> <i class="fa fa-pencil-square-o text-warning"></i> </span>
+                                <span type="button" class="btn btn-tool" @click="deleteHighlit(howtostep)"> <i class="fa fa-trash text-danger"></i> </span>
                             </div>
                         </td>
                     </tr>
@@ -72,6 +72,7 @@
 <script>
     import HowtostepAddUpdate from "./addupdate";
     import HowToStepBus from "./stepBus";
+    import HowtothreadBus from "../howtothreadBus";
 
     export default {
         name: "howtostep-list",
@@ -83,6 +84,7 @@
         },
         watch: {
             howtosteps_prop: function (newValue, oldValue) {
+                console.log("howtosteps_prop watched: ", newValue, oldValue)
                 this.howtosteps = newValue
             },
         },
@@ -90,9 +92,10 @@
             HowtostepAddUpdate
         },
         mounted() {
-            HowToStepBus.$on('howtostep_created', (howtostep) => {
+            this.$on('new_howtostep_created', (howtostep) => {
                 if (this.howtothread.id === howtostep.howtothread.id) {
-                    this.addHowToStepToList(howtostep)
+                    //this.addHowToStepToList(howtostep)
+                    HowtothreadBus.$emit('new_howtostep_created', howtostep)
                 }
             })
             HowToStepBus.$on('howtostep_updated', (howtostep) => {
@@ -100,10 +103,10 @@
                     this.updateHowToStepFromList(howtostep)
                 }
             })
-            this.$parent.$on('howtothread_reloaded', ({ howtosteps, howtothread }) => {
-                console.log('howtothread_reloaded receive on list ', howtosteps, howtothread)
-                if (this.howtothread.id === howtothread.howtothread.ids) {
-                    this.howtosteps = howtosteps
+            this.$parent.$on('howtothread_reloaded', ({ howtothread }) => {
+                console.log('howtothread_reloaded receive on list ', howtothread)
+                if (this.howtothread.id === howtothread.id) {
+                    this.howtosteps = howtothread.steps
                 }
             })
         },
@@ -124,7 +127,8 @@
         methods: {
             createHowToStep() {
                 let howtothreadId = this.howtothread.id
-                this.$emit('create_new_howtostep', { howtothreadId })
+                let stepscount = this.howtothread.steps.length
+                this.$emit('create_new_howtostep', { howtothreadId, stepscount })
             },
             editHighlit(howtostep) {
                 HowToStepBus.$emit('edit_howtostep', howtostep)

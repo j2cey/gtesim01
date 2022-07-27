@@ -40,11 +40,11 @@
                               </div>
                             </div>
                             <div class="form-group row">
-                                <label for="step_position" class="col-sm-2 col-form-label text-xs">Position</label>
+                                <label for="step_position" class="col-sm-2 col-form-label text-xs">Num. Ordre</label>
                                 <div class="col-sm-10">
                                     <b-field id="step_position">
                                         <b-select size="is-small" expanded placeholder="Select a posi" v-model="howtostepForm.posi">
-                                            <option v-for="option in getPositons" :value="option" :key="option">
+                                            <option v-for="option in positions" :value="option" :key="option">
                                                 {{ option }}
                                             </option>
                                         </b-select>
@@ -94,15 +94,19 @@
         },
         components: { Multiselect },
         mounted() {
-            this.$parent.$on('create_new_howtostep', ({ howtothreadId }) => {
+            this.$parent.$on('create_new_howtostep', ({ howtothreadId, stepscount }) => {
 
+                console.log("create_new_howtostep: ", howtothreadId, stepscount)
                 this.how_to_thread_id = howtothreadId;
 
-                this.setPositionMax(howtothreadId);
+                //this.setPositionMax(stepscount);
+                //this.max_posi = stepscount
+                this.positions = this.setPositonsArray(stepscount);
 
                 this.editing = false
                 this.howtostep = new HowToStep({
-                    'how_to_thread_id': howtothreadId
+                    'how_to_thread_id': howtothreadId,
+                    'posi': stepscount + 1,
                 })
                 this.howtostepForm = new Form(this.howtostep)
 
@@ -126,16 +130,18 @@
         created() {
             axios.get('/howtos.fetchall')
                 .then(({data}) => this.howtos = data);
+            this.positions = this.setPositonsArray(0);
         },
         data() {
             return {
                 formTitle: 'Create HowToStep',
                 howtostep: {},
-                howtostepForm: new Form(new HowToStep({})),
+                howtostepForm: new Form(new HowToStep({}, 1)),
 
                 how_to_thread_id: null,
                 howto: null,
                 max_posi: 1,
+                positions: [1],
                 howtos: [],
 
                 howtostepId: null,
@@ -177,9 +183,7 @@
                         }).then(() => {
                             $('#addUpdateHowToStep').modal('hide')
                             this.$parent.$emit('new_howtostep_created', resp)
-                            console.log()
                             this.resetForm()
-                            console.log("how to step created resp: ", resp)
                         })
                     }).catch(error => {
                     this.loading = false
@@ -201,37 +205,28 @@
                         }).then(() => {
                             HowtothreadBus.$emit('howtostep_updated', resp)
                             $('#addUpdateHowToStep').modal('hide')
-                            console.log("how to step updated resp: ", resp)
+                            this.resetForm()
                         })
                     }).catch(error => {
                     this.loading = false
                 });
             },
-            addTag(e) {
-                console.log("addTag: ", e)
-                /*
-                this.howtostepForm.tags.push({
-                    name: e
-                })
-                */
+            setPositonsArray(posi_max) {
+                this.posi_max = posi_max + 1;
+                let start_posi = this.positions.length;
+                let posis = this.positions;
+                console.log("start getPositons ", posi_max, posis)
+                for (let i = start_posi; i < this.posi_max; i++) {
+                    console.log("loop getPositons ", i, posis)
+                    posis.push(i + 1);
+                }
+                return posis;
             }
         },
         computed: {
             isValidCreateForm() {
                 return !this.loading
             },
-            getPositons() {
-                let posis = [1];
-
-                if ( this.posi_max > 1 ) {
-                    for (let i = 2; i <= this.posi_max; i++) {
-                        posis.push(i);
-                    }
-                    posis.push(this.posi_max + 1);
-                }
-
-                return posis;
-            }
         }
     }
 </script>

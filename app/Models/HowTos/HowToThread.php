@@ -143,5 +143,14 @@ class HowToThread extends BaseModel implements Auditable
         return HowToStep::createNew($this, $howto, $posi, $step_title, $description);
     }
 
+    public function shiftStepsFrom($posi) {
+        $max_posi = $this->steps()->count();
+        if ($posi <= $max_posi) {
+            for ($i = $posi; $i <= $max_posi; $i++) {
+                $this->steps()->where('posi', $i)->first()->moveDown();
+            }
+        }
+    }
+
     #endregion
 }
