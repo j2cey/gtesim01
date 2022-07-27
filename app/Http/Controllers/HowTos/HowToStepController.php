@@ -3,12 +3,26 @@
 namespace App\Http\Controllers\HowTos;
 
 use App\Models\HowTos\HowToStep;
+use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\HowTos\HowToStepResource;
 use App\Http\Requests\HowToStep\StoreHowToStepRequest;
 use App\Http\Requests\HowToStep\UpdateHowToStepRequest;
 
 class HowToStepController extends Controller
 {
+    public function read($id) {
+        $howtostep = HowToStep::where('id', $id)->first();
+        $howtostep->load(['howtothread','howto']);
+
+        $howtostepprev = $howtostep->prevStep();
+        $howtostepnext = $howtostep->nextStep();
+
+        return view('howtosteps.read')
+            ->with('howtostep', $howtostep)
+            ->with('howtostepprev', $howtostepprev)
+            ->with('howtostepnext', $howtostepnext);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -33,11 +47,11 @@ class HowToStepController extends Controller
      * Store a newly created resource in storage.
      *
      * @param StoreHowToStepRequest $request
-     * @return HowToStep|void
+     * @return HowToStepResource|HowToStep|void
      */
     public function store(StoreHowToStepRequest $request)
     {
-        return $request->howtothread->addNewStep($request->howto, $request->posi, $request->title, $request->description);
+        return new HowToStepResource( $request->howtothread->addNewStep($request->howto, $request->posi, $request->title, $request->description) );
     }
 
     /**
@@ -67,21 +81,26 @@ class HowToStepController extends Controller
      *
      * @param UpdateHowToStepRequest $request
      * @param HowToStep $howtostep
-     * @return HowToStep|void
+     * @return HowToStepResource|HowToStep|void
      */
     public function update(UpdateHowToStepRequest $request, HowToStep $howtostep)
     {
-        return $howtostep->updateOne($request->howto, $request->posi, $request->title, $request->description);
+        return new HowToStepResource( $howtostep->updateOne($request->howto, $request->title, $request->posi, $request->description) );
+        //updateOne(HowTo $howto, $title, $posi, $description, $tags = null) : HowToStep
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param HowToStep $howtostep
-     * @return void
+     * @return JsonResponse|void
      */
     public function destroy(HowToStep $howtostep)
     {
-        //
+        $howtostep->load('howtothread');
+        $howtostep->howtothread->shiftStepsUpTo($howtostep->posi);
+        $howtostep->delete();
+
+        return response()->json(['status' => 'ok'], 200);
     }
 }

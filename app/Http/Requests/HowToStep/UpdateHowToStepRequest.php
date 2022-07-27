@@ -37,6 +37,7 @@ class UpdateHowToStepRequest extends HowToStepRequest
         $this->merge([
             'howtothread' => $this->setRelevantHowToThread( $this->input('howtothread'), "id", true ),
             'howto' => $this->setRelevantHowTo( $this->input('howto'), "id", true ),
+            'posi' => (int)$this->input('posi'),
         ]);
     }
 }

@@ -44,7 +44,7 @@
 
             <div class="row">
                 <div class="col">
-                    <HowToStepList :key="stepslist_key"  :howtothread_prop="howtothread" :howtosteps_prop="howtothread.steps" list_title_prop="Etapes" list_color_prop="success"></HowToStepList>
+                    <HowToStepList :key="stepslist_key"  :howtothread_prop="howtothread" :howtosteps_prop="howtosteps" list_title_prop="Etapes" list_color_prop="success"></HowToStepList>
                 </div>
             </div>
 
@@ -78,13 +78,24 @@
                     this.reloadHowToThread()
                 }
             })
+
+            HowToThreadBus.$on('howtostep_updated', (howtostep) => {
+                if (this.howtothread.id === howtostep.how_to_thread_id) {
+                    this.reloadHowToThread()
+                }
+            })
+
+            this.$on('howtostep_deleted', (howtostep) => {
+                if (this.howtothread.id === howtostep.how_to_thread_id) {
+                    this.reloadHowToThread()
+                }
+            })
         },
         created() {
         },
         data() {
             return {
                 howtothread: this.howtothread_prop,
-                index: this.index_prop,
                 commom_key: 0,
                 stepslist_key: this.howtothread_prop.id + '_' + 0,
                 collapse_icon: 'fas fa-chevron-down',
@@ -134,8 +145,8 @@
                 axios.get(`/howtothreads.fetchone/${this.howtothread.id}`)
                     .then((result => {
                         this.analysisrule = result.data;
-                        this.forceRerenderStepsList()
-                        this.$emit('howtothread_reloaded', { 'howtothread':result.data });
+                        this.$emit('howtothread_reloaded', { 'howtothread':result.data, 'howtosteps':result.data.steps });
+                        //this.forceRerenderStepsList()
                     }))
                     .catch(error => {
                     window.handleErrors(error)
@@ -157,6 +168,9 @@
             }
         },
         computed: {
+            howtosteps() {
+                return this.howtothread.steps
+            },
             displayTitle() {
                 return this.howtothread.title
             },

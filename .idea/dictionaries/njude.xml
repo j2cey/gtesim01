@@ -7,6 +7,7 @@
       <w>clientesim</w>
       <w>clientesims</w>
       <w>clientsesims</w>
+      <w>commom</w>
       <w>departement</w>
       <w>edithtml</w>
       <w>employe</w>
@@ -15,6 +16,7 @@
       <w>esimheadfile</w>
       <w>esims</w>
       <w>fetchall</w>
+      <w>firststep</w>
       <w>fonction</w>
       <w>hasphonenum</w>
       <w>headfiles</w>
@@ -23,6 +25,7 @@
       <w>howtos</w>
       <w>howtostep</w>
       <w>howtosteps</w>
+      <w>howtostepsgroup</w>
       <w>howtothread</w>
       <w>howtothreads</w>
       <w>howtotype</w>
@@ -40,6 +43,7 @@
       <w>readhtml</w>
       <w>statut</w>
       <w>statutesims</w>
+      <w>stepslist</w>
       <w>storeclientesim</w>
       <w>storehtml</w>
       <w>technologie</w>

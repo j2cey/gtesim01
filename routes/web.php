@@ -232,6 +232,9 @@ Route::get('howtosteps.fetch',[HowToStepController::class,'fetch'])
 Route::get('howtosteps.fetchall',[HowToStepController::class,'fetchall'])
     ->name('howtosteps.fetchall')
     ->middleware('auth');
+Route::get('howtosteps.read/{id}',[HowToStepController::class,'read'])
+    ->name('howtosteps.read')
+    ->middleware('auth');
 
 Route::get('tags.fetchall',[TagController::class,'fetchall'])
     ->name('tags.fetchall')

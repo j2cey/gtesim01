@@ -67,11 +67,13 @@ class HowToThread extends BaseModel implements Auditable
     #region Eloquent Relationships
 
     public function firststep() {
-        return $this->steps()->where('posi', 1);
+        //return $this->steps()->where('posi', 1);
+        return $this->hasOne(HowToStep::class)->ofMany('posi', 'min');
     }
 
     public function steps() {
-        return $this->hasMany(HowToStep::class);
+        return $this->hasMany(HowToStep::class)
+            ->orderBy('posi');
     }
 
     public function laststep() {
@@ -143,11 +145,26 @@ class HowToThread extends BaseModel implements Auditable
         return HowToStep::createNew($this, $howto, $posi, $step_title, $description);
     }
 
-    public function shiftStepsFrom($posi) {
+    public function shiftStepsDownFrom($posi) {
         $max_posi = $this->steps()->count();
         if ($posi <= $max_posi) {
-            for ($i = $posi; $i <= $max_posi; $i++) {
-                $this->steps()->where('posi', $i)->first()->moveDown();
+            for ($i = $max_posi; $i >= $posi; $i--) {
+                $curr_step = $this->steps()->where('posi', $i)->first();
+                if ($curr_step) {
+                    $curr_step->moveDown();
+                }
+            }
+        }
+    }
+
+    public function shiftStepsUpTo($posi) {
+        $max_posi = $this->steps()->count();
+        if ($posi <= $max_posi) {
+            for ($i = $posi + 1; $i <= $max_posi; $i++) {
+                $curr_step = $this->steps()->where('posi', $i)->first();
+                if ($curr_step) {
+                    $curr_step->moveUp();
+                }
             }
         }
     }

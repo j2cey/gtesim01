@@ -77,7 +77,7 @@
 
 <script>
     import Multiselect from 'vue-multiselect'
-    import HowtothreadBus from "./stepBus";
+    import HowToStepBus from "./stepBus";
 
     class HowToStep {
         constructor(howtostep) {
@@ -115,14 +115,17 @@
                 $('#addUpdateHowToStep').modal()
             })
 
-            this.$parent.$on('edit_howtostep', ( howtostep ) => {
+            this.$parent.$on('edit_howtostep', ({ howtostep, stepscount } ) => {
                 console.log("howtostep to edit", howtostep)
+
+                this.positions = this.setPositonsArray(stepscount);
+
                 this.editing = true
                 this.howtostep = new HowToStep(howtostep)
                 this.howtostepForm = new Form(this.howtostep)
                 this.howtostepId = howtostep.uuid
 
-                this.formTitle = 'Modifier Tuto'
+                this.formTitle = 'Modifier Etape Tuto'
 
                 $('#addUpdateHowToStep').modal()
             })
@@ -203,7 +206,8 @@
                             icon: 'success',
                             timer: 3000
                         }).then(() => {
-                            HowtothreadBus.$emit('howtostep_updated', resp)
+                            console.log("howtostep_updated: ", resp)
+                            HowToStepBus.$emit('howtostep_updated', resp)
                             $('#addUpdateHowToStep').modal('hide')
                             this.resetForm()
                         })
@@ -215,9 +219,7 @@
                 this.posi_max = posi_max + 1;
                 let start_posi = this.positions.length;
                 let posis = this.positions;
-                console.log("start getPositons ", posi_max, posis)
                 for (let i = start_posi; i < this.posi_max; i++) {
-                    console.log("loop getPositons ", i, posis)
                     posis.push(i + 1);
                 }
                 return posis;

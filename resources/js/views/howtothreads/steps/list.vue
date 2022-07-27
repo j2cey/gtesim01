@@ -49,8 +49,8 @@
                         <td>{{ howtostep.description }}</td>
                         <td>
                             <div class="block">
-                                <span type="button" class="btn btn-tool" @click="editHighlit(howtostep)"> <i class="fa fa-pencil-square-o text-warning"></i> </span>
-                                <span type="button" class="btn btn-tool" @click="deleteHighlit(howtostep)"> <i class="fa fa-trash text-danger"></i> </span>
+                                <span @click="editHowToStep(howtostep)"> <i class="fa fa-pencil-square-o text-warning"></i> </span>
+                                <span @click="deleteHowToStep(howtostep)"> <i class="fa fa-trash text-danger"></i> </span>
                             </div>
                         </td>
                     </tr>
@@ -93,20 +93,22 @@
         },
         mounted() {
             this.$on('new_howtostep_created', (howtostep) => {
-                if (this.howtothread.id === howtostep.howtothread.id) {
+                if (this.howtothread.id === howtostep.how_to_thread_id) {
                     //this.addHowToStepToList(howtostep)
                     HowtothreadBus.$emit('new_howtostep_created', howtostep)
                 }
             })
             HowToStepBus.$on('howtostep_updated', (howtostep) => {
-                if (this.howtothread.id === howtostep.howtothread.id) {
-                    this.updateHowToStepFromList(howtostep)
+                if (this.howtothread.id === howtostep.how_to_thread_id) {
+                    //this.updateHowToStepFromList(howtostep)
+                    HowtothreadBus.$emit('howtostep_updated', howtostep)
                 }
             })
-            this.$parent.$on('howtothread_reloaded', ({ howtothread }) => {
-                console.log('howtothread_reloaded receive on list ', howtothread)
+            this.$parent.$on('howtothread_reloaded', ({ howtothread, howtosteps }) => {
+                console.log('howtothread_reloaded receive on list ', howtothread, howtosteps)
                 if (this.howtothread.id === howtothread.id) {
-                    this.howtosteps = howtothread.steps
+                    this.howtosteps = howtosteps
+                    console.log('list set', this.howtosteps)
                 }
             })
         },
@@ -130,8 +132,9 @@
                 let stepscount = this.howtothread.steps.length
                 this.$emit('create_new_howtostep', { howtothreadId, stepscount })
             },
-            editHighlit(howtostep) {
-                HowToStepBus.$emit('edit_howtostep', howtostep)
+            editHowToStep(howtostep) {
+                let stepscount = this.howtothread.steps.length
+                this.$emit('edit_howtostep', { howtostep, stepscount })
             },
             collapseHowToStepClicked() {
                 if (this.howtostep_collapse_icon === 'fas fa-chevron-down') {
@@ -158,7 +161,7 @@
                     this.howtosteps.splice(howtostepIndex, 1, howtostep)
                 }
             },
-            deleteHighlit(howtostep) {
+            deleteHowToStep(howtostep) {
                 this.$swal({
                     title: '<small>Are you sure ?</small>',
                     text: "You won't be able to revert this!",
@@ -169,7 +172,7 @@
                     confirmButtonText: 'Yes, delete it!'
                 }).then((result) => {
                     if(result.value) {
-                        axios.delete(`/analysishowtosteps/${howtostep.uuid}`)
+                        axios.delete(`/howtosteps/${howtostep.uuid}`)
                             .then(resp => {
                                 this.$swal({
                                     html: '<small>HowToStep successfully deleted !</small>',

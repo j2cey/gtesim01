@@ -81,7 +81,7 @@ class HowToStep extends BaseModel implements Auditable
         $step_title = is_null($title) ? $howto->title : $title;
 
         // Move steps down if any
-        $howtothread->shiftStepsFrom($posi);
+        $howtothread->shiftStepsDownFrom($posi);
 
         $howtostep = self::create([
             'title' => $step_title,
@@ -104,9 +104,20 @@ class HowToStep extends BaseModel implements Auditable
 
     public function updateOne(HowTo $howto, $title, $posi, $description, $tags = null) : HowToStep
     {
-        // Move steps down if any
-        $this->howtothread->shiftStepsFrom($posi);
-
+        // Move steps if any must change
+        if ($this->posi !== $posi) {
+            //dd("posis differs", $this, $title, $posi);
+            if ($posi > $this->howtothread->steps()->count()) {
+                // the current step will be the last
+                $posi = $this->howtothread->steps()->count();
+                // we move up all others steps till the current step position's
+                $this->howtothread->shiftStepsUpTo($this->posi);
+            } else {
+                // we move steps down
+                $this->howtothread->shiftStepsDownFrom($posi);
+            }
+        }
+        //dd("after if", $this, $title, $posi);
         $this->update([
             'title' => $title,
             'posi' => $posi,
@@ -124,20 +135,29 @@ class HowToStep extends BaseModel implements Auditable
         return $this;
     }
 
-    public function mooveUp() {
+    public function moveUp() {
         $this->update([
             'posi' => $this->posi - 1,
         ]);
         return $this;
     }
 
-    public function mooveDown() {
+    public function moveDown() {
         $this->update([
             'posi' => $this->posi + 1,
         ]);
         return $this;
     }
 
+    public function prevStep(): ?self
+    {
+        return $this->howtothread->prevStep($this->posi);
+    }
+
+    public function nextStep(): ?self
+    {
+        return $this->howtothread->nextStep($this->posi);
+    }
 
     #endregion
 }

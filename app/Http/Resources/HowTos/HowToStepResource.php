@@ -2,7 +2,10 @@
 
 namespace App\Http\Resources\HowTos;
 
+use JsonSerializable;
+use Illuminate\Http\Request;
 use App\Http\Resources\StatusResource;
+use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
@@ -33,8 +36,8 @@ class HowToStepResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
+     * @param  Request  $request
+     * @return array|Arrayable|JsonSerializable
      */
     public function toArray($request)
     {
@@ -57,6 +60,7 @@ class HowToStepResource extends JsonResource
 
             'show_url' => route('howtosteps.show', $this->uuid),
             'edit_url' => route('howtosteps.edit', $this->uuid),
+            'read_url' => route('howtosteps.read', $this->id),
             'destroy_url' => route('howtosteps.destroy', $this->uuid),
         ];
     }
