@@ -58,7 +58,7 @@ class HowToThreadResource extends JsonResource
 
             'show_url' => route('howtothreads.show', $this->uuid),
             'edit_url' => route('howtothreads.edit', $this->uuid),
-            'read_url' => route('howtothreads.read', [$this->uuid, 1]),
+            'read_url' => route('howtothreads.read', $this->id),
             'destroy_url' => route('howtothreads.destroy', $this->uuid),
         ];
     }

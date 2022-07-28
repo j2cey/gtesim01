@@ -47,6 +47,7 @@ class HowToResource extends JsonResource
             'title' => $this->title,
             'code' => $this->code,
             'view' => $this->view,
+            'htmlbody' => $this->htmlbody,
             'description' => $this->description,
             'tags' => $this->tags,
 

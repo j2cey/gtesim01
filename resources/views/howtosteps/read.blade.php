@@ -5,40 +5,51 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-
-                    <div class="row">
-                        <div class="col col-sm-4 border-right">
+                    
+                    <div class="col-md-4 col-sm-4 border-right">
+                        
+                        <div class="description-block">
                             @if($howtostepprev)
-                            <div class="description-block">
-                                <h5 class="description-header"><i class="fa fa-arrow-left"></i></h5>
-                                <span class="text text-sm">{{ $howtostepprev->title }}</span>
-                            </div>
+                            <h5 class="description-header">
+                                <a href="{{ route('howtosteps.read', $howtostepprev->id) }}">
+                                    <i class="fa fa-arrow-circle-left" aria-hidden="true"></i>
+                                </a>
+                            </h5>
+                            <span class="text text-xs">{{ $howtostepprev->title }}</span>
                             @endif
-                            <!-- /.description-block -->
                         </div>
-                        <!-- /.col -->
-                        <div class="col col-sm-4 border-right">
-                            <div class="description-block">
-                                <h5 class="description-header">
-                                    <span><i class="fa fa-times-circle-o text-danger"></i></span>
-                                </h5>
-                                <span class="text text-sm">{{ $howtostep->title }}</span>
-                            </div>
-                            <!-- /.description-block -->
-                        </div>
-                        <!-- /.col -->
-                        <div class="col col-sm-4">
-                            @if($howtostepnext)
-                            <div class="description-block">
-                                <h5 class="description-header"><i class="fa fa-arrow-right"></i></h5>
-                                <span class="text text-sm">{{ $howtostepnext->title }}</span>
-                            </div>
-                            @endif
-                            <!-- /.description-block -->
-                        </div>
-                        <!-- /.col -->
+                        
+                        <!-- /.description-block -->
                     </div>
-
+                    <!-- /.col -->
+                    <div class="col-md-4 col-sm-4 border-right">
+                        <div class="description-block">
+                            <h5 class="description-header"><i class="fa fa-circle" aria-hidden="true"></i></h5>
+                            <span class="text text-xs">{{ $howtostep->title }}</span>
+                        </div>
+                        <!-- /.description-block -->
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-md-4 col-sm-4">
+                        <div class="description-block">
+                        @if($howtostepnext)
+                            <h5 class="description-header">
+                                <a href="{{ route('howtosteps.read', $howtostepnext->id) }}">
+                                    <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>
+                                </a>
+                            </h5>
+                            <span class="text text-xs">{{ $howtostepnext->title }}</span>
+                        @else
+                        <h5 class="description-header">
+                            <a href="{{ route('howtothreads.index') }}">
+                                <i class="fa fa-stop-circle" aria-hidden="true"></i>
+                            </a>
+                        </h5>
+                        <span class="text text-xs">Terminé</span>
+                        @endif
+                        </div>
+                        <!-- /.description-block -->
+                    </div>
 
                 </div>
 

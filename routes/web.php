@@ -214,7 +214,7 @@ Route::get('howtothreads.fetchall',[HowToThreadController::class,'fetchall'])
 Route::get('howtothreads.fetchone/{id}',[HowToThreadController::class,'fetchone'])
     ->name('howtothreads.fetchone')
     ->middleware('auth');
-Route::get('howtothreads.read/{id}/{posi}',[HowToThreadController::class,'read'])
+Route::get('howtothreads.read/{id}',[HowToThreadController::class,'read'])
     ->name('howtothreads.read')
     ->middleware('auth');
 

@@ -18,6 +18,9 @@ class HowToStepController extends Controller
         $howtostepprev = $howtostep->prevStep();
         $howtostepnext = $howtostep->nextStep();
 
+        $howtostepprev = is_null($howtostepprev) ? $howtostepprev : new HowToStepResource($howtostepprev);
+        $howtostepnext = is_null($howtostepnext) ? $howtostepnext : new HowToStepResource($howtostepnext);
+
         return view('howtosteps.read')
             ->with('howtostep', $howtostep)
             ->with('howtostepprev', $howtostepprev)

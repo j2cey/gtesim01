@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Contracts\View\Factory;
 use App\Http\Resources\SearchCollection;
 use App\Http\Requests\HowToThread\FetchRequest;
+use App\Http\Resources\HowTos\HowToStepResource;
 use Illuminate\Contracts\Foundation\Application;
 use App\Http\Resources\HowTos\HowToThreadResource;
 use App\Http\Requests\HowToStep\StoreHowToStepRequest;
@@ -50,11 +51,30 @@ class HowToThreadController extends Controller
         return HowToThread::all();
     }
 
-    public function read($id, $posi) {
+    public function read($id) {
         $howtothread = HowToThread::where('id', $id)->first();
+
+        $posisteps = $howtothread->getPosiSteps(1);
+        
+        $posisteps['current'] = new HowToStepResource($posisteps['current']);
+        $posisteps['prev'] = is_null($posisteps['prev']) ? $posisteps['prev'] : new HowToStepResource($posisteps['prev']);
+        $posisteps['next'] = is_null($posisteps['next']) ? $posisteps['next'] : new HowToStepResource($posisteps['next']);
+
         return view('howtothreads.read')
             ->with('howtothread', $howtothread)
-            ->with('posi', $posi);
+            ->with('posisteps', $posisteps);
+    }
+
+    public function nextposisteps($id) {
+        $howtothread = HowToThread::where('id', $id)->first();
+
+        $posisteps = $howtothread->getPosiSteps(1);
+        
+        $posisteps['current'] = new HowToStepResource($posisteps['current']);
+        $posisteps['prev'] = is_null($posisteps['prev']) ? $posisteps['prev'] : new HowToStepResource($posisteps['prev']);
+        $posisteps['next'] = is_null($posisteps['next']) ? $posisteps['next'] : new HowToStepResource($posisteps['next']);
+
+        return $posisteps;
     }
 
     public function posimax($id) {

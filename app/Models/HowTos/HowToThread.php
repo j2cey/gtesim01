@@ -37,6 +37,7 @@ class HowToThread extends BaseModel implements Auditable
 
     protected $guarded = [];
     protected $with = ['tags','steps'];
+    protected $currentposi = 1;
 
     #region Validation Rules
 
@@ -88,7 +89,20 @@ class HowToThread extends BaseModel implements Auditable
 
     #region Custom Functions
 
-    public function nextStep($posi) {
+    public function getPosiSteps($posi) {
+
+        $current = $this->steps()->where('posi', $posi)->first();
+        $next = $this->nextStep($posi);
+        $prev = $this->prevStep($posi);
+
+        return [
+            'current' => $current,
+            'prev' => $prev,
+            'next' => $next,
+        ];
+    }
+
+    public function nextStep($posi): ?HowToStep {
         $next_step_posi = $posi + 1;
         if ( $this->steps()->count() < $next_step_posi ) {
             return null;
@@ -96,7 +110,8 @@ class HowToThread extends BaseModel implements Auditable
         return $this->steps()->where('posi', $next_step_posi)->first();
     }
 
-    public function prevStep($posi) {
+    public function prevStep($posi): ?HowToStep
+    {
         $prev_step_posi = $posi - 1;
         if ( $prev_step_posi === 0 ) {
             return null;
