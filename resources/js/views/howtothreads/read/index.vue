@@ -3,25 +3,25 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    
+
                     <div class="col-md-4 col-sm-4 border-right">
-                        
+
                         <div v-if="prevstep" class="description-block">
                             <h5 class="description-header">
                                 <a @click="goToStep(prevstep)">
                                     <i class="fa fa-arrow-circle-left text-warning" aria-hidden="true"></i>
                                 </a>
                             </h5>
-                            <span class="text text-xs">{{ prevstep.title }}</span>
+                            <span class="text text-xs">{{ prevstep.posi + '. ' + prevstep.title }}</span>
                         </div>
-                        
+
                         <!-- /.description-block -->
                     </div>
                     <!-- /.col -->
                     <div class="col-md-4 col-sm-4 border-right">
                         <div class="description-block">
                             <h5 class="description-header"><i class="fa fa-circle" aria-hidden="true"></i></h5>
-                            <span class="text text-xs">{{ currstep.title }}</span>
+                            <span class="text text-xs">{{ currstep.posi + '. ' + currstep.title }}</span>
                         </div>
                         <!-- /.description-block -->
                     </div>
@@ -33,7 +33,7 @@
                                     <i class="fa fa-arrow-circle-right text-success" aria-hidden="true"></i>
                                 </a>
                             </h5>
-                            <span class="text text-xs">{{ nextstep.title }}</span>
+                            <span class="text text-xs">{{ nextstep.posi + '. ' + nextstep.title }}</span>
                         </div>
                         <div v-else class="description-block">
                             <h5 class="description-header">
@@ -66,7 +66,7 @@
             htmleval
         },
         mounted() {
-            
+
         },
         created() {
         },

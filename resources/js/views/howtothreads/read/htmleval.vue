@@ -12,11 +12,11 @@
             htmlcontent_prop: {}
         },
         components: {
-            
+
         },
         mounted() {
             this.$parent.$on('htmlcontent_reloaded', ({ htmlcontent }) => {
-                console.log('htmlcontent_reloaded receive on htmleval ', htmlcontent)
+                //console.log('htmlcontent_reloaded receive on htmleval ', htmlcontent)
                 this.htmlcontent = htmlcontent
             })
         },
@@ -28,10 +28,10 @@
             }
         },
         methods: {
-            
+
         },
         computed: {
-            
+
         }
     }
 </script>

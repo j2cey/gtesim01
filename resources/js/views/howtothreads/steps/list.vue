@@ -107,6 +107,7 @@
             this.$parent.$on('howtothread_reloaded', ({ howtothread, howtosteps }) => {
                 console.log('howtothread_reloaded receive on list ', howtothread, howtosteps)
                 if (this.howtothread.id === howtothread.id) {
+                    this.howtothread = howtothread
                     this.howtosteps = howtosteps
                     console.log('list set', this.howtosteps)
                 }
@@ -129,7 +130,7 @@
         methods: {
             createHowToStep() {
                 let howtothreadId = this.howtothread.id
-                let stepscount = this.howtothread.steps.length
+                let stepscount = this.howtosteps.length
                 this.$emit('create_new_howtostep', { howtothreadId, stepscount })
             },
             editHowToStep(howtostep) {

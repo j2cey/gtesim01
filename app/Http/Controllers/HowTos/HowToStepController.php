@@ -31,11 +31,11 @@ class HowToStepController extends Controller
         $howtostep = HowToStep::where('id', $id)->first();
 
         $posisteps = $howtostep->getRelativeSteps();
-        
+
         $posisteps['current'] = new HowToStepResource($posisteps['current']);
         $posisteps['prev'] = is_null($posisteps['prev']) ? $posisteps['prev'] : new HowToStepResource($posisteps['prev']);
         $posisteps['next'] = is_null($posisteps['next']) ? $posisteps['next'] : new HowToStepResource($posisteps['next']);
-        
+
         return $posisteps;
     }
 
@@ -101,6 +101,7 @@ class HowToStepController extends Controller
      */
     public function update(UpdateHowToStepRequest $request, HowToStep $howtostep)
     {
+        //dd($request);
         return new HowToStepResource( $howtostep->updateOne($request->howto, $request->title, $request->posi, $request->description) );
         //updateOne(HowTo $howto, $title, $posi, $description, $tags = null) : HowToStep
     }
