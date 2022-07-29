@@ -8,8 +8,8 @@
                         
                         <div v-if="prevstep" class="description-block">
                             <h5 class="description-header">
-                                <a href="#">
-                                    <i class="fa fa-arrow-circle-left" aria-hidden="true"></i>
+                                <a @click="goToStep(prevstep)">
+                                    <i class="fa fa-arrow-circle-left text-warning" aria-hidden="true"></i>
                                 </a>
                             </h5>
                             <span class="text text-xs">{{ prevstep.title }}</span>
@@ -29,16 +29,16 @@
                     <div class="col-md-4 col-sm-4">
                         <div v-if="nextstep" class="description-block">
                             <h5 class="description-header">
-                                <a href="#">
-                                    <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>
+                                <a @click="goToStep(nextstep)">
+                                    <i class="fa fa-arrow-circle-right text-success" aria-hidden="true"></i>
                                 </a>
                             </h5>
                             <span class="text text-xs">{{ nextstep.title }}</span>
                         </div>
                         <div v-else class="description-block">
                             <h5 class="description-header">
-                                <a href="#">
-                                    <i class="fa fa-stop-circle" aria-hidden="true"></i>
+                                <a @click="endReading()">
+                                    <i class="fa fa-stop-circle text-danger" aria-hidden="true"></i>
                                 </a>
                             </h5>
                             <span class="text text-xs">Terminé</span>
@@ -61,7 +61,6 @@
         name: "howtothread-read",
         props: {
             howtothread_prop: {},
-            posisteps_prop: {},
         },
         components: {
             htmleval
@@ -74,9 +73,7 @@
         data() {
             return {
                 howtothread: this.howtothread_prop,
-                currstep: this.posisteps_prop.current,
-                prevstep: this.posisteps_prop.prev,
-                nextstep: this.posisteps_prop.next,
+                currposi: 1,
                 commom_key: 0,
                 stepslist_key: this.howtothread_prop.id + '_' + 0,
                 collapse_icon: 'fas fa-chevron-down',
@@ -84,10 +81,46 @@
             }
         },
         methods: {
-            
+            goToStep(step) {
+                /*
+                axios.get(`/howtosteps.relativesteps/${step.id}`)
+                .then(({data}) => {
+                    let posisteps = data
+                    this.currstep = posisteps.current
+                    this.prevstep = posisteps.prev
+                    this.nextstep = posisteps.next
+
+                    this.$emit('htmlcontent_reloaded', { 'htmlcontent':posisteps.current.howto.htmlbody });
+                });
+                */
+               this.currposi = step.posi
+               let currstep = this.currstep
+               this.$emit('htmlcontent_reloaded', { 'htmlcontent':currstep.howto.htmlbody });
+            },
+            endReading() {
+                window.location = '/howtothreads'
+            },
+            getStep(stepIndex) {
+                if ( stepIndex >= 0 && stepIndex < this.howtothread.steps.length ) {
+                    return this.howtothread.steps[stepIndex];
+                } else {
+                    return null;
+                }
+            }
         },
         computed: {
-            
+            currstep() {
+                let stepIndex = (this.currposi - 1)
+                return this.getStep(stepIndex)
+            },
+            prevstep() {
+                let stepIndex = (this.currposi - 2)
+                return this.getStep(stepIndex)
+            },
+            nextstep() {
+                let stepIndex = (this.currposi + 0)
+                return this.getStep(stepIndex)
+            }
         }
     }
 </script>

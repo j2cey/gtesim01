@@ -26,6 +26,19 @@ class HowToStepController extends Controller
             ->with('howtostepprev', $howtostepprev)
             ->with('howtostepnext', $howtostepnext);
     }
+
+    public function relativesteps($id) {
+        $howtostep = HowToStep::where('id', $id)->first();
+
+        $posisteps = $howtostep->getRelativeSteps();
+        
+        $posisteps['current'] = new HowToStepResource($posisteps['current']);
+        $posisteps['prev'] = is_null($posisteps['prev']) ? $posisteps['prev'] : new HowToStepResource($posisteps['prev']);
+        $posisteps['next'] = is_null($posisteps['next']) ? $posisteps['next'] : new HowToStepResource($posisteps['next']);
+        
+        return $posisteps;
+    }
+
     /**
      * Display a listing of the resource.
      *

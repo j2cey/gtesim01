@@ -91,15 +91,17 @@ class HowToThread extends BaseModel implements Auditable
 
     public function getPosiSteps($posi) {
 
-        $current = $this->steps()->where('posi', $posi)->first();
-        $next = $this->nextStep($posi);
-        $prev = $this->prevStep($posi);
-
+        $posi_step = $this->steps()->where('posi', $posi)->first();
+        //$next = $this->nextStep($posi);
+        //$prev = $this->prevStep($posi);
+        /*
         return [
             'current' => $current,
             'prev' => $prev,
             'next' => $next,
         ];
+        */
+        return $posi_step->getRelativeSteps();
     }
 
     public function nextStep($posi): ?HowToStep {

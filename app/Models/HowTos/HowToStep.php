@@ -159,5 +159,17 @@ class HowToStep extends BaseModel implements Auditable
         return $this->howtothread->nextStep($this->posi);
     }
 
+    public function getRelativeSteps() 
+    {
+        $next = $this->nextStep();
+        $prev = $this->prevStep();
+        
+        return [
+            'current' => $this,
+            'prev' => $prev,
+            'next' => $next,
+        ];
+    }
+
     #endregion
 }

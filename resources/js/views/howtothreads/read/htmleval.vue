@@ -15,7 +15,10 @@
             
         },
         mounted() {
-            
+            this.$parent.$on('htmlcontent_reloaded', ({ htmlcontent }) => {
+                console.log('htmlcontent_reloaded receive on htmleval ', htmlcontent)
+                this.htmlcontent = htmlcontent
+            })
         },
         created() {
         },
