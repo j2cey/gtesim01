@@ -12,6 +12,7 @@ use App\Http\Controllers\SystemController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\Esims\EsimController;
 use App\Http\Controllers\HowTos\HowToController;
+use App\Http\Controllers\Comments\CommentController;
 use App\Http\Controllers\Esims\ClientEsimController;
 use App\Http\Controllers\Esims\StatutEsimController;
 use App\Http\Controllers\HowTos\HowToStepController;

@@ -5,6 +5,7 @@ namespace App\Models\HowTos;
 use Spatie\Tags\HasTags;
 use App\Models\BaseModel;
 use Illuminate\Support\Carbon;
+use App\Traits\Comment\HasComments;
 use OwenIt\Auditing\Contracts\Auditable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -32,7 +33,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  */
 class HowToStep extends BaseModel implements Auditable
 {
-    use HasTags, HasFactory, \OwenIt\Auditing\Auditable;
+    use HasComments, HasTags, HasFactory, \OwenIt\Auditing\Auditable;
 
     protected $guarded = [];
     protected $with = ['tags'];
@@ -159,11 +160,11 @@ class HowToStep extends BaseModel implements Auditable
         return $this->howtothread->nextStep($this->posi);
     }
 
-    public function getRelativeSteps() 
+    public function getRelativeSteps()
     {
         $next = $this->nextStep();
         $prev = $this->prevStep();
-        
+
         return [
             'current' => $this,
             'prev' => $prev,

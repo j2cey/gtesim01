@@ -80,6 +80,7 @@ class HowTo extends BaseModel implements IHasMedia
     public static function defaultRules() {
         return [
             'title' => ['required'],
+            'howtotype' => ['required'],
             'description' => ['required'],
         ];
     }
@@ -119,7 +120,6 @@ class HowTo extends BaseModel implements IHasMedia
      * @param $title
      * @param $view
      * @param $description
-     * @param null $htmlbody
      * @param null $code
      * @param null $tags
      * @return HowTo
