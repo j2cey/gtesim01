@@ -1,6 +1,6 @@
 <template>
     <div>
-        <label for="rich-text" class="form-label">Content</label>
+        <label for="rich-text" class="form-label">{{ howto.title }}</label>
         <quill-editor v-model="form.body"
                       class="mb-3"
                       id="rich-text"

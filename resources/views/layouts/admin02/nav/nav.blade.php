@@ -97,11 +97,11 @@
                 </li>
                 @endrole
 
-                @role('Admin')
+                @can('howtothread-list')
                 <li class="nav-item dropdown">
                     <a class="button is-warning" size="is-small" href="/howtothreads">Comment Faire &nbsp;<i class="fa fa-lightbulb"></i> </a>
                 </li>
-                @endrole
+                @endcan
 
                 @role('Admin')
                 <li class="nav-item dropdown">
