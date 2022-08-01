@@ -1,0 +1,9 @@
+
+### caching
+php artisan config:cache
+php artisan route:cache
+
+### reverse caching (for new changes)
+php artisan config:clear
+php artisan route:clear
+

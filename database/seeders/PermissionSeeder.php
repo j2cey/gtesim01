@@ -16,6 +16,7 @@ class PermissionSeeder extends Seeder
     {
         $permissions = [
 
+	/*
             ['role-list', 2],
             ['role-create', 1],
             ['role-edit', 1],
@@ -53,7 +54,7 @@ class PermissionSeeder extends Seeder
             ['esimqrcode-create', 3],
             ['esimqrcode-edit', 3],
             ['esimqrcode-delete', 3],
-
+	 */
             ['howto-list', 4],
             ['howto-create', 3],
             ['howto-edit', 3],
