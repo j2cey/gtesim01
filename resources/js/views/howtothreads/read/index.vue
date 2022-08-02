@@ -64,6 +64,8 @@
                 <htmleval :htmlcontent_prop="currstep.howto.htmlbody"></htmleval>
 
 <!--                <comments-list :comments_prop="currstep.comments" model_type_prop="App\Models\Task" :model_id_prop="currstep.id"></comments-list>-->
+                <hr />
+                <commentsManager :user_prop="user" :comments_prop="currstep.comments" :commentable_type_prop="currstep.model_type" :commentable_id_prop="currstep.id"></commentsManager>
             </div>
         </div>
     </div>
@@ -75,11 +77,12 @@
     export default {
         name: "howtothread-read",
         props: {
+            user_prop: {},
             howtothread_prop: {},
         },
         components: {
             htmleval,
-            commentsList: () => import('../../comments/list'),
+            commentsManager: () => import('../../comments/CommentsManager'),
         },
         mounted() {
 
@@ -88,6 +91,7 @@
         },
         data() {
             return {
+                user: this.user_prop,
                 howtothread: this.howtothread_prop,
                 currposi: 1,
                 commom_key: 0,

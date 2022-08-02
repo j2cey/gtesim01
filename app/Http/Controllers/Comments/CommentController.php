@@ -15,6 +15,12 @@ use App\Http\Requests\Comment\UpdateCommentRequest;
 
 class CommentController extends Controller
 {
+    public function fetchall() {
+        return Comment::with('author')
+            ->orderByDesc('id')
+            ->get();
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -143,7 +149,7 @@ class CommentController extends Controller
      */
     public function store(StoreCommentRequest $request)
     {
-        return Comment::create($request->all());
+        return $request->commentable->addComment($request->comment_text);
     }
 
     /**
@@ -177,52 +183,11 @@ class CommentController extends Controller
      */
     public function update(UpdateCommentRequest $request, Comment $comment)
     {
-        if ( $request->update_type === "vote" ){
-            $this->validate($request, [
-                'vote' => 'required',
-                'users_id' => 'required',
-            ]);
-            //$comments = Comment::find($commentId);
-            $data = [
-                "comment_id" => $comment->id,
-                'vote' => $request->vote,
-                'user_id' => $request->users_id,
-            ];
-            if($request->vote === "up"){
-                //$comment = $comments->first();
-                $vote = $comment->votes;
-                $vote++;
-                $comment->votes = $vote;
-                $comment->save();
-            }
-            if($request->vote === "down"){
-                //$comment = $comments->first();
-                $vote = $comment->votes;
-                $vote--;
-                $comment->votes = $vote;
-                $comment->save();
-            }
-            return CommentVote::create($data);
-        }
-        if ( $request->update_type === "spam" ) {
+        $comment->update([
+            'comment_text' => $request->comment_text
+        ]);
 
-            $this->validate($request, [
-                'users_id' => 'required',
-            ]);
-
-            //$comments = Comment::find($commentId);
-            //$comment = $comments->first();
-            $spam = $comment->spam;
-            $spam++;
-            $comment->spam = $spam;
-            $comment->save();
-
-            $data = [
-                "comment_id" => $comment->id,
-                'user_id' => $request->users_id,
-            ];
-            return CommentSpam::create($data);
-        }
+        return $comment;
     }
 
     /**
@@ -233,6 +198,8 @@ class CommentController extends Controller
      */
     public function destroy(Comment $comment)
     {
-        //
+        $comment->delete();
+        
+        return response( null,204);
     }
 }

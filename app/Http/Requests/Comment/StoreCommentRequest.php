@@ -3,7 +3,6 @@
 namespace App\Http\Requests\Comment;
 
 use App\Models\Comments\Comment;
-use Illuminate\Foundation\Http\FormRequest;
 
 class StoreCommentRequest extends CommentRequest
 {
@@ -25,5 +24,17 @@ class StoreCommentRequest extends CommentRequest
     public function rules()
     {
         return Comment::createRules();
+    }
+    
+    /**
+     * Prepare the data for validation.
+     *
+     * @return void
+     */
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'commentable' => $this->setRelevantPolymorph( $this->input('commentable_type'), $this->input('commentable_id') ),
+        ]);
     }
 }

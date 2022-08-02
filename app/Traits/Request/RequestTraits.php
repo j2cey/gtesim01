@@ -50,6 +50,10 @@ trait RequestTraits
         }
     }
 
+    public function setRelevantPolymorph($type, $id) {
+        return $type && $id ? $type::where('id', $id)->first() : null;
+    }
+
     public function setRelevantRole($value, $json_decode_before = false): ?Role
     {
         if (is_null($value)) {

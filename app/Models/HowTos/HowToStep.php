@@ -6,7 +6,7 @@ use Spatie\Tags\HasTags;
 use App\Models\BaseModel;
 use Illuminate\Support\Carbon;
 use App\Traits\Comment\HasComments;
-use OwenIt\Auditing\Contracts\Auditable;
+use App\Contracts\Comments\ICommentable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
@@ -31,7 +31,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @property Carbon $created_at
  * @property Carbon $updated_at
  */
-class HowToStep extends BaseModel implements Auditable
+class HowToStep extends BaseModel implements ICommentable
 {
     use HasComments, HasTags, HasFactory, \OwenIt\Auditing\Auditable;
 

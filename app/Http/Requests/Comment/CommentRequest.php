@@ -4,6 +4,7 @@ namespace App\Http\Requests\Comment;
 
 use App\Models\Comments\Comment;
 use App\Traits\Request\RequestTraits;
+use App\Contracts\Comments\ICommentable;
 use Illuminate\Foundation\Http\FormRequest;
 
 /**
@@ -18,6 +19,7 @@ use Illuminate\Foundation\Http\FormRequest;
  * @property integer $user_id
  *
  * @property Comment $comment
+ * @property ICommentable $commentable
  */
 class CommentRequest extends FormRequest
 {

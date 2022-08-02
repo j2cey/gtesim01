@@ -243,3 +243,8 @@ Route::get('howtosteps.relativesteps/{id}',[HowToStepController::class,'relative
 Route::get('tags.fetchall',[TagController::class,'fetchall'])
     ->name('tags.fetchall')
     ->middleware('auth');
+
+Route::resource('comments',CommentController::class)->middleware('auth');
+Route::get('comments.fetchall',[CommentController::class,'fetchall'])
+    ->name('comments.fetchall')
+    ->middleware('auth');

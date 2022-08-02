@@ -1,0 +1,12 @@
+<?php
+
+namespace App\Contracts\Comments;
+
+use OwenIt\Auditing\Contracts\Auditable;
+
+interface ICommentable extends Auditable
+{
+  public function addComment($comment_text);
+  public function removeComments();
+  
+}

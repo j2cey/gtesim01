@@ -37,6 +37,7 @@ class Comment extends BaseModel implements Auditable
 
     protected $guarded = [];
     protected $dates = ['created_at', 'updated_at'];
+    protected $with = ['author'];
 
     #region Validation Rules
 
@@ -69,7 +70,8 @@ class Comment extends BaseModel implements Auditable
 
     #region Eloquent Relationships
 
-    public function user() {
+    public function author()
+    {
         return $this->belongsTo(User::class, 'user_id');
     }
 

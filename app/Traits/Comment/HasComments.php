@@ -42,7 +42,7 @@ trait HasComments
         $comment = $this->comments()->create([
             'comment_text' => $comment_text,
         ])
-        ->user()->associate($user);
+        ->author()->associate($user);
         $comment->save();
 
         return $comment;

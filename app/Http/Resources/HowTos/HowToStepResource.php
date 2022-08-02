@@ -4,6 +4,7 @@ namespace App\Http\Resources\HowTos;
 
 use JsonSerializable;
 use Illuminate\Http\Request;
+use App\Models\HowTos\HowToStep;
 use App\Http\Resources\StatusResource;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -53,6 +54,7 @@ class HowToStepResource extends JsonResource
             'howto' => HowToResource::make($this->howto),
 
             'tags' => $this->tags,
+            'model_type' => HowToStep::class,
 
             'status' => StatusResource::make($this->status),
 

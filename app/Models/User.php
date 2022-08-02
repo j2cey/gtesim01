@@ -5,6 +5,7 @@ namespace App\Models;
 use GuzzleHttp\Client;
 use App\Traits\Base\BaseTrait;
 use Illuminate\Support\Carbon;
+use App\Models\Comments\Comment;
 use App\Models\Ldap\LdapAccount;
 use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Traits\HasRoles;
@@ -165,7 +166,17 @@ class User extends Authenticatable implements Auditable
         return $this->belongsTo(LdapAccount::class, 'ldap_account_id');
     }
 
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
     #endregion
+
+    public function getFullNameAttribute()
+    {
+        return "{$this->name}";
+    }
 
     public function getAllPermissionsAttribute() {
         $permissions = [];
