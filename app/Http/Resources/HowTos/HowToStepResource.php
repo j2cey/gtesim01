@@ -55,6 +55,7 @@ class HowToStepResource extends JsonResource
 
             'tags' => $this->tags,
             'model_type' => HowToStep::class,
+            'comments' => $this->comments,
 
             'status' => StatusResource::make($this->status),
 

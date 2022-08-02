@@ -4,12 +4,14 @@ namespace App\Traits\Comment;
 
 
 use Auth;
+use App\Models\User;
 use App\Models\Comments\Comment;
 
 trait HasComments
 {
     public function comments() {
-        return $this->morphMany(Comment::class, 'commentable');
+        return $this->morphMany(Comment::class, 'commentable')
+            ->orderByDesc('id');
     }
 
     /**
@@ -32,17 +34,15 @@ trait HasComments
 
     #region Custom Functions
 
-    public function addComment($comment_text) {
+    public function addComment(User $author, $comment_text) {
         if (empty($comment_text)) {
             return false;
         }
 
-        $user = Auth::user();
-
         $comment = $this->comments()->create([
             'comment_text' => $comment_text,
         ])
-        ->author()->associate($user);
+        ->author()->associate($author);
         $comment->save();
 
         return $comment;

@@ -54,7 +54,9 @@ __webpack_require__.r(__webpack_exports__);
     return {
       state: 'default',
       data: {
-        comment_text: this.comment.comment_text
+        comment_text: this.comment.comment_text,
+        commentable_type: this.comment.commentable_type,
+        commentable_id: this.comment.commentable_id
       }
     };
   },
@@ -67,12 +69,15 @@ __webpack_require__.r(__webpack_exports__);
       this.state = 'default';
       this.$emit('comment-updated', {
         'id': this.comment.id,
+        'uuid': this.comment.uuid,
+        'author': this.comment.author,
         'comment_text': this.data.comment_text
       });
     },
     deleteComment: function deleteComment() {
       this.$emit('comment-deleted', {
-        'id': this.comment.id
+        'id': this.comment.id,
+        'uuid': this.comment.uuid
       });
     }
   },
@@ -95,6 +100,12 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _CommentItem__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./CommentItem */ "./resources/js/views/comments/CommentItem.vue");
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
 //
 //
 //
@@ -144,13 +155,25 @@ var local_comments = [{
   }
 }];
 
+
+var Comment = /*#__PURE__*/_createClass(function Comment(comment) {
+  _classCallCheck(this, Comment);
+
+  this.commentable_type = comment.commentable_type || '';
+  this.commentable_id = comment.commentable_id || '';
+  this.comment_text = comment.comment_text || '';
+});
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "comments-manager",
   props: {
     user_prop: {
       required: true,
       type: Object
-    }
+    },
+    comments_prop: [],
+    commentable_type_prop: "",
+    commentable_id_prop: 0
   },
   components: {
     comment: _CommentItem__WEBPACK_IMPORTED_MODULE_0__["default"]
@@ -159,10 +182,12 @@ var local_comments = [{
     return {
       state: 'default',
       user: this.user_prop,
-      comments: local_comments,
-      data: {
+      comments: this.comments_prop,
+      commentForm: new Form(new Comment({
+        commentable_type: this.commentable_type_prop,
+        commentable_id: this.commentable_id_prop,
         comment_text: ''
-      }
+      }))
     };
   },
   methods: {
@@ -171,33 +196,46 @@ var local_comments = [{
     },
     stopEditing: function stopEditing() {
       this.state = 'default';
-      this.data.comment_text = '';
+      this.commentForm.comment_text = '';
     },
     saveComment: function saveComment() {
-      var newComment = {
-        id: this.comments[this.comments.length - 1].id + 1,
-        comment_text: this.data.comment_text,
-        edited: false,
-        created_at: new Date().toLocaleString(),
-        author: {
-          id: this.user.id,
-          name: this.user.name
-        }
-      };
-      this.comments.push(newComment);
-      this.stopEditing();
+      var _this = this;
+
+      var t = this;
+      this.commentForm.post('/comments').then(function (resp) {
+        console.log("comment created: ", resp);
+        t.comments.unshift(resp);
+
+        _this.stopEditing();
+      })["catch"](function (error) {
+        _this.loading = false;
+      });
     },
     updateComment: function updateComment($event) {
-      var index = this.comments.findIndex(function (element) {
-        return element.id === $event.id;
+      var t = this;
+      var updateForm = new Form(new Comment({
+        commentable_type: this.commentable_type_prop,
+        commentable_id: this.commentable_id_prop,
+        comment_text: $event.comment_text,
+        author: $event.author,
+        id: $event.id,
+        uuid: $event.uuid
+      }));
+      updateForm.put("/comments/".concat($event.uuid), undefined).then(function (resp) {
+        console.log("comment updated: ", resp);
+        t.comments[t.commentIndex($event.id)].comment_text = resp.comment_text;
       });
-      this.comments[index].comment_text = $event.comment_text;
     },
     deleteComment: function deleteComment($event) {
-      var index = this.comments.findIndex(function (element) {
-        return element.id === $event.id;
+      var t = this;
+      axios["delete"]("/comments/".concat($event.uuid)).then(function () {
+        t.comments.splice(t.commentIndex($event.id), 1);
       });
-      this.comments.splice(index, 1);
+    },
+    commentIndex: function commentIndex(commentId) {
+      return this.comments.findIndex(function (element) {
+        return element.id === commentId;
+      });
     }
   }
 });
@@ -259,13 +297,17 @@ var render = function () {
             : _vm._e(),
         ]),
         _vm._v(" "),
-        _c("div", { staticClass: "text-grey-dark leading-normal text-xs" }, [
-          _c("span", [
-            _vm._v(_vm._s(_vm.comment.author.name) + " "),
-            _c("span", { staticClass: "mx-1 text-xs" }, [_vm._v("•")]),
-            _vm._v(_vm._s(_vm.comment.created_at)),
-          ]),
-        ]),
+        _c(
+          "div",
+          { staticClass: "text-muted text-grey-dark leading-normal text-xs" },
+          [
+            _c("span", [
+              _vm._v(_vm._s(_vm.comment.author.name) + " "),
+              _c("span", { staticClass: "mx-1 text-xs" }, [_vm._v("•")]),
+              _vm._v(_vm._s(_vm._f("formatDate")(_vm.comment.created_at))),
+            ]),
+          ]
+        ),
       ]
     ),
     _vm._v(" "),
@@ -295,6 +337,7 @@ var render = function () {
           ],
           staticClass:
             "bg-grey-lighter rounded leading-normal resize-none w-full h-24 py-2 px-3",
+          staticStyle: { "min-width": "50%" },
           attrs: { placeholder: "Update comment" },
           domProps: { value: _vm.data.comment_text },
           on: {
@@ -398,22 +441,23 @@ var render = function () {
             {
               name: "model",
               rawName: "v-model",
-              value: _vm.data.comment_text,
-              expression: "data.comment_text",
+              value: _vm.commentForm.comment_text,
+              expression: "commentForm.comment_text",
             },
           ],
           staticClass:
             "bg-grey-lighter rounded leading-normal resize-none w-full py-2 px-3",
           class: [_vm.state === "editing" ? "h-24" : "h-10"],
+          staticStyle: { "min-width": "50%", "min-height": "5px" },
           attrs: { placeholder: "Laissez un commentaire" },
-          domProps: { value: _vm.data.comment_text },
+          domProps: { value: _vm.commentForm.comment_text },
           on: {
             focus: _vm.startEditing,
             input: function ($event) {
               if ($event.target.composing) {
                 return
               }
-              _vm.$set(_vm.data, "comment_text", $event.target.value)
+              _vm.$set(_vm.commentForm, "comment_text", $event.target.value)
             },
           },
         }),

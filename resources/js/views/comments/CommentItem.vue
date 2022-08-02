@@ -6,8 +6,8 @@
                 <br>
                 <button v-if="editable" @click="state = 'editing'" class="ml-2 mt-1 mb-auto text-blue hover:text-blue-dark text-sm">Modifier</button>
             </div>
-            <div class="text-grey-dark leading-normal text-xs">
-                <span>{{comment.author.name}} <span class="mx-1 text-xs">&bull;</span>{{ comment.created_at}}</span>
+            <div class="text-muted text-grey-dark leading-normal text-xs">
+                <span>{{comment.author.name}} <span class="mx-1 text-xs">&bull;</span>{{ comment.created_at | formatDate }}</span>
             </div>
         </div>
         <div v-show="state === 'editing'">
@@ -15,7 +15,7 @@
                 <h5 class="text-black text-sm">Modifer Commentaire</h5>
             </div>
             <textarea v-model="data.comment_text"
-                placeholder="Update comment"
+                placeholder="Update comment" style="min-width: 50%"
                 class="bg-grey-lighter rounded leading-normal resize-none w-full h-24 py-2 px-3">
             </textarea>
             <div class="flex flex-col md:flex-row items-center mt-2">
@@ -59,12 +59,15 @@
                 this.state = 'default';
                 this.$emit('comment-updated', {
                     'id': this.comment.id,
+                    'uuid': this.comment.uuid,
+                    'author': this.comment.author,
                     'comment_text': this.data.comment_text,
                 });
             },
             deleteComment() {
                 this.$emit('comment-deleted', {
                     'id': this.comment.id,
+                    'uuid': this.comment.uuid,
                 });
             }
         },

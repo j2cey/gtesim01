@@ -25,7 +25,7 @@ class StoreCommentRequest extends CommentRequest
     {
         return Comment::createRules();
     }
-    
+
     /**
      * Prepare the data for validation.
      *
@@ -35,6 +35,7 @@ class StoreCommentRequest extends CommentRequest
     {
         $this->merge([
             'commentable' => $this->setRelevantPolymorph( $this->input('commentable_type'), $this->input('commentable_id') ),
+            'author' => auth()->user(),
         ]);
     }
 }

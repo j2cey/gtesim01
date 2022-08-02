@@ -37,6 +37,14 @@ class CreateCommentsTable extends Migration
             $table->bigInteger('commentable_id');
 
             $table->baseFields();
+
+            $table->foreignId('created_by')->nullable()
+                ->comment('user creator reference')
+                ->constrained('users')->onDelete('set null');
+
+            $table->foreignId('updated_by')->nullable()
+                ->comment('user updator reference')
+                ->constrained('users')->onDelete('set null');
         });
         $this->setTableComment($this->comments['table_name'],$this->comments['table_comment']);
 
@@ -51,6 +59,14 @@ class CreateCommentsTable extends Migration
                 ->constrained('users')->onDelete('set null');
 
             $table->baseFields();
+
+            $table->foreignId('created_by')->nullable()
+                ->comment('user creator reference')
+                ->constrained('users')->onDelete('set null');
+
+            $table->foreignId('updated_by')->nullable()
+                ->comment('user updator reference')
+                ->constrained('users')->onDelete('set null');
         });
         $this->setTableComment($this->commentUserVotes['table_name'],$this->commentUserVotes['table_comment']);
 
@@ -63,6 +79,14 @@ class CreateCommentsTable extends Migration
                 ->constrained('users')->onDelete('set null');
 
             $table->baseFields();
+
+            $table->foreignId('created_by')->nullable()
+                ->comment('user creator reference')
+                ->constrained('users')->onDelete('set null');
+
+            $table->foreignId('updated_by')->nullable()
+                ->comment('user updator reference')
+                ->constrained('users')->onDelete('set null');
         });
         $this->setTableComment($this->commentSpams['table_name'],$this->commentSpams['table_comment']);
     }
@@ -77,18 +101,24 @@ class CreateCommentsTable extends Migration
         Schema::table($this->comments['table_name'], function (Blueprint $table) {
             $table->dropBaseForeigns();
             $table->dropForeign(['user_id']);
+            $table->dropForeign(['created_by']);
+            $table->dropForeign(['updated_by']);
         });
         Schema::dropIfExists($this->comments['table_name']);
 
         Schema::table($this->commentUserVotes['table_name'], function (Blueprint $table) {
             $table->dropBaseForeigns();
             $table->dropForeign(['user_id']);
+            $table->dropForeign(['created_by']);
+            $table->dropForeign(['updated_by']);
         });
         Schema::dropIfExists($this->commentUserVotes['table_name']);
 
         Schema::table($this->commentSpams['table_name'], function (Blueprint $table) {
             $table->dropBaseForeigns();
             $table->dropForeign(['user_id']);
+            $table->dropForeign(['created_by']);
+            $table->dropForeign(['updated_by']);
         });
         Schema::dropIfExists($this->commentSpams['table_name']);
     }

@@ -65,7 +65,7 @@
 
 <!--                <comments-list :comments_prop="currstep.comments" model_type_prop="App\Models\Task" :model_id_prop="currstep.id"></comments-list>-->
                 <hr />
-                <commentsManager :user_prop="user" :comments_prop="currstep.comments" :commentable_type_prop="currstep.model_type" :commentable_id_prop="currstep.id"></commentsManager>
+                <commentsManager :user_prop="user" :comments_prop="currcomments" :commentable_type_prop="currstep.model_type" :commentable_id_prop="currstep.id" :key="currstep.id"></commentsManager>
             </div>
         </div>
     </div>
@@ -140,6 +140,10 @@
             nextstep() {
                 let stepIndex = (this.currposi + 0)
                 return this.getStep(stepIndex)
+            },
+            currcomments() {
+                let stepIndex = (this.currposi - 1)
+                return this.getStep(stepIndex).comments
             }
         }
     }

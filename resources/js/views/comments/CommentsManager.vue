@@ -4,8 +4,8 @@
             <div class="mb-4">
                 <h5 class="text-black">Commentaires</h5>
             </div>
-            <textarea v-model="commentForm.comment_text" placeholder="Laissez un commentaire" 
-                class="bg-grey-lighter rounded leading-normal resize-none w-full py-2 px-3" 
+            <textarea v-model="commentForm.comment_text" placeholder="Laissez un commentaire" style="min-width: 50%; min-height: 5px;"
+                class="bg-grey-lighter rounded leading-normal resize-none w-full py-2 px-3"
                 :class="[state === 'editing' ? 'h-24' : 'h-10']" @focus="startEditing">
             </textarea>
             <div v-show="state === 'editing'" class="mt-3">
@@ -13,7 +13,7 @@
                 <b-button size="is-small" class="border border-grey-darker text-grey-darker hover:bg-grey-dark hover:text-white py-2 px-4 rounded tracking-wide ml-1" @click="stopEditing">Annuler</b-button>
             </div>
         </div>
-        
+
         <div class="bg-white rounded shadow-sm p-8">
             <comment v-for="(comment, index) in comments"
                     :key="comment.id"
@@ -78,7 +78,7 @@
             return {
                 state: 'default',
                 user: this.user_prop,
-                comments: comments_prop,
+                comments: this.comments_prop,
                 commentForm: new Form(new Comment({
                     commentable_type: this.commentable_type_prop,
                     commentable_id: this.commentable_id_prop,
@@ -101,6 +101,7 @@
                     .post('/comments')
                     .then(resp => {
 
+                        console.log("comment created: ", resp)
                         t.comments.unshift(resp);
 
                         this.stopEditing();
@@ -110,16 +111,32 @@
                 });
             },
             updateComment($event) {
-                let index = this.comments.findIndex((element) => {
-                    return element.id === $event.id;
-                });
-                this.comments[index].comment_text = $event.comment_text;
+                const t = this;
+                let updateForm = new Form(new Comment({
+                        commentable_type: this.commentable_type_prop,
+                        commentable_id: this.commentable_id_prop,
+                        comment_text: $event.comment_text,
+                        author: $event.author,
+                        id: $event.id,
+                        uuid: $event.uuid,
+                    }));
+                updateForm.put(`/comments/${$event.uuid}`, undefined)
+                .then(resp => {
+                    console.log("comment updated: ", resp)
+                    t.comments[t.commentIndex($event.id)].comment_text = resp.comment_text;
+                })
             },
             deleteComment($event) {
-                let index = this.comments.findIndex((element) => {
-                    return element.id === $event.id;
+                const t = this;
+                axios.delete(`/comments/${$event.uuid}`)
+                    .then(() => {
+                        t.comments.splice(t.commentIndex($event.id), 1);
+                    })
+            },
+            commentIndex(commentId) {
+                return this.comments.findIndex((element) => {
+                    return element.id === commentId;
                 });
-                this.comments.splice(index, 1);
             }
         }
     }

@@ -34,4 +34,17 @@ class UpdateCommentRequest extends CommentRequest
     {
         return Comment::updateRules($this->comment);
     }
+
+    /**
+     * Prepare the data for validation.
+     *
+     * @return void
+     */
+    protected function prepareForValidation(): void
+    {
+        $this->merge([
+            'commentable' => $this->setRelevantPolymorph( $this->input('commentable_type'), $this->input('commentable_id') ),
+            'author' => $this->setRelevantUser($this->input('author'), true),
+        ]);
+    }
 }

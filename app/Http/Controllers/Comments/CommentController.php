@@ -4,12 +4,15 @@ namespace App\Http\Controllers\Comments;
 
 use Auth;
 use App\Models\User;
+use Illuminate\Http\Response;
 use App\Models\Comments\Comment;
 use App\Http\Controllers\Controller;
 use App\Models\Comments\CommentVote;
 use App\Models\Comments\CommentSpam;
 use Illuminate\Database\Eloquent\Model;
 use Tightenco\Collect\Support\Collection;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Routing\ResponseFactory;
 use App\Http\Requests\Comment\StoreCommentRequest;
 use App\Http\Requests\Comment\UpdateCommentRequest;
 
@@ -149,7 +152,7 @@ class CommentController extends Controller
      */
     public function store(StoreCommentRequest $request)
     {
-        return $request->commentable->addComment($request->comment_text);
+        return $request->commentable->addComment($request->author, $request->comment_text);
     }
 
     /**
@@ -194,12 +197,12 @@ class CommentController extends Controller
      * Remove the specified resource from storage.
      *
      * @param Comment $comment
-     * @return void
+     * @return Application|ResponseFactory|Response|void
      */
     public function destroy(Comment $comment)
     {
         $comment->delete();
-        
+
         return response( null,204);
     }
 }

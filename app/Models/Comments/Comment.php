@@ -51,7 +51,7 @@ class Comment extends BaseModel implements Auditable
                 'comment_text' => ['required'],
                 'reply_id' => 'filled',
                 'page_id' => 'filled',
-                'users_id' => 'required',
+                'author' => 'required',
             ]
         );
     }
