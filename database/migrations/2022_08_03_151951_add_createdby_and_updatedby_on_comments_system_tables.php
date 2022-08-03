@@ -17,7 +17,7 @@ class AddCreatedbyAndUpdatedbyOnCommentsSystemTables extends Migration
      */
     public function up()
     {
-        Schema::create($this->comments['table_name'], function (Blueprint $table) {
+        Schema::table($this->comments['table_name'], function (Blueprint $table) {
 
             $table->foreignId('created_by')->nullable()
                 ->comment('user creator reference')
@@ -28,7 +28,7 @@ class AddCreatedbyAndUpdatedbyOnCommentsSystemTables extends Migration
                 ->constrained('users')->onDelete('set null');
         });
 
-        Schema::create($this->commentUserVotes['table_name'], function (Blueprint $table) {
+        Schema::table($this->commentUserVotes['table_name'], function (Blueprint $table) {
 
             $table->foreignId('created_by')->nullable()
                 ->comment('user creator reference')
@@ -39,7 +39,7 @@ class AddCreatedbyAndUpdatedbyOnCommentsSystemTables extends Migration
                 ->constrained('users')->onDelete('set null');
         });
 
-        Schema::create($this->commentSpams['table_name'], function (Blueprint $table) {
+        Schema::table($this->commentSpams['table_name'], function (Blueprint $table) {
 
             $table->foreignId('created_by')->nullable()
                 ->comment('user creator reference')
