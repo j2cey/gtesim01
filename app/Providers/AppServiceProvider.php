@@ -5,15 +5,17 @@ namespace App\Providers;
 use App\Models\Setting;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Schema\Blueprint;
-use App\Repositories\Eloquent\UserRepository;
-use Illuminate\Http\Resources\Json\JsonResource;
-use App\Repositories\Eloquent\HowToRepository;
-use App\Repositories\Eloquent\HowToThreadRepository;
-use App\Repositories\Contracts\IUserRepositoryContract;
-
 use App\Repositories\Eloquent\EsimRepository;
+use App\Repositories\Eloquent\UserRepository;
+use App\Repositories\Eloquent\AuditRepository;
+use App\Repositories\Eloquent\HowToRepository;
+use Illuminate\Http\Resources\Json\JsonResource;
+
 use App\Repositories\Eloquent\ClientEsimRepository;
+use App\Repositories\Eloquent\HowToThreadRepository;
 use App\Repositories\Contracts\IEsimRepositoryContract;
+use App\Repositories\Contracts\IUserRepositoryContract;
+use App\Repositories\Contracts\IAuditRepositoryContract;
 use App\Repositories\Contracts\IHowToRepositoryContract;
 use App\Repositories\Contracts\IClientEsimRepositoryContract;
 use App\Repositories\Contracts\IHowToThreadRepositoryContract;
@@ -33,6 +35,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(IClientEsimRepositoryContract::class, ClientEsimRepository::class);
         $this->app->bind(IHowToRepositoryContract::class, HowToRepository::class);
         $this->app->bind(IHowToThreadRepositoryContract::class, HowToThreadRepository::class);
+        $this->app->bind(IAuditRepositoryContract::class, AuditRepository::class);
     }
 
     /**

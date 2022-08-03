@@ -93,6 +93,9 @@
                         <li class="nav-item">
                             <a href="/users.online" class="nav-link">Users Online</a>
                         </li>
+                        <li class="nav-item">
+                            <a href="/audits.index" class="nav-link">Audit</a>
+                        </li>
                     </ul>
                 </li>
                 @endrole

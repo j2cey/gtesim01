@@ -11,6 +11,7 @@ use App\Http\Controllers\StatusController;
 use App\Http\Controllers\SystemController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\Esims\EsimController;
+use App\Http\Controllers\Audit\AuditController;
 use App\Http\Controllers\HowTos\HowToController;
 use App\Http\Controllers\Comments\CommentController;
 use App\Http\Controllers\Esims\ClientEsimController;
@@ -56,6 +57,13 @@ Route::resource('settings',SettingController::class);
 Route::get('settings.fetch',[SettingController::class,'fetch'])
     ->name('settings.fetch')
     ->middleware('auth');
+
+Route::get('audits.index', [AuditController::class,'index'])
+    ->name('audits.index')
+    ->middleware('auth');
+Route::get('audits.fetch',[AuditController::class,'fetch'])
+->name('audits.fetch')
+->middleware('auth');
 
 Route::get('uuid.generate',[UuidController::class,'generate'])
     ->name('uuid.generate')
