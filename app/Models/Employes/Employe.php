@@ -2,6 +2,7 @@
 
 namespace App\Models\Employes;
 
+use App\Models\User;
 use App\Models\BaseModel;
 use App\Traits\PhoneNum\HasPhoneNums;
 use OwenIt\Auditing\Contracts\Auditable;
@@ -72,7 +73,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Employe extends BaseModel implements Auditable
 {
     use HasFactory, HasEmailAddresses, HasPhoneNums, \OwenIt\Auditing\Auditable;
-    
+
     protected $guarded = [];
 
     /**
@@ -128,12 +129,19 @@ class Employe extends BaseModel implements Auditable
         return $this->belongsTo(Departement::class);
     }
 
-
     /**
      * Retourne toutes les Departements pour lesquelles cet employe est responsable.
      */
     public function departementsResponsable() {
         return $this->hasMany(Departement::class, 'employe_responsable_id');
+    }
+
+    /**
+     * Get the user that owns the phone.
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     #endregion

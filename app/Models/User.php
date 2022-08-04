@@ -7,6 +7,7 @@ use App\Traits\Base\BaseTrait;
 use Illuminate\Support\Carbon;
 use App\Models\Comments\Comment;
 use App\Models\Ldap\LdapAccount;
+use App\Models\Employes\Employe;
 use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
@@ -171,11 +172,19 @@ class User extends Authenticatable implements Auditable
         return $this->hasMany(Comment::class);
     }
 
+    /**
+     * Get the employe associated with the user.
+     */
+    public function employe()
+    {
+        return $this->hasOne(Employe::class);
+    }
+
     #endregion
 
     public function getFullNameAttribute()
     {
-        return "{$this->name}";
+        return (string)($this->name);
     }
 
     public function getAllPermissionsAttribute() {
