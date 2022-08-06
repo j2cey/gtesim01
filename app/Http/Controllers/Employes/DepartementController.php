@@ -4,11 +4,16 @@ namespace App\Http\Controllers\Employes;
 
 use App\Models\Employes\Departement;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreDepartementRequest;
-use App\Http\Requests\UpdateDepartementRequest;
+use App\Http\Requests\Departement\StoreDepartementRequest;
+use App\Http\Requests\Departement\UpdateDepartementRequest;
 
 class DepartementController extends Controller
 {
+
+    public function fetchall() {
+        return Departement::all();
+    }
+    
     /**
      * Display a listing of the resource.
      *

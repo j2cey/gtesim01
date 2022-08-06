@@ -130,7 +130,7 @@ class Employe extends BaseModel implements Auditable
     }
 
     /**
-     * Retourne toutes les Departements pour lesquelles cet employe est responsable.
+     * Retourne tous les Departements pour lesquelles cet employe est responsable.
      */
     public function departementsResponsable() {
         return $this->hasMany(Departement::class, 'employe_responsable_id');

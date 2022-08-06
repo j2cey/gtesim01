@@ -2,13 +2,13 @@
 
 namespace App\Http\Resources\Employes;
 
-use App\Http\Resources\Esims\EsimResource;
-use App\Http\Resources\StatusResource;
-use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Carbon;
 use JsonSerializable;
+use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use App\Http\Resources\StatusResource;
+use App\Http\Resources\Esims\EsimResource;
+use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
  * Class PhoneNumResource

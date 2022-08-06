@@ -108,7 +108,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   components: {
     UserAddUpdate: function UserAddUpdate() {
-      return __webpack_require__.e(/*! import() */ 3).then(__webpack_require__.bind(null, /*! ./addupdate */ "./resources/js/views/users/addupdate.vue"));
+      return Promise.resolve(/*! import() */).then(__webpack_require__.bind(null, /*! ./addupdate */ "./resources/js/views/users/addupdate.vue"));
     },
     UserItem: function UserItem() {
       return __webpack_require__.e(/*! import() */ 4).then(__webpack_require__.bind(null, /*! ./item */ "./resources/js/views/users/item.vue"));

@@ -14,6 +14,7 @@ use App\Http\Controllers\Esims\EsimController;
 use App\Http\Controllers\Audit\AuditController;
 use App\Http\Controllers\HowTos\HowToController;
 use App\Http\Controllers\Comments\CommentController;
+use App\Http\Controllers\Employes\EmployeController;
 use App\Http\Controllers\Esims\ClientEsimController;
 use App\Http\Controllers\Esims\StatutEsimController;
 use App\Http\Controllers\HowTos\HowToStepController;
@@ -21,7 +22,10 @@ use App\Http\Controllers\HowTos\HowToTypeController;
 use App\Http\Controllers\Employes\PhoneNumController;
 use App\Http\Controllers\Authorization\RoleController;
 use App\Http\Controllers\HowTos\HowToThreadController;
+use App\Http\Controllers\Employes\DepartementController;
 use App\Http\Controllers\Employes\EmailAddressController;
+use App\Http\Controllers\Employes\FonctionEmployeController;
+use App\Http\Controllers\Employes\TypeDepartementController;
 
 /*
 |--------------------------------------------------------------------------
@@ -255,4 +259,36 @@ Route::get('tags.fetchall',[TagController::class,'fetchall'])
 Route::resource('comments',CommentController::class)->middleware('auth');
 Route::get('comments.fetchall',[CommentController::class,'fetchall'])
     ->name('comments.fetchall')
+    ->middleware('auth');
+
+Route::resource('typedepartements',TypeDepartementController::class)->middleware('auth');
+Route::get('typedepartements.fetch',[TypeDepartementController::class,'fetch'])
+    ->name('typedepartements.fetch')
+    ->middleware('auth');
+Route::get('typedepartements.fetchall',[TypeDepartementController::class,'fetchall'])
+    ->name('typedepartements.fetchall')
+    ->middleware('auth');
+    
+Route::resource('departements',DepartementController::class)->middleware('auth');
+Route::get('departements.fetch',[DepartementController::class,'fetch'])
+    ->name('departements.fetch')
+    ->middleware('auth');
+Route::get('departements.fetchall',[DepartementController::class,'fetchall'])
+    ->name('departements.fetchall')
+    ->middleware('auth');
+    
+Route::resource('fonctionemployes',FonctionEmployeController::class)->middleware('auth');
+Route::get('fonctionemployes.fetch',[FonctionEmployeController::class,'fetch'])
+    ->name('fonctionemployes.fetch')
+    ->middleware('auth');
+Route::get('fonctionemployes.fetchall',[FonctionEmployeController::class,'fetchall'])
+    ->name('fonctionemployes.fetchall')
+    ->middleware('auth');
+    
+Route::resource('employes',EmployeController::class)->middleware('auth');
+Route::get('employes.fetch',[EmployeController::class,'fetch'])
+    ->name('employes.fetch')
+    ->middleware('auth');
+Route::get('employes.fetchall',[EmployeController::class,'fetchall'])
+    ->name('employes.fetchall')
     ->middleware('auth');

@@ -4,11 +4,16 @@ namespace App\Http\Controllers\Employes;
 
 use App\Http\Controllers\Controller;
 use App\Models\Employes\TypeDepartement;
-use App\Http\Requests\StoreTypeDepartementRequest;
-use App\Http\Requests\UpdateTypeDepartementRequest;
+use App\Http\Requests\TypeDepartement\StoreTypeDepartementRequest;
+use App\Http\Requests\TypeDepartement\UpdateTypeDepartementRequest;
 
 class TypeDepartementController extends Controller
 {
+
+    public function fetchall() {
+        return TypeDepartement::all();
+    }
+    
     /**
      * Display a listing of the resource.
      *

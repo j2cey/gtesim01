@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
+use App\Http\Resources\Employes\EmployeResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
@@ -14,6 +15,8 @@ use Illuminate\Http\Resources\Json\JsonResource;
  * @property string $name
  * @property string $username
  * @property string $email
+ * @property boolean $is_local
+ * @property boolean $is_ldap
  */
 class UserResource extends JsonResource
 {
@@ -28,10 +31,17 @@ class UserResource extends JsonResource
         return [
             'id' => $this->id,
             'uuid' => $this->uuid,
+
             'name' => $this->name,
             'username' => $this->username,
             'email' => $this->email,
 
+            'is_local' => $this->is_local,
+            'is_ldap' => $this->is_ldap,
+
+            'employe' => EmployeResource::make($this->employe),
+
+            'status' => StatusResource::make($this->status),
             'created_at' => $this->created_at,
 
             'edit_url' => route('users.edit', $this->uuid),

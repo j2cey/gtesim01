@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Employes;
 use Illuminate\Http\Response;
 use App\Models\Employes\PhoneNum;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StorePhoneNumRequest;
-use App\Http\Requests\UpdatePhoneNumRequest;
+use App\Http\Requests\PhoneNum\StorePhoneNumRequest;
+use App\Http\Requests\PhoneNum\UpdatePhoneNumRequest;
 
 class PhoneNumController extends Controller
 {

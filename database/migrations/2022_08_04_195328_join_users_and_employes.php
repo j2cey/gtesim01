@@ -20,7 +20,7 @@ class JoinUsersAndEmployes extends Migration
             $table->foreignId('user_id')->nullable()
                 ->comment('user account reference')
                 ->constrained('users')->onDelete('set null');
-
+                
         });
     }
 

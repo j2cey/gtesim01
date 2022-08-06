@@ -4,11 +4,16 @@ namespace App\Http\Controllers\Employes;
 
 use App\Models\Employes\Employe;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreEmployeRequest;
-use App\Http\Requests\UpdateEmployeRequest;
+use App\Http\Requests\Employe\StoreEmployeRequest;
+use App\Http\Requests\Employe\UpdateEmployeRequest;
 
 class EmployeController extends Controller
 {
+
+    public function fetchall() {
+        return Employe::all();
+    }
+
     /**
      * Display a listing of the resource.
      *

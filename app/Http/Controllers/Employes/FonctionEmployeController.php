@@ -5,11 +5,16 @@ namespace App\Http\Controllers\Employes;
 use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
 use App\Models\Employes\FonctionEmploye;
-use App\Http\Requests\StoreFonctionEmployeRequest;
-use App\Http\Requests\UpdateFonctionEmployeRequest;
+use App\Http\Requests\FonctionEmploye\StoreFonctionEmployeRequest;
+use App\Http\Requests\FonctionEmploye\UpdateFonctionEmployeRequest;
 
 class FonctionEmployeController extends Controller
 {
+
+    public function fetchall() {
+        return FonctionEmploye::all();
+    }
+
     /**
      * Display a listing of the resource.
      *
