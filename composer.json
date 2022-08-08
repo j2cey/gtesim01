@@ -15,6 +15,7 @@
         "adldap2/adldap2-laravel": "^6.1",
         "ahmedsaoud31/laravel-permission-to-vuejs": "dev-master",
         "barryvdh/laravel-dompdf": "^1.0",
+        "consoletvs/charts": "^6.5",
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.4",

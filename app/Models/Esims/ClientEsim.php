@@ -2,6 +2,7 @@
 
 namespace App\Models\Esims;
 
+use App\Models\User;
 use GuzzleHttp\Client;
 use App\Models\BaseModel;
 use Illuminate\Support\Carbon;
@@ -129,6 +130,10 @@ class ClientEsim extends BaseModel implements Auditable
 
     public function esim() {
         return $this->belongsTo(Esim::class, 'esim_id');
+    }
+
+    public function creator() {
+        return $this->belongsTo(User::class, 'created_by');
     }
 
     #endregion

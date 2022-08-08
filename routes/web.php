@@ -22,6 +22,7 @@ use App\Http\Controllers\HowTos\HowToTypeController;
 use App\Http\Controllers\Employes\PhoneNumController;
 use App\Http\Controllers\Authorization\RoleController;
 use App\Http\Controllers\HowTos\HowToThreadController;
+use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Employes\DepartementController;
 use App\Http\Controllers\Employes\EmailAddressController;
 use App\Http\Controllers\Employes\FonctionEmployeController;
@@ -45,9 +46,9 @@ Route::get('/', function () {
     return redirect('/login');
 })->name('home');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
+Route::get('dashboards.index',[DashboardController::class,'index'])
+    ->name('dashboards.index')
+    ->middleware('auth');
 
 require __DIR__.'/auth.php';
 
@@ -268,7 +269,7 @@ Route::get('typedepartements.fetch',[TypeDepartementController::class,'fetch'])
 Route::get('typedepartements.fetchall',[TypeDepartementController::class,'fetchall'])
     ->name('typedepartements.fetchall')
     ->middleware('auth');
-    
+
 Route::resource('departements',DepartementController::class)->middleware('auth');
 Route::get('departements.fetch',[DepartementController::class,'fetch'])
     ->name('departements.fetch')
@@ -276,7 +277,7 @@ Route::get('departements.fetch',[DepartementController::class,'fetch'])
 Route::get('departements.fetchall',[DepartementController::class,'fetchall'])
     ->name('departements.fetchall')
     ->middleware('auth');
-    
+
 Route::resource('fonctionemployes',FonctionEmployeController::class)->middleware('auth');
 Route::get('fonctionemployes.fetch',[FonctionEmployeController::class,'fetch'])
     ->name('fonctionemployes.fetch')
@@ -284,7 +285,7 @@ Route::get('fonctionemployes.fetch',[FonctionEmployeController::class,'fetch'])
 Route::get('fonctionemployes.fetchall',[FonctionEmployeController::class,'fetchall'])
     ->name('fonctionemployes.fetchall')
     ->middleware('auth');
-    
+
 Route::resource('employes',EmployeController::class)->middleware('auth');
 Route::get('employes.fetch',[EmployeController::class,'fetch'])
     ->name('employes.fetch')

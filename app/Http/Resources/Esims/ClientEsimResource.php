@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Esims;
 
+use App\Http\Resources\UserResource;
 use App\Http\Resources\Employes\EmailAddressResource;
 use App\Http\Resources\Employes\PhoneNumResource;
 use App\Http\Resources\StatusResource;
@@ -62,9 +63,10 @@ class ClientEsimResource extends JsonResource
             'oldestEmailAddress' => EmailAddressResource::make($this->oldestEmailAddress),
             'emailaddresses' => EmailAddressResource::collection($this->emailaddresses),
 
-            'status' => StatusResource::make($this->status),
-
+            'creator' => UserResource::make($this->creator),
             'esim_id' => $this->esim_id,
+
+            'status' => StatusResource::make($this->status),
             'created_at' => $this->created_at,
 
             'show_url' => route('clientesims.show', $this->uuid),

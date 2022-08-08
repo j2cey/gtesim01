@@ -113,10 +113,13 @@
                                     <tr>
                                         <th class="tw-px-4 tw-py-2">#</th>
                                         <th class="tw-px-4 tw-py-2">Nom</th>
-                                        <th class="tw-px-4 tw-py-2">Prenom</th>
                                         <th class="tw-px-4 tw-py-2">Numéros Téléphone</th>
                                         <th class="tw-px-4 tw-py-2">Adresses mail</th>
                                         <th class="tw-px-4 tw-py-2">Status</th>
+                                        @role('Admin')
+                                        <th class="tw-px-4 tw-py-2">Creator</th>
+                                        <th class="tw-px-4 tw-py-2">Departement</th>
+                                        @endrole('Admin')
                                         <th class="tw-px-4 tw-py-2">Details</th>
                                     </tr>
                                     </thead>
@@ -129,10 +132,9 @@
                                             <span class="tw-text-sm">@{{ record.id }}</span>
                                         </td>
                                         <td class="tw-px-4 tw-py-2">
-                                            <span class="tw-text-sm">@{{ record.nom_raison_sociale }}</span>
-                                        </td>
-                                        <td class="tw-px-4 tw-py-2">
-                                            <span class="tw-text-sm">@{{ record.prenom }}</span>
+                                            <span class="tw-text-sm">
+                                                <b>@{{ record.nom_raison_sociale }}</b>&nbsp;<span class="tw-first-letter:text-4xl">@{{ record.prenom }}</span>
+                                            </span>
                                         </td>
                                         <td class="tw-px-4 tw-py-2">
                                             <span class="tw-text-xs" v-if="record.phonenums">
@@ -182,6 +184,18 @@
                                                 <span v-else class="tw-text-xs tw-font-semibold tw-inline-block tw-py-1 tw-px-2 tw-rounded tw-text-teal-600 tw-bg-red-200 tw-w-32 last:tw-mr-0 tw-mr-1">@{{ record.status.name }}</span>
                                             </span>
                                         </td>
+                                        @role('Admin')
+                                        <td class="tw-px-6 tw-py-2">
+                                            <span class="tw-text-xs" v-if="record.creator">
+                                                @{{ record.creator.name }}
+                                            </span>
+                                        </td>
+                                        <td class="tw-px-6 tw-py-2">
+                                            <span class="tw-text-xs" v-if="record.creator.employe">
+                                                @{{ record.creator.employe.departement.intitule }}
+                                            </span>
+                                        </td>
+                                        @endrole
                                         <td class="tw-px-4 tw-py-2">
                                             @can('clientesim-edit')
                                             <a @click="$emit('edit_clientesim', record)" class="tw-inline-block tw-mr-3 tw-text-green-500">
