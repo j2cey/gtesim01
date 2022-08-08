@@ -21,23 +21,56 @@ class EsimSearch extends Search
             $createddaterange = $this->getCreatedDateRangeCrit($this->params->search->search);
             $status = $this->getStatutCrit($this->params->search->search);
             $statutesim = $this->getStatutEsimCrit($this->params->search->search);
+            $searchcrit = $this->getSearchCrit($this->params->search->search);
+            
+            $nb_crit = 0;
+
+            if ($searchcrit) {
+            $query
+                ->where('imsi', 'like', '%'.$searchcrit.'%')
+                ->orWhere('iccid', 'like', '%'.$searchcrit.'%')
+                ->orWhere('ac', 'like', '%'.$searchcrit.'%')
+                ->orWhere('pin', 'like', '%'.$searchcrit.'%')
+                ->orWhere('puk', 'like', '%'.$searchcrit.'%');
+
+                $nb_crit++;
+            }
             if ($createddaterange) {
                 $dt_deb = Carbon::createFromFormat('Y-m-d', $createddaterange[0])->addDay()->format('Y-m-d');
                 $dt_fin = Carbon::createFromFormat('Y-m-d', $createddaterange[1])->addDay()->format('Y-m-d');
-                $query
-                    ->whereBetween('created_at', [$dt_deb,$dt_fin]);
+                if ($nb_crit === 0) {
+                    $query->whereBetween('created_at', [$dt_deb,$dt_fin]);
+                } else {
+                    $query->orWhereBetween('created_at', [$dt_deb,$dt_fin]);
+                }
+                $nb_crit++;
             }
             if ($status) {
-                $query
-                    ->whereHas('status', function (Builder $q) use ($status) {
+                if ($nb_crit === 0) {
+                    $query
+                        ->whereHas('status', function (Builder $q) use ($status) {
+                            $q->where('status_id', $status);
+                        });
+                } else {
+                    $query->orWhereHas('status', function (Builder $q) use ($status) {
                         $q->where('status_id', $status);
                     });
+                }
+                $nb_crit++;
             }
             if ($statutesim) {
-                $query
-                    ->whereHas('statutesim', function (Builder $q) use ($statutesim) {
-                        $q->where('statut_esim_id', $statutesim);
-                    });
+                if ($nb_crit === 0) {
+                    $query
+                        ->whereHas('statutesim', function (Builder $q) use ($statutesim) {
+                            $q->where('statut_esim_id', $statutesim);
+                        });
+                } else {
+                    $query
+                        ->orWhereHas('statutesim', function (Builder $q) use ($statutesim) {
+                            $q->where('statut_esim_id', $statutesim);
+                        });
+                }
+                $nb_crit++;
             }
         }
 
@@ -80,5 +113,17 @@ class EsimSearch extends Search
             }
         }
         return $statutesimcrit;
+    }
+    
+    private function getSearchCrit($search) {
+        $search_arr = explode('|', $search);
+        $searchcrit = null;
+        foreach ($search_arr as $crit) {
+            $crit_arr = explode(':', $crit);
+            if ($crit_arr[0] === "search") {
+                $searchcrit = $crit_arr[1];
+            }
+        }
+        return $searchcrit;
     }
 }

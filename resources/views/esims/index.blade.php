@@ -90,6 +90,34 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <div class="tw-col-span-4 md:tw-col-span-4">
+                                <label class="tw-block tw-uppercase tw-tracking-wide tw-text-gray-700 tw-text-xs tw-font-bold tw-mb-2" for="search">
+                                    Recherche
+                                </label>
+                                <div class="tw-relative">
+                                    <span
+                                        v-if="params.search"
+                                        @click="clear({ search: '' })"
+                                        class="tw-absolute tw-top-0 tw-right-0 tw-mt-4 mr-4 tw-text-gray-500 tw-cursor-pointer"
+                                    >
+                                        <times-circle
+                                            class="tw-fill-current tw-h-4 tw-pointer-events-none"
+                                        ></times-circle>
+                                    </span>
+                                    <input
+                                        v-model="params.search"
+                                        @input="update"
+                                        @keydown.enter.prevent
+                                        type="text"
+                                        id="search"
+                                        name="search"
+                                        class="tw-appearance-none tw-block tw-w-full tw-bg-gray-200 focus:tw-bg-white tw-text-gray-700 tw-border tw-border-gray-400 focus:tw-border-gray-500 tw-rounded-sm tw-py-3 tw-pl-4 tw-pr-10 tw-mb-3 md:tw-mb-0 tw-leading-tight focus:tw-outline-none"
+                                        placeholder="Rechercher..."
+                                    >
+                                </div>
+                            </div>
+
                         </form>
 
                     </search-form>
@@ -118,6 +146,7 @@
                                         <th class="tw-px-4 tw-py-2">Statut</th>
                                         <th class="tw-px-4 tw-py-2">Pin</th>
                                         <th class="tw-px-4 tw-py-2">Puk</th>
+                                        <th class="tw-px-4 tw-py-2">Num. Phones</th>
                                         <th class="tw-px-4 tw-py-2">Details</th>
                                     </tr>
                                     </thead>
@@ -145,6 +174,30 @@
                                         </td>
                                         <td class="tw-px-4 tw-py-2">
                                             <span class="tw-text-sm">@{{ record.puk }}</span>
+                                        </td>
+                                        <td class="tw-px-4 tw-py-2">
+                                            <span class="tw-text-xs" v-if="record.phonenums">
+                                                <div class="overflow-x">
+                                                    <table class="table-auto tw-bg-gray-200 overflow-scroll w-full">
+                                                        <thead>
+                                                        <tr>
+                                                            <th class="tw-px-2 tw-py-2"><span class="tw-text-xs">Numéro</span></th>
+                                                            <th class="tw-px-2 tw-py-2"><span class="tw-text-xs">Date</span></th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr v-for="phonenum in record.phonenums" :key="phonenum.id">
+                                                                <td class="tw-px-2 tw-py-2">
+                                                                    <span class="tw-text-xs">@{{ phonenum.numero }}</span>
+                                                                </td>
+                                                                <td class="tw-px-2 tw-py-2">
+                                                                    <span class="tw-text-xs">@{{ phonenum.created_at | formatDate }}</span>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                        </table>
+                                                    </div>
+                                            </span>
                                         </td>
                                         <td class="tw-px-4 tw-py-2">
                                             @can('esim-edit')

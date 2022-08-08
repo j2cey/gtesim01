@@ -3,6 +3,7 @@
 namespace App\Models\Esims;
 
 use App\Models\BaseModel;
+use App\Models\Employes\PhoneNum;
 use Illuminate\Support\Carbon;
 use OwenIt\Auditing\Contracts\Auditable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -110,6 +111,10 @@ class Esim extends BaseModel implements Auditable
 
     public function qrcode() {
         return $this->hasOne(EsimQrcode::class, 'esim_id');
+    }
+
+    public function phonenums() {
+        return $this->hasMany(PhoneNum::class, 'esim_id');
     }
 
     #endregion
