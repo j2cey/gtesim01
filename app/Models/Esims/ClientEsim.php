@@ -10,6 +10,8 @@ use Illuminate\Validation\Rule;
 use App\Models\Employes\PhoneNum;
 use App\Traits\PhoneNum\HasPhoneNums;
 use OwenIt\Auditing\Contracts\Auditable;
+use GuzzleHttp\Exception\ConnectException;
+use GuzzleHttp\Exception\RequestException;
 use App\Traits\EmailAddress\HasEmailAddresses;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -187,36 +189,52 @@ class ClientEsim extends BaseModel implements Auditable
 
     public function sendmailprofile(PhoneNum $phonenum)
     {
-        $post_link = "http://192.168.5.174/clientesims.sendmail";
-        $directory = "esim_fichier_qrcode";
+        $error_message = "";
+        try {
+            $post_link = "http://192.168.5.174/clientesims.sendmail";
+            $directory = "esim_fichier_qrcode";
 
-        $phonenum->esim->saveQrcode();
+            $phonenum->esim->saveQrcode();
 
-        $file_name = public_path('/') . config('app.' . $directory) . '/' . $phonenum->esim->qrcode->qrcode_img;
+            $file_name = public_path('/') . config('app.' . $directory) . '/' . $phonenum->esim->qrcode->qrcode_img;
 
-        $qrcode_img = $file_name;
+            $qrcode_img = $file_name;
 
-        $client = new Client(['headers' => ['Authorization' => 'auth_trusted_header']]);
-        $options = [
-            'multipart' => [
-                [
-                    'Content-type' => 'multipart/form-data',
-                    'name' => 'file',
-                    'contents' => file_get_contents($qrcode_img),//base64_encode( file_get_contents($qrcode_img) ), // fopen('data:image/png;base64,' . $qrcode_img, 'r'), // data://text/plain;base64
-                    'filename' => 'qrcode_image.png',
-                ],
-                ['name' => 'nom', 'contents' => $this->nom_raison_sociale . ' ' .$this->prenom],
-                ['name' => 'email', 'contents' => $this->latestEmailAddress->email,],
-                ['name' => 'telephone', 'contents' => $phonenum->numero,],
-                ['name' => 'imsi', 'contents' => $phonenum->esim->imsi,],
-                ['name' => 'iccid', 'contents' => $phonenum->esim->iccid,],
-                ['name' => 'pin', 'contents' => $phonenum->esim->pin,],
-                ['name' => 'puk', 'contents' => $phonenum->esim->puk,],
-                ['name' => 'ac', 'contents' => $phonenum->esim->ac,],
-            ]
-        ];
+            $client = new Client(['headers' => ['Authorization' => 'auth_trusted_header']]);
+            $options = [
+                'multipart' => [
+                    [
+                        'Content-type' => 'multipart/form-data',
+                        'name' => 'file',
+                        'contents' => file_get_contents($qrcode_img),//base64_encode( file_get_contents($qrcode_img) ), // fopen('data:image/png;base64,' . $qrcode_img, 'r'), // data://text/plain;base64
+                        'filename' => 'qrcode_image.png',
+                    ],
+                    ['name' => 'nom', 'contents' => $this->nom_raison_sociale . ' ' .$this->prenom],
+                    ['name' => 'email', 'contents' => $this->latestEmailAddress->email,],
+                    ['name' => 'telephone', 'contents' => $phonenum->numero,],
+                    ['name' => 'imsi', 'contents' => $phonenum->esim->imsi,],
+                    ['name' => 'iccid', 'contents' => $phonenum->esim->iccid,],
+                    ['name' => 'pin', 'contents' => $phonenum->esim->pin,],
+                    ['name' => 'puk', 'contents' => $phonenum->esim->puk,],
+                    ['name' => 'ac', 'contents' => $phonenum->esim->ac,],
+                ]
+            ];
 
-        return $client->post($post_link, $options);
+            return $client->post($post_link, $options);
+        } catch (ConnectException $e) {
+            $error_message = 'sendmailprofile FAILS ! status: ' . 404;
+            $error_message = $error_message . '; msg: ' . $e->getMessage();
+        } catch (RequestException $e) {
+            $error_message = 'sendmailprofile FAILS ! status: ' . $e->getResponse()->getStatusCode();
+            $error_message = $error_message . '; msg: ' . $e->getMessage();
+        } catch (\Exception $e) {
+            $error_message = 'sendmailprofile FAILS ! status: ' . 0;
+            $error_message = $error_message . '; msg: ' . $e->getMessage();
+        } finally {
+            if ($error_message !== "") {
+                \Log::error($error_message);
+            }
+        }
     }
 
     #endregion

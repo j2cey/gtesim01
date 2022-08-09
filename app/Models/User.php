@@ -6,13 +6,15 @@ use GuzzleHttp\Client;
 use App\Traits\Base\BaseTrait;
 use Illuminate\Support\Carbon;
 use App\Models\Comments\Comment;
-use App\Models\Ldap\LdapAccount;
 use App\Models\Employes\Employe;
+use App\Models\Ldap\LdapAccount;
 use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
 use OwenIt\Auditing\Contracts\Auditable;
 use Spatie\Permission\Models\Permission;
+use GuzzleHttp\Exception\ConnectException;
+use GuzzleHttp\Exception\RequestException;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use LaravelAndVueJS\Traits\LaravelPermissionToVueJS;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -213,26 +215,42 @@ class User extends Authenticatable implements Auditable
     }
 
     public function sendMailAccountInfos() {
-        $post_link = "http://192.168.5.174/users.sendmailaccountinfos";
+        $error_message = "";
+        try {
+            $post_link = "http://192.168.5.174/users.sendmailaccountinfos";
 
-        $client = new Client(['headers' => ['Authorization' => 'auth_trusted_header']]);
-        $options = [
-            'multipart' => [
-                [
-                    'Content-type' => 'multipart/form-data',
-                    'name' => 'file',
-                    'contents' => "",//base64_encode( file_get_contents($qrcode_img) ), // fopen('data:image/png;base64,' . $qrcode_img, 'r'), // data://text/plain;base64
-                    'filename' => '',
-                ],
-                ['name' => 'name', 'contents' => $this->name],
-                ['name' => 'email', 'contents' => $this->email,],
-                ['name' => 'username', 'contents' => $this->username ,],
-                ['name' => 'is_local', 'contents' => $this->is_local ,],
-                ['name' => 'is_ldap', 'contents' => $this->is_ldap ,],
-            ]
-        ];
+            $client = new Client(['headers' => ['Authorization' => 'auth_trusted_header']]);
+            $options = [
+                'multipart' => [
+                    [
+                        'Content-type' => 'multipart/form-data',
+                        'name' => 'file',
+                        'contents' => "",//base64_encode( file_get_contents($qrcode_img) ), // fopen('data:image/png;base64,' . $qrcode_img, 'r'), // data://text/plain;base64
+                        'filename' => '',
+                    ],
+                    ['name' => 'name', 'contents' => $this->name],
+                    ['name' => 'email', 'contents' => $this->email,],
+                    ['name' => 'username', 'contents' => $this->username ,],
+                    ['name' => 'is_local', 'contents' => $this->is_local ,],
+                    ['name' => 'is_ldap', 'contents' => $this->is_ldap ,],
+                ]
+            ];
 
-        return $client->post($post_link, $options);
+            return $client->post($post_link, $options);
+        } catch (ConnectException $e) {
+            $error_message = 'sendMailAccountInfos FAILS ! status: ' . 404;
+            $error_message = $error_message . '; msg: ' . $e->getMessage();
+        } catch (RequestException $e) {
+            $error_message = 'sendMailAccountInfos FAILS ! status: ' . $e->getResponse()->getStatusCode();
+            $error_message = $error_message . '; msg: ' . $e->getMessage();
+        } catch (\Exception $e) {
+            $error_message = 'sendMailAccountInfos FAILS ! status: ' . 0;
+            $error_message = $error_message . '; msg: ' . $e->getMessage();
+        } finally {
+            if ($error_message !== "") {
+                \Log::error($error_message);
+            }
+        }
     }
 
     #endregion
