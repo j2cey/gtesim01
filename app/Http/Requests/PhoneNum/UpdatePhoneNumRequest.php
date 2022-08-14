@@ -2,9 +2,10 @@
 
 namespace App\Http\Requests\PhoneNum;
 
+use App\Models\Employes\PhoneNum;
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdatePhoneNumRequest extends FormRequest
+class UpdatePhoneNumRequest extends PhoneNumRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,7 +14,7 @@ class UpdatePhoneNumRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,8 +24,18 @@ class UpdatePhoneNumRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            //
-        ];
+        return PhoneNum::updateRules($this->phonenum,$this->numero,$this->hasphonenum_type);
+    }
+
+    /**
+     * Prepare the data for validation.
+     *
+     * @return void
+     */
+    protected function prepareForValidation(): void
+    {
+        $this->merge([
+            'hasphonenum' => $this->setRelevantPolymorph( $this->input('hasphonenum_type'), $this->input('hasphonenum_id') ),
+        ]);
     }
 }

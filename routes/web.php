@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PDFController;
@@ -10,23 +9,14 @@ use App\Http\Controllers\UuidController;
 use App\Http\Controllers\StatusController;
 use App\Http\Controllers\SystemController;
 use App\Http\Controllers\SettingController;
-use App\Http\Controllers\Esims\EsimController;
 use App\Http\Controllers\Audit\AuditController;
 use App\Http\Controllers\HowTos\HowToController;
 use App\Http\Controllers\Comments\CommentController;
-use App\Http\Controllers\Employes\EmployeController;
-use App\Http\Controllers\Esims\ClientEsimController;
-use App\Http\Controllers\Esims\StatutEsimController;
 use App\Http\Controllers\HowTos\HowToStepController;
 use App\Http\Controllers\HowTos\HowToTypeController;
-use App\Http\Controllers\Employes\PhoneNumController;
 use App\Http\Controllers\Authorization\RoleController;
 use App\Http\Controllers\HowTos\HowToThreadController;
 use App\Http\Controllers\Dashboard\DashboardController;
-use App\Http\Controllers\Employes\DepartementController;
-use App\Http\Controllers\Employes\EmailAddressController;
-use App\Http\Controllers\Employes\FonctionEmployeController;
-use App\Http\Controllers\Employes\TypeDepartementController;
 
 /*
 |--------------------------------------------------------------------------
@@ -103,17 +93,7 @@ Route::get('users.sendmail/{id}',[UserController::class,'sendMail'])
 
 #endregion
 
-#region Email Adresses
-
-Route::resource('emailaddresses',EmailAddressController::class)->middleware('auth');
-
-#endregion
-
-#region Phone Nums
-
-Route::resource('phonenums',PhoneNumController::class)->middleware('auth');
-
-#endregion
+#region statuses
 
 Route::resource('statuses',StatusController::class);
 Route::get('statuses.fetch',[StatusController::class,'fetch'])
@@ -126,69 +106,7 @@ Route::match(['post'],'statuses.modelupdate',[StatusController::class, 'modelupd
     ->name('statuses.modelupdate')
     ->middleware('auth');
 
-Route::resource('statutesims',StatutEsimController::class)->middleware('auth');
-Route::get('statutesims.fetch',[StatutEsimController::class,'fetch'])
-    ->name('statutesims.fetch')
-    ->middleware('auth');
-Route::get('statutesims.fetchall',[StatutEsimController::class,'fetchall'])
-    ->name('statutesims.fetchall')
-    ->middleware('auth');
-
-Route::resource('esims',EsimController::class)->middleware('auth');
-Route::get('esims.fetch',[EsimController::class,'fetch'])
-    ->name('esims.fetch')
-    ->middleware('auth');
-Route::get('esims.fetchall',[EsimController::class,'fetchall'])
-    ->name('esims.fetchall')
-    ->middleware('auth');
-
-Route::get('esims.headfiles',[EsimController::class,'headfiles'])
-    ->name('esims.headfiles')
-    ->middleware('auth');
-Route::post('esims.headfiles',[EsimController::class,'headfilespost'])
-    ->name('esims.headfilespost')
-    ->middleware('auth');
-
-Route::get('esims.bodyfiles',[EsimController::class,'bodyfiles'])
-    ->name('esims.bodyfiles')
-    ->middleware('auth');
-Route::post('esims.bodyfiles',[EsimController::class,'bodyfilespost'])
-    ->name('esims.bodyfilespost')
-    ->middleware('auth');
-
-Route::resource('clientesims',ClientEsimController::class)->middleware('auth');
-Route::get('clientesims.fetch',[ClientEsimController::class,'fetch'])
-    ->name('clientesims.fetch')
-    ->middleware('auth');
-Route::get('clientesims.fetchall',[ClientEsimController::class,'fetchall'])
-    ->name('clientesims.fetchall')
-    ->middleware('auth');
-Route::get('clientesims.generatepdf/{id}',[ClientEsimController::class,'generatePDF'])
-->name('clientesims.generatepdf')
-->middleware('auth');
-Route::get('clientesims.previewpdf/{id}',[ClientEsimController::class,'previewPDF'])
-->name('clientesims.previewpdf')
-->middleware('auth');
-Route::get('clientesims.preprintpdf/{id}',[ClientEsimController::class,'preprintPDF'])
-->name('clientesims.preprintpdf')
-->middleware('auth');
-Route::get('clientesims.mailtest/{id}',[ClientEsimController::class,'mailtest'])
-->name('clientesims.mailtest')
-->middleware('auth');
-Route::post('clientesims.phonenums',[ClientEsimController::class,'phonenumstore'])
-->name('clientesims.phonenums')
-->middleware('auth');
-
-Route::get('clientesims.sendmail/{id}',[ClientEsimController::class,'sendMail'])
-->name('clientesims.sendmail')
-->middleware('auth');
-
-Route::post('clientesims.checkbeforecreate',[ClientEsimController::class,'checkbeforecreate'])
-->name('clientesims.checkbeforecreate')
-->middleware('auth');
-Route::get('clientesims.checkbeforecreate',[ClientEsimController::class,'checkbeforecreate'])
-->name('clientesims.checkbeforecreate')
-->middleware('auth');
+#endregion
 
 Route::get('pdf/preview', [PDFController::class, 'preview'])->name('pdf.preview');
 Route::get('pdf/generate', [PDFController::class, 'generatePDF'])->name('pdf.generate');
@@ -260,36 +178,4 @@ Route::get('tags.fetchall',[TagController::class,'fetchall'])
 Route::resource('comments',CommentController::class)->middleware('auth');
 Route::get('comments.fetchall',[CommentController::class,'fetchall'])
     ->name('comments.fetchall')
-    ->middleware('auth');
-
-Route::resource('typedepartements',TypeDepartementController::class)->middleware('auth');
-Route::get('typedepartements.fetch',[TypeDepartementController::class,'fetch'])
-    ->name('typedepartements.fetch')
-    ->middleware('auth');
-Route::get('typedepartements.fetchall',[TypeDepartementController::class,'fetchall'])
-    ->name('typedepartements.fetchall')
-    ->middleware('auth');
-
-Route::resource('departements',DepartementController::class)->middleware('auth');
-Route::get('departements.fetch',[DepartementController::class,'fetch'])
-    ->name('departements.fetch')
-    ->middleware('auth');
-Route::get('departements.fetchall',[DepartementController::class,'fetchall'])
-    ->name('departements.fetchall')
-    ->middleware('auth');
-
-Route::resource('fonctionemployes',FonctionEmployeController::class)->middleware('auth');
-Route::get('fonctionemployes.fetch',[FonctionEmployeController::class,'fetch'])
-    ->name('fonctionemployes.fetch')
-    ->middleware('auth');
-Route::get('fonctionemployes.fetchall',[FonctionEmployeController::class,'fetchall'])
-    ->name('fonctionemployes.fetchall')
-    ->middleware('auth');
-
-Route::resource('employes',EmployeController::class)->middleware('auth');
-Route::get('employes.fetch',[EmployeController::class,'fetch'])
-    ->name('employes.fetch')
-    ->middleware('auth');
-Route::get('employes.fetchall',[EmployeController::class,'fetchall'])
-    ->name('employes.fetchall')
     ->middleware('auth');

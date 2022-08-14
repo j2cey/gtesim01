@@ -6,10 +6,9 @@ use App\Models\User;
 use GuzzleHttp\Client;
 use App\Models\BaseModel;
 use Illuminate\Support\Carbon;
-use Illuminate\Validation\Rule;
 use App\Models\Employes\PhoneNum;
 use App\Traits\PhoneNum\HasPhoneNums;
-use OwenIt\Auditing\Contracts\Auditable;
+use App\Contracts\Employes\IHasPhoneNums;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
 use App\Traits\EmailAddress\HasEmailAddresses;
@@ -69,7 +68,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @mixin \Eloquent
  * @property-read \App\Models\Status|null $status
  */
-class ClientEsim extends BaseModel implements Auditable
+class ClientEsim extends BaseModel implements IHasPhoneNums
 {
     use HasPhoneNums, HasEmailAddresses, HasFactory, \OwenIt\Auditing\Auditable;
 
@@ -77,53 +76,28 @@ class ClientEsim extends BaseModel implements Auditable
 
     #region Validation Rules
 
-    public static function defaultRules() {
-        return [
+    public static function defaultRules($numero) {
+        return array_merge(PhoneNum::defaultRules($numero,self::class), [
             'nom_raison_sociale' => ['required'],
             'email' => ['required','email'],
-        ];
+        ]);
     }
     public static function createRules($numero) {
-        return array_merge(self::defaultRules(), [
-            'numero_telephone' => [
-                'required',
-                'regex:/^([0-9\s\-\+\(\)]*)$/',
-                'min:8',
-                //'unique:phone_nums,numero,NULL,id',
-                //'unique:phone_nums,numero,NULL,id','hasphonenum_type', 'App\Models\Esims\ClientEsim',
-                /*
-                Rule::unique('phone_nums')->where(function ($query) use($numero) {
-                    return $query->where('hasphonenum_type', ClientEsim::class)
-                        ->where('numero', $numero);
-                }),
-                */
-                Rule::unique('phone_nums', 'numero')
-                    ->where(function ($query) use($numero) {
-                        $query->where('numero', $numero) ->where('hasphonenum_type', ClientEsim::class);
-                    })->ignore($numero),
-            ],
+        return array_merge(self::defaultRules($numero), PhoneNum::createRules($numero,self::class), [
+            
         ]);
     }
-    public static function updateRules($model) {
-        return array_merge(self::defaultRules(), [
-            'numero_telephone' => [
-                'required',
-                'regex:/^([0-9\s\-\+\(\)]*)$/',
-                'min:8',
-            ],
+    public static function updateRules($model,$numero) {
+        return array_merge(self::defaultRules($numero), PhoneNum::updateRules($model,$numero,self::class), [
+            
         ]);
     }
-
     public static function messagesRules() {
-        return [
+        return array_merge(PhoneNum::messagesRules(), [
             'nom_raison_sociale.required' => 'Nom ou Raison Sociale du client requis',
             'email.required' => 'Adresse e-mail requise',
             'email.email' => 'Adresse e-mail non valide',
-            'numero_telephone.required' => 'Numéro de téléphone requis',
-            'numero_telephone.regex' => 'Numéro de téléphone non valide',
-            'numero_telephone.min' => 'Numéro de téléphone doit avoir 8 digits minimum',
-            'numero_telephone.unique' => 'Numéro déjà attribué',
-        ];
+        ]);
     }
 
     #endregion

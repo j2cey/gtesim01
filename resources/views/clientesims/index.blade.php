@@ -191,7 +191,7 @@
                                             </span>
                                         </td>
                                         <td class="tw-px-6 tw-py-2">
-                                            <span class="tw-text-xs" v-if="record.creator.employe">
+                                            <span class="tw-text-xs" v-if="record.creator && record.creator.employe">
                                                 @{{ record.creator.employe.departement.intitule }}
                                             </span>
                                         </td>

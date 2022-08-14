@@ -2,15 +2,16 @@
 
 namespace App\Http\Resources\Esims;
 
+use JsonSerializable;
+use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use App\Models\Esims\ClientEsim;
 use App\Http\Resources\UserResource;
-use App\Http\Resources\Employes\EmailAddressResource;
-use App\Http\Resources\Employes\PhoneNumResource;
 use App\Http\Resources\StatusResource;
 use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Carbon;
-use JsonSerializable;
+use App\Http\Resources\Employes\PhoneNumResource;
+use App\Http\Resources\Employes\EmailAddressResource;
 
 /**
  * Class ClientEsimResource
@@ -52,19 +53,21 @@ class ClientEsimResource extends JsonResource
             'prenom' => $this->prenom,
             'email' => $this->email,
             'numero_telephone' => $this->numero_telephone,
+            'numero' => $this->numero_telephone,
             'pin' => $this->pin,
             'puk' => $this->puk,
 
             'latestPhonenum' => PhoneNumResource::make($this->latestPhonenum),
             'oldestPhonenum' => PhoneNumResource::make($this->oldestPhonenum),
             'phonenums' => PhoneNumResource::collection($this->phonenums),
-
+            
             'latestEmailAddress' => EmailAddressResource::make($this->latestEmailAddress),
             'oldestEmailAddress' => EmailAddressResource::make($this->oldestEmailAddress),
             'emailaddresses' => EmailAddressResource::collection($this->emailaddresses),
 
             'creator' => UserResource::make($this->creator),
             'esim_id' => $this->esim_id,
+            'model_type' => ClientEsim::class,
 
             'status' => StatusResource::make($this->status),
             'created_at' => $this->created_at,

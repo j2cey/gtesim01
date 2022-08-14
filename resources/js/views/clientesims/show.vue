@@ -92,6 +92,9 @@
                                                         <a v-if="can('clientesim-print')" type="button" class="btn btn-tool btn-sm text-success" data-toggle="tooltip" @click="showPreviewPDF(phonenum)">
                                                             <i class="fa fa-print"></i>
                                                         </a>
+                                                        <a v-if="can('clientesim-esim-attach')" type="button" class="btn btn-tool btn-sm text-warning" data-toggle="tooltip" :disabled="loading" @click="changePhoneNumEsim(phonenum)">
+                                                            <i class="fa fa-recycle"></i>
+                                                        </a>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -129,6 +132,13 @@
         }
     }
 
+    class PhoneNum {
+        constructor(phonenum) {
+            this.numero = phonenum.numero || ''
+            this.client_esim = phonenum.client_esim || ''
+        }
+    }
+
     export default {
         name: "clientesim-show",
         props: {
@@ -151,7 +161,8 @@
             return {
                 clientesim: this.clientesim_prop,
                 index: this.index_prop,
-                collapse_icon: 'fas fa-chevron-down'
+                collapse_icon: 'fas fa-chevron-down',
+                loading: false,
             }
         },
         methods: {
@@ -171,7 +182,6 @@
                     cancelButtonText: 'Non'
                 }).then((result) => {
                     if(result.value) {
-
                         axios.delete(`/clientesims/${clientesim.uuid}`)
                             .then(resp => {
 
@@ -192,6 +202,61 @@
                         // stay here
                     }
                 })
+            },
+            changePhoneNumEsim(phonenum) {
+                
+                let phonenumForm = new Form(
+                    new PhoneNum({
+                        'numero': phonenum.numero,
+                        'client_esim': this.clientesim
+                    })
+                )
+
+                Swal.fire({
+                    html: '<small>Affecter une nouvelle eSIM au <b>' + phonenum.numero + '</b></small>',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    showLoaderOnConfirm: true,
+                    confirmButtonText: 'Valider',
+                    cancelButtonText: 'Annuler',
+                    preConfirm: () => {
+                        return fetch(`/phonenums.getchangeesim/${phonenum.id}`)
+                        .then(response => {
+                            /*
+                            if (!response.ok) {
+                            throw new Error(response.statusText)
+                            }*/
+                            return response.json()
+                        })
+                        .catch(error => {
+                            console.log("request failed: ", error)
+                            Swal.showValidationMessage(
+                            `Request failed: ${error}`
+                            )
+                        })
+                    }, allowOutsideClick: () => !Swal.isLoading()
+                }).then((result) => {
+                    if (result.value) {
+                        Swal.fire({
+                            html: '<small>Nouvelle eSIM affectée avec Succes !</small>',
+                            icon: 'success',
+                            timer: 3000
+                        }).then(() => {
+                            this.updatePhoneNum(result.value.phonenum)
+                            window.location = '/clientesims.previewpdf/' + result.value.phonenum.id
+                        })
+                    }
+                })
+
+                
+            },
+            updatePhoneNum(phonenum) {
+                let phonenumIndex = this.clientesim.phonenums.findIndex(p => {
+                    return phonenum.id === p.id
+                })
+                if (phonenumIndex !== -1) {
+                    this.clientesim.phonenums.splice(phonenumIndex, 1, phonenum)
+                }
             },
             collapseClicked() {
                 if (this.collapse_icon === 'fas fa-chevron-down') {

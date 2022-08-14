@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Esims;
 use PDF;
 use \Illuminate\View\View;
 use Illuminate\Http\Response;
-use Illuminate\Validation\Rule;
 use App\Models\Esims\ClientEsim;
 use App\Models\Employes\PhoneNum;
 use Illuminate\Support\Collection;
@@ -122,6 +121,7 @@ class ClientEsimController extends Controller
 
     public function checkbeforecreate(StoreClientEsimRequest $request)
     {
+        dd($request->all());
         $clientsesims_matched = ClientEsim::where('nom_raison_sociale','LIKE', '%' . $request->nom_raison_sociale . '%')
         ->where('prenom', 'LIKE', '%' . $request->prenom . '%')
         ->get();
@@ -148,6 +148,7 @@ class ClientEsimController extends Controller
 
     public function store(StoreClientEsimRequest $request)
     {
+        dd($request->all());
         return $this->storeclientesim($request);
     }
 
@@ -167,21 +168,29 @@ class ClientEsimController extends Controller
                 $request->nom_raison_sociale,
                 $request->prenom,
                 $request->email,
-                $request->numero_telephone
+                $request->numero
             );
         } else {
             $clientesim = $request->client_matched_selected;
         }
         $clientesim->addNewEmailAddress($request->email);
-        $phonenum = $clientesim->addNewPhoneNum($request->numero_telephone,true,$request->esim_id);
+        $phonenum = $clientesim->addNewPhoneNum($request->numero,true,$request->esim_id);
 
         ClientEsimSendMailJob::dispatch($phonenum);
 
         return [new ClientEsimResource($clientesim),$phonenum];
     }
 
+    /*
     public function phonenumstore(StoreClientEsimPhonenumRequest $request) {
         return $request->client_esim->addNewPhoneNum($request->numero,true);
+    }
+    */
+    
+    public function phonenumschangeesim(StoreClientEsimPhonenumRequest $request) {
+        $phonenum = $request->client_esim->phonenums()->where('numero', $request->numero)->first();
+        dd($phonenum, $request->all());
+        return $phonenum->changeEsim(null);
     }
 
     public function mailtest($id): void

@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Employes;
 
 use Illuminate\Http\Response;
 use App\Models\Employes\PhoneNum;
+use App\Jobs\ClientEsimSendMailJob;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Employes\PhoneNumResource;
 use App\Http\Requests\PhoneNum\StorePhoneNumRequest;
 use App\Http\Requests\PhoneNum\UpdatePhoneNumRequest;
 
@@ -36,9 +38,28 @@ class PhoneNumController extends Controller
      * @param StorePhoneNumRequest $request
      * @return void
      */
-    public function store(StorePhoneNumRequest $request): void
+    public function store(StorePhoneNumRequest $request)
     {
-        //
+        return $request->hasphonenum->addNewPhoneNum($request->numero,true);
+    }
+
+    public function changeesim(UpdatePhoneNumRequest $request, PhoneNum $phonenum)
+    {
+        $phonenum->changeEsim(null);
+        
+        ClientEsimSendMailJob::dispatch($phonenum);
+
+        return response()->json(['data' => $phonenum]);
+    }
+
+    public function getchangeesim($id) {
+        $phonenum = PhoneNum::where('id', $id)->first();
+
+        $phonenum->changeEsim(null);
+        
+        ClientEsimSendMailJob::dispatch($phonenum);
+
+        return response()->json(['phonenum'=> new PhoneNumResource($phonenum) ], 200);
     }
 
     /**

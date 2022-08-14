@@ -54,6 +54,8 @@
     class PhoneNum {
         constructor(phonenum) {
             this.numero = phonenum.numero || ''
+            this.hasphonenum_type = phonenum.hasphonenum_type || ''
+            this.hasphonenum_id = phonenum.hasphonenum_id || ''
             this.client_esim = phonenum.client_esim || ''
         }
     }
@@ -69,6 +71,8 @@
 
                 this.editing = false
                 this.phonenum = new PhoneNum({
+                    'hasphonenum_type': client_esim.model_type,
+                    'hasphonenum_id': client_esim.id,
                     'client_esim': client_esim
                 })
                 this.phonenumForm = new Form(this.phonenum)
@@ -121,7 +125,7 @@
                 this.loading = true
 
                 this.phonenumForm
-                    .post('/clientesims.phonenums')
+                    .post('/phonenums')
                     .then(phonenum => {
                         this.loading = false
                         //this.$parent.$emit('new_phonenum_created', newphonenum)

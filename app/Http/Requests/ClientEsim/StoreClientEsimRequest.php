@@ -30,14 +30,7 @@ class StoreClientEsimRequest extends ClientEsimRequest
      */
     public function rules()
     {
-        return array_merge(ClientEsim::createRules($this->numero_telephone), [
-            /*
-            'numero_telephone' => Rule::unique('phone_nums', 'numero')
-                ->where(function ($query) {
-                    $query->where('numero', $this->numero_telephone) ->where('hasphonenum_type', ClientEsim::class);
-                })->ignore($this->numero_telephone),
-            */
-        ]);
+        return ClientEsim::createRules($this->numero);
     }
 
     /**

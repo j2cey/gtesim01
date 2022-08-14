@@ -27,10 +27,10 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="numero_telephone" class="col-sm-2 col-form-label text-xs">Numero Telephone</label>
+                                <label for="numero" class="col-sm-2 col-form-label text-xs">Numero Telephone</label>
                                 <div class="col-sm-10">
-                                    <input @keyup.enter="formKeyEnter()" type="text" class="form-control text-xs" id="numero_telephone" name="numero_telephone" required autocomplete="numero_telephone" autofocus placeholder="Numero Telephone" v-model="clientesimForm.numero_telephone">
-                                    <span class="invalid-feedback d-block text-xs" role="alert" v-if="clientesimForm.errors.has('numero_telephone')" v-text="clientesimForm.errors.get('numero_telephone')"></span>
+                                    <input @keyup.enter="formKeyEnter()" type="text" class="form-control text-xs" id="numero" name="numero" required autocomplete="numero" autofocus placeholder="Numero Telephone" v-model="clientesimForm.numero">
+                                    <span class="invalid-feedback d-block text-xs" role="alert" v-if="clientesimForm.errors.has('numero')" v-text="clientesimForm.errors.get('numero')"></span>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -106,7 +106,7 @@
         constructor(clientesim) {
             this.nom_raison_sociale = clientesim.nom_raison_sociale || ''
             this.prenom = clientesim.prenom || ''
-            this.numero_telephone = clientesim.numero_telephone || ''
+            this.numero = clientesim.numero || ''
             this.email = clientesim.email || ''
             this.esim_id = clientesim.esim_id || ''
             this.client_matched_selected = clientesim.client_matched_selected || null
@@ -192,7 +192,7 @@
                 this.clientesim = {
                     'nom_raison_sociale': this.clientesimForm.nom_raison_sociale,
                     'prenom': this.clientesimForm.prenom,
-                    'numero_telephone': this.clientesimForm.numero_telephone,
+                    'numero': this.clientesimForm.numero,
                     'email': this.clientesimForm.email,
                     'esim_id': this.clientesimForm.esim_id,
                     'client_matched_selected': this.clientesimForm.client_matched_selected

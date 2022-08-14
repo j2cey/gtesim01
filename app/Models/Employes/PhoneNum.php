@@ -5,6 +5,7 @@ namespace App\Models\Employes;
 use App\Models\BaseModel;
 use App\Models\Esims\Esim;
 use Illuminate\Support\Carbon;
+use Illuminate\Validation\Rule;
 use OwenIt\Auditing\Contracts\Auditable;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -58,6 +59,43 @@ class PhoneNum extends BaseModel implements Auditable
 
     protected $guarded = [];
 
+    #region Validation Rules
+
+    public static function defaultRules($numero,$hasphonenum_type) {
+        return [
+            'numero' => [
+                'required',
+                'regex:/^([0-9\s\-\+\(\)]*)$/',
+                'min:8',
+                Rule::unique('phone_nums', 'numero')
+                    ->where(function ($query) use($numero,$hasphonenum_type) {
+                        $query->where('numero', $numero) ->where('hasphonenum_type', $hasphonenum_type);
+                    })->ignore($numero),
+            ],
+        ];
+    }
+    public static function createRules($numero,$hasphonenum_type) {
+        return array_merge(self::defaultRules($numero,$hasphonenum_type), [
+            
+        ]);
+    }
+    public static function updateRules($model,$numero,$hasphonenum_type) {
+        return array_merge(self::defaultRules($numero,$hasphonenum_type), [
+            
+        ]);
+    }
+
+    public static function messagesRules() {
+        return [
+            'numero.required' => 'Numéro de téléphone requis',
+            'numero.regex' => 'Numéro de téléphone non valide',
+            'numero.min' => 'Numéro de téléphone doit avoir 8 digits minimum',
+            'numero.unique' => 'Numéro déjà attribué',
+        ];
+    }
+
+    #endregion
+
     #region Eloquent Relationships
 
     /**
@@ -89,5 +127,17 @@ class PhoneNum extends BaseModel implements Auditable
         $esim->setStatutAttribue();
 
         return $this->load(['esim','esim.qrcode']);
+    }
+
+    public function changeEsim($esim_id) {
+
+        $old_esim = $this->esim;
+
+        $this->esim()->dissociate();
+        $this->attachEsim($esim_id);
+        
+        $old_esim->setStatutFree();
+
+        return $this;
     }
 }

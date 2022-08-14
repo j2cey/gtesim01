@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests\PhoneNum;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Models\Employes\PhoneNum;
 
-class StorePhoneNumRequest extends FormRequest
+class StorePhoneNumRequest extends PhoneNumRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,7 +13,7 @@ class StorePhoneNumRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,8 +23,18 @@ class StorePhoneNumRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            //
-        ];
+        return PhoneNum::createRules($this->numero,$this->hasphonenum_type);
+    }
+
+    /**
+     * Prepare the data for validation.
+     *
+     * @return void
+     */
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'hasphonenum' => $this->setRelevantPolymorph( $this->input('hasphonenum_type'), $this->input('hasphonenum_id') ),
+        ]);
     }
 }
