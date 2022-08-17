@@ -146,7 +146,7 @@
                                         <th class="tw-px-4 tw-py-2">Statut</th>
                                         <th class="tw-px-4 tw-py-2">Pin</th>
                                         <th class="tw-px-4 tw-py-2">Puk</th>
-                                        <th class="tw-px-4 tw-py-2">Num. Phones</th>
+                                        <th class="tw-px-4 tw-py-2">Num. Phone</th>
                                         <th class="tw-px-4 tw-py-2">Details</th>
                                     </tr>
                                     </thead>
@@ -176,27 +176,8 @@
                                             <span class="tw-text-sm">@{{ record.puk }}</span>
                                         </td>
                                         <td class="tw-px-4 tw-py-2">
-                                            <span class="tw-text-xs" v-if="record.phonenums">
-                                                <div class="overflow-x">
-                                                    <table class="table-auto tw-bg-gray-200 overflow-scroll w-full">
-                                                        <thead>
-                                                        <tr>
-                                                            <th class="tw-px-2 tw-py-2"><span class="tw-text-xs">Numéro</span></th>
-                                                            <th class="tw-px-2 tw-py-2"><span class="tw-text-xs">Date</span></th>
-                                                        </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            <tr v-for="phonenum in record.phonenums" :key="phonenum.id">
-                                                                <td class="tw-px-2 tw-py-2">
-                                                                    <span class="tw-text-xs">@{{ phonenum.numero }}</span>
-                                                                </td>
-                                                                <td class="tw-px-2 tw-py-2">
-                                                                    <span class="tw-text-xs">@{{ phonenum.created_at | formatDate }}</span>
-                                                                </td>
-                                                            </tr>
-                                                        </tbody>
-                                                        </table>
-                                                    </div>
+                                            <span class="tw-text-xs" v-if="record.phonenum">
+                                                @{{ record.phonenum.numero }}
                                             </span>
                                         </td>
                                         <td class="tw-px-4 tw-py-2">

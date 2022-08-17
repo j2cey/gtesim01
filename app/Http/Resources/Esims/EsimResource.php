@@ -27,8 +27,8 @@ class EsimResource extends JsonResource
 
             'status' => StatusResource::make($this->status),
             'statutesim' => StatutEsimResource::make($this->statutesim),
-            
-            'phonenums' => $this->phonenums,
+
+            'phonenum' => $this->phonenum,
 
             'created_at' => $this->created_at,
 

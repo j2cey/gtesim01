@@ -2,6 +2,7 @@
 
 namespace App\Models\Employes;
 
+use App\Models\User;
 use App\Models\BaseModel;
 use App\Models\Esims\Esim;
 use Illuminate\Support\Carbon;
@@ -76,12 +77,12 @@ class PhoneNum extends BaseModel implements Auditable
     }
     public static function createRules($numero,$hasphonenum_type) {
         return array_merge(self::defaultRules($numero,$hasphonenum_type), [
-            
+
         ]);
     }
     public static function updateRules($model,$numero,$hasphonenum_type) {
         return array_merge(self::defaultRules($numero,$hasphonenum_type), [
-            
+
         ]);
     }
 
@@ -112,6 +113,10 @@ class PhoneNum extends BaseModel implements Auditable
         return $this->belongsTo(Esim::class, 'esim_id');
     }
 
+    public function creator() {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
     #endregion
 
     public function attachEsim($esim_id) {
@@ -135,7 +140,7 @@ class PhoneNum extends BaseModel implements Auditable
 
         $this->esim()->dissociate();
         $this->attachEsim($esim_id);
-        
+
         $old_esim->setStatutFree();
 
         return $this;

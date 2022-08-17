@@ -113,8 +113,8 @@ class Esim extends BaseModel implements Auditable
         return $this->hasOne(EsimQrcode::class, 'esim_id');
     }
 
-    public function phonenums() {
-        return $this->hasMany(PhoneNum::class, 'esim_id');
+    public function phonenum() {
+        return $this->hasOne(PhoneNum::class, 'esim_id');
     }
 
     #endregion
@@ -142,10 +142,10 @@ class Esim extends BaseModel implements Auditable
     public static function getFirstFree($esim_id = -1) {
         if ($esim_id === -1 || is_null($esim_id)) {
             $esim_nouveau_statut = StatutEsim::where('code', "nouveau")->first();
-            
+
             $esim = Esim::where('statut_esim_id', $esim_nouveau_statut->id)->first();
             $esim->setStatutAttribution();
-            
+
             return $esim;
         } else {
             return Esim::where('id', $esim_id)->first();
@@ -170,9 +170,9 @@ class Esim extends BaseModel implements Auditable
             'opc' => $opc,
         ]);
 
-        $esim->statutesim()->associate($default_statutesim); 
-        $esim->technologieesim()->associate($default_technologieesim); 
-        
+        $esim->statutesim()->associate($default_statutesim);
+        $esim->technologieesim()->associate($default_technologieesim);
+
         $esim->save();
 
         return $esim;
@@ -196,7 +196,7 @@ class Esim extends BaseModel implements Auditable
 
         // juste avant suppression
         self::creating(function($model){
-            
+
         });
     }
 }

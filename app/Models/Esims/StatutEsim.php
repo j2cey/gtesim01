@@ -81,6 +81,25 @@ class StatutEsim extends BaseModel implements Auditable
 
     #endregion
 
+    #region Scopes
+
+    public function scopeNouveau($query) {
+        return $query
+            ->where('code', "nouveau");
+    }
+
+    public function scopeAttribue($query) {
+        return $query
+            ->where('code', 'attribue');
+    }
+
+    public function scopeAttribution($query) {
+        return $query
+            ->where('code', 'attribution');
+    }
+
+    #endregion
+
     #region Custom Functions
 
     public static function createNew($libelle, $code, $description)

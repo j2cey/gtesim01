@@ -59,3 +59,7 @@
     @include('layouts.admin02.footer')
 
 @endsection
+
+@section('more_scripts')
+@endsection
+
