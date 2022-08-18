@@ -14,6 +14,10 @@ use App\Http\Controllers\Controller;
 class DashboardController extends Controller
 {
     public function index() {
+
+        $this->getMonthStats(8);
+
+
         $statutesim_libre = StatutEsim::nouveau()->first();
         $statutesim_attribue = StatutEsim::attribue()->first();
         $esimslibres = Esim::whereHas('statutesim', function ($query) use ($statutesim_libre) {
@@ -32,6 +36,8 @@ class DashboardController extends Controller
             ->whereHas('phonenum', function ($query) {
                 $query->whereBetween('created_at', [Carbon::now()->startOfMonth(),Carbon::now()->endOfMonth()]);
             });
+        
+        //$esimsattribuees_mensuel = $esimsattribuees_mensuel_req->get();
 
         dd($esimsattribuees_mensuel_req->get());
 
@@ -119,7 +125,9 @@ class DashboardController extends Controller
 
     private function getMonthStats($month) {
         $statutesim_attribue = StatutEsim::attribue()->first();
-        $firstDay_ofMonth = Carbon::create(Carbon::now()->year, $month, 1, 0);
+        $firstDay_ofMonth = Carbon::createFromFormat('Y-m-d', Carbon::now()->year . '-' . $month .'-'. '1');
+
+        dd($firstDay_ofMonth,$firstDay_ofMonth->startOfMonth(),$firstDay_ofMonth->endOfMonth());
 
         // toutes les sims attribuées durant ce mois
         $esimsattribuees_req = Esim::with(['phonenum','phonenum.creator','phonenum.creator.employe.departement'])
@@ -146,8 +154,12 @@ class DashboardController extends Controller
             $jours_duMois[] = $i;
         }
 
+        dd($esimsattribuees,$agences_actives,$jours_duMois);
+
         // remplissage des valeurs (les y)
-        $valeurs_ordonnees = [];
+        $valeurs_ordonnees = $this->distributeValues($esimsattribuees,$agences_actives,$jours_duMois);
+
+        dd($valeurs_ordonnees);
     }
 
     private function addAgence($total_sims,$agences_array,$id,$intitule) {
@@ -168,8 +180,28 @@ class DashboardController extends Controller
 
     private function distributeValues($esims,$agences,$jours) {
         $distributed_values = [];
-        foreach ($esims as $index => $esim) {
-            
+        // init
+        foreach ($jours as $jour) {
+            $init_jour = [];
+            foreach ($agences as $agence) {
+                $init_jour[] = 0;
+            }
+            $distributed_values[$jour] = $init_jour;
         }
+        foreach ($esims as $index => $esim) {
+            $agence_idx = $this->getAgenceIndex($agences, $esim->phonenum->creator->employe->departement->id);
+            $esim_jour = Carbon::parse($esim->created_at)->day;
+            $distributed_values[$esim_jour][$agence_idx]++;
+        }
+        return $distributed_values;
+    }
+
+    private function getAgenceIndex($agences,$id) {
+        foreach ($agences as $index => $agence) {
+            if ($agence['value'] === $id) {
+                return $index;
+            }
+        }
+        return -1;
     }
 }
