@@ -17,11 +17,11 @@ class DashboardController extends Controller
 
         $statutesim_libre = StatutEsim::nouveau()->first();
         $statutesim_attribue = StatutEsim::attribue()->first();
-        
+
         $esimslibres = Esim::whereHas('statutesim', function ($query) use ($statutesim_libre) {
             $query->where( 'id', $statutesim_libre->id );
         })->get();
-        
+
         $esimsattribuees_req = Esim::with(['phonenum','phonenum.creator','phonenum.creator.employe.departement'])
             ->whereHas('statutesim', function ($query) use ($statutesim_attribue) {
             $query->where( 'id', $statutesim_attribue->id );
@@ -74,13 +74,14 @@ class DashboardController extends Controller
             ->addNumberColumn('Projected')
             ->addNumberColumn('Official');
         */
-        
+
         $esimsTable->addDateColumn('Day of Month');
         foreach ($esims_of_month['agences'] as $agence) {
             $esimsTable->addNumberColumn($agence['label']);
         }
 
         foreach ($esims_of_month['values_by_day'] as $day => $value) {
+            //$value_date = Carbon::createFromFormat('Y-m-d',$day);
             $rowData = array_merge([$day],$value);
             //dump($rowData);
             try {
@@ -101,7 +102,7 @@ class DashboardController extends Controller
             $esimsTable->addRow($rowData);
         }*/
 
-        $lava->BarChart('Stocks', $esimsTable, [
+        $lava->LineChart('Stocks', $esimsTable, [
             'title' => 'Stock Market Trends',
             'animation' => [
                 'startup' => true,
@@ -110,6 +111,7 @@ class DashboardController extends Controller
             'legend' => ['position' => 'top'],
             'colors' => $esims_of_month['agences_colors_hex']
         ]);
+
         /*
         $lava->ColumnChart('Simulacros', $materias, [
             'titleTextStyle' => ['color' => '#6f6ae1', 'fontSize' => 50],
@@ -185,7 +187,7 @@ class DashboardController extends Controller
                 $agences_actives = $this->addAgence($esimsattribuees->count(),$agences_actives,0,"Indéfinie");
             }
         }
-        
+
         $agences_actives_colors_hex = [];
         foreach ($agences_actives as $agence) {
             $agences_actives_colors_hex[] = $agence['color']['hex'];
@@ -214,7 +216,7 @@ class DashboardController extends Controller
 
     private function getMonthName($monthNum) {
         $month_arr = [
-            '1' => "January", 
+            '1' => "January",
             '2' => "Fabruary",
             '3' => "March",
             '4' => "April",
@@ -256,9 +258,9 @@ class DashboardController extends Controller
         }
         $color_index = count($agences_array) > count($colors) ? 0 : count($agences_array);
         $agences_array[] = [
-            'value' => $id, 
-            'label' => $intitule, 
-            'count' => 1, 
+            'value' => $id,
+            'label' => $intitule,
+            'count' => 1,
             'rate' =>  $this->getRate($total_sims,1),
             'color' => $colors[$color_index]
         ];
@@ -272,7 +274,7 @@ class DashboardController extends Controller
     private function distributeValues($esims,$agences,$days,$month,$year) {
         $distributed_values_byday = [];
         $distributed_values_byagence = [];
-        
+
         // init by day
         foreach ($days as $day) {
             $init_day = [];
@@ -289,11 +291,11 @@ class DashboardController extends Controller
             }
             $distributed_values_byagence[$agence['label']] = $init_agence;
         }
-        
+
         foreach ($esims as $index => $esim) {
             $esim_day = Carbon::parse($esim->phonenum->created_at)->day;
             $esim_date = $year.'-'.$month.'-'.Carbon::parse($esim->phonenum->created_at)->day;
-            
+
             if ( $esim->phonenum->creator ) {
                 $agence_idx = $this->getAgenceIndex($agences, $esim->phonenum->creator->employe->departement->id);
                 $distributed_values_byday[$esim_date][$agence_idx]++;

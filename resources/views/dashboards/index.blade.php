@@ -67,10 +67,27 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h5 class="card-title">Recap Mensuel</h5>
+                        <div class="col-md-6 col-sm-8 col-12">
+                            <h5 class="card-title">Recap Mensuel</h5>
+                        </div>
 
-                        <div class="card-tools">
-
+                        <div class="col-md-6 col-sm-4 col-12 text-right">
+                            <div class="btn-group">
+                                <select class="form-control">
+                                    <option><a href="#" class="dropdown-item">Janvier</a></option>
+                                    <option><a href="#" class="dropdown-item">Février</a></option>
+                                    <option><a href="#" class="dropdown-item">Mars</a></option>
+                                    <option><a href="#" class="dropdown-item">Avril</a></option>
+                                    <option><a href="#" class="dropdown-item">Mai</a></option>
+                                    <option><a href="#" class="dropdown-item">Juin</a></option>
+                                    <option><a href="#" class="dropdown-item">Juillet</a></option>
+                                    <option><a href="#" class="dropdown-item">Aout</a></option>
+                                    <option><a href="#" class="dropdown-item">Septembre</a></option>
+                                    <option><a href="#" class="dropdown-item">Octobre</a></option>
+                                    <option><a href="#" class="dropdown-item">Novembre</a></option>
+                                    <option><a href="#" class="dropdown-item">Décembre</a></option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                     <!-- /.card-header -->
@@ -104,7 +121,7 @@
                                                 </div>
                                             </div>
                                             @break
-                                    
+
                                         @case(1)
                                             <div class="progress-group">
                                                 {{ $agencesactives_m[$i]['label'] }}
@@ -130,7 +147,7 @@
                                                 <div class="progress progress-sm">
                                                     <div class="progress-bar bg-primary" style="width: {{ $agencesactives_m[$i]['rate'] . '%' }};"></div>
                                                 </div>
-                                            </div>  
+                                            </div>
                                     @endswitch
 
                                 @endfor
@@ -228,5 +245,5 @@
 @endsection
 
 @section('more_scripts')
-    {!! $lava->render('BarChart', 'Stocks', 'pop_div') !!}
+    {!! $lava->render('LineChart', 'Stocks', 'pop_div') !!}
 @endsection
