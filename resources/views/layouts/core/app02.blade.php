@@ -75,7 +75,8 @@
 
 <!-- Bootstrap slider -->
 <script src="{{ asset('AdminLTE/plugins/bootstrap-slider/bootstrap-slider.min.js') }}"></script>
-
+{{--<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>--}}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js" integrity="sha512-GsqF810cNwHMCDELTwi3YgWIBwKYQlvC1WTAJ6fk80rtB6zN3IWdpoQujBQCuOMOxXXksEWwE0k4Lrb+N87DZQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 @yield('more_scripts')
 </body>
 

@@ -55,6 +55,8 @@ class RouteServiceProvider extends ServiceProvider
                         require base_path('routes/employes.php');
                         /* Esims Routes */
                         require base_path('routes/esims.php');
+                        /* Chartjs Routes */
+                        require base_path('routes/chartjs.php');
                     }
                 );
         });

@@ -176,6 +176,9 @@ Vue.component("howtothread-addupdate", require("./views/howtothreads/addupdate")
 Vue.component("howtothread-show", require("./views/howtothreads/show").default);
 Vue.component("howtothread-read", require("./views/howtothreads/read/index").default);
 
+Vue.component("esims-dashboard", require("./views/dashboard/esims").default);
+Vue.component("charts-index", require("./views/chartjs/index").default);
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
