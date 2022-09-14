@@ -14,11 +14,11 @@
         <div class="collapse navbar-collapse order-3" id="navbarCollapse">
             <!-- Left navbar links -->
             <ul class="navbar-nav">
-                @role('Admin')
+                @can('stats-list')
                 <li class="nav-item">
                     <a href="/dashboards.index" class="nav-link"><i class="nav-icon fas fa-tachometer-alt"></i> Dashboard</a>
                 </li>
-                @endrole
+                @endcan
 
                 @if(false)
                 <li class="nav-item dropdown">
