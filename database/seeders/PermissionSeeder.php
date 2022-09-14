@@ -65,7 +65,7 @@ class PermissionSeeder extends Seeder
             ['howtothread-create', 3],
             ['howtothread-edit', 3],
             ['howtothread-delete', 3],
-            ['howtothread-update-code', 1],
+	    ['howtothread-update-code', 1],
 
             ['stats-list', 4],
         ];
