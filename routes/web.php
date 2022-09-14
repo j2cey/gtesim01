@@ -100,6 +100,10 @@ Route::get('audits.fetch',[AuditController::class,'fetch'])
 ->name('audits.fetch')
 ->middleware('auth');
 
+Route::get('audits.fetchall',[AuditController::class,'fetchall'])
+    ->name('audits.fetchall')
+    ->middleware('auth');
+
 Route::get('uuid.generate',[UuidController::class,'generate'])
     ->name('uuid.generate')
     ->middleware('auth');

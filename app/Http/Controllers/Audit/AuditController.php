@@ -45,6 +45,8 @@ class AuditController extends Controller
 
     public function fetchall() {
         return Audit::with('user')
+            ->where('auditable_type',"App\Models\Employes\PhoneNum")
+            ->where('event', "created")
         ->orderBy('created_at', 'desc')->get();
     }
 

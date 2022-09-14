@@ -119,6 +119,13 @@ class PhoneNum extends BaseModel implements Auditable
 
     #endregion
 
+    public function setCreator(User $creator) {
+        $this->creator()->associate($creator);
+        $this->save();
+
+        return $creator;
+    }
+
     public function attachEsim($esim_id) {
         $esim = Esim::getFirstFree($esim_id);
 
