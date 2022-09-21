@@ -121,7 +121,7 @@ class ClientEsimController extends Controller
 
     public function checkbeforecreate(StoreClientEsimRequest $request)
     {
-        dd($request->all());
+        //dd($request->all());
         $clientsesims_matched = ClientEsim::where('nom_raison_sociale','LIKE', '%' . $request->nom_raison_sociale . '%')
         ->where('prenom', 'LIKE', '%' . $request->prenom . '%')
         ->get();
@@ -148,7 +148,7 @@ class ClientEsimController extends Controller
 
     public function store(StoreClientEsimRequest $request)
     {
-        dd($request->all());
+        //dd($request->all());
         return $this->storeclientesim($request);
     }
 
@@ -189,7 +189,7 @@ class ClientEsimController extends Controller
     
     public function phonenumschangeesim(StoreClientEsimPhonenumRequest $request) {
         $phonenum = $request->client_esim->phonenums()->where('numero', $request->numero)->first();
-        dd($phonenum, $request->all());
+        //dd($phonenum, $request->all());
         return $phonenum->changeEsim(null);
     }
 
@@ -206,7 +206,7 @@ class ClientEsimController extends Controller
 
         $response = $clientesim->sendmailprofile();
 
-        dd($response);
+        //dd($response);
     }
 
     /**
