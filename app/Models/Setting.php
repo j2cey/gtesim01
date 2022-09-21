@@ -53,6 +53,54 @@ class Setting extends Model implements Auditable
 
     protected $guarded = [];
 
+    public static $SETTINGTYPES = [
+        [
+            'label' => "string", 'value' => "string", 'parserFunc' => "getParsedStringValue", 'validationRule' => "required|string"
+        ],
+        [
+            'label' => "integer", 'value' => "integer", 'parserFunc' => "getParsedIntegerValue", 'validationRule' => "required|integer"
+        ],
+        [
+            'label' => "bool", 'value' => "bool", 'parserFunc' => "getParsedBoolValue", 'validationRule' => "required|boolean"
+        ],
+        [
+            'label' => "float", 'value' => "float", 'parserFunc' => "getParsedFloatValue", 'validationRule' => "required|integer"
+        ],
+        [
+            'label' => "array", 'value' => "array", 'parserFunc' => "getParsedArrayValue", 'validationRule' => "required|string"
+        ],
+    ];
+
+    #region Validation Tools
+
+    public static function defaultRules($type,$value) {
+        $rules = [
+            'name' => ['required'],
+            'type' => ['required'],
+            'value' => "",
+        ];
+        if ( ! is_null($value) ) {
+            $settingtype = self::getSettingType($type);
+            $rules['value'] = $settingtype['validationRule'];
+        }
+        return $rules;
+    }
+    public static function createRules($type,$value)  {
+        return array_merge(self::defaultRules($type,$value), [
+
+        ]);
+    }
+    public static function updateRules($model) {
+        return array_merge(self::defaultRules($model->type,$model->value), [
+
+        ]);
+    }
+    public static function validationMessages() {
+        return [];
+    }
+
+    #endregion
+
     #region Relationships
 
     public function group() {
@@ -86,7 +134,7 @@ class Setting extends Model implements Auditable
         }
     }
 
-    private static function buildTree(array $elements, $parentId = 0) {
+    public static function buildTree(array $elements, $parentId = 0) {
         $branch = array();
 
         foreach ($elements as $element) {
@@ -102,7 +150,7 @@ class Setting extends Model implements Auditable
         return $branch;
     }
 
-    private static function cleanTree($tree) {
+    public static function cleanTree($tree) {
         $final_tree = [];
         foreach ($tree as $key => $item) {
             if (isset($item['children'])) {
@@ -116,20 +164,49 @@ class Setting extends Model implements Auditable
     }
 
     private static function getParsedValue($setting) {
+        $type = self::getSettingType($setting['type']);
+        // call the type parser function from a string stored in the variable 'parserFunc'
+        return self::{$type['parserFunc']}($setting);
+    }
+
+    private static function getParsedStringValue($setting) {
         if ($setting['value'] === null) {
             return $setting['value'];
-        } elseif ($setting['type'] === "string") {
-            return $setting['value'];
-        } elseif ($setting['type'] === "integer") {
-            return (int)$setting['value'];
-        } elseif ($setting['type'] === "bool" || $setting['type'] === "boolean") {
-            return (bool)$setting['value'];
-        } elseif ($setting['type'] === "float") {
-            return (float)$setting['value'];
-        } elseif ($setting['type'] === "array") {
-            return explode($setting['array_sep'], $setting['value']);
         }
         return $setting['value'];
+    }
+    private static function getParsedIntegerValue($setting) {
+        if ($setting['value'] === null) {
+            return $setting['value'];
+        }
+        return (int)$setting['value'];
+    }
+    private static function getParsedBoolValue($setting) {
+        if ($setting['value'] === null) {
+            return $setting['value'];
+        }
+        return (bool)$setting['value'];
+    }
+    private static function getParsedFloatValue($setting) {
+        if ($setting['value'] === null) {
+            return $setting['value'];
+        }
+        return (float)$setting['value'];
+    }
+    private static function getParsedArrayValue($setting) {
+        if ($setting['value'] === null) {
+            return $setting['value'];
+        }
+        return explode($setting['array_sep'], $setting['value']);
+    }
+
+    public static function getSettingType($type) {
+        foreach (self::$SETTINGTYPES as $SETTINGTYPE) {
+            if ($SETTINGTYPE['value'] === $type) {
+                return $SETTINGTYPE;
+            }
+        }
+        return null;
     }
 
     public function setGroup(Setting $group = null, $save = true) : Setting {

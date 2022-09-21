@@ -23,6 +23,9 @@ Route::match(['put','patch'],'phonenums.changeesim/{phonenum}',[PhoneNumControll
 Route::get('phonenums.getchangeesim/{id}',[PhoneNumController::class, 'getchangeesim'])
     ->name('phonenums.getchangeesim')
     ->middleware('auth');
+Route::get('phonenums.fetchall',[PhoneNumController::class, 'fetchall'])
+    ->name('phonenums.fetchall')
+    ->middleware('auth');
 
 #endregion
 

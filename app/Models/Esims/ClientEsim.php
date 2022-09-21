@@ -11,6 +11,7 @@ use App\Traits\PhoneNum\HasPhoneNums;
 use App\Contracts\Employes\IHasPhoneNums;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Traits\EmailAddress\HasEmailAddresses;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -70,7 +71,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  */
 class ClientEsim extends BaseModel implements IHasPhoneNums
 {
-    use HasPhoneNums, HasEmailAddresses, HasFactory, \OwenIt\Auditing\Auditable;
+    use HasPhoneNums, HasEmailAddresses, SoftDeletes, HasFactory, \OwenIt\Auditing\Auditable;
 
     protected $guarded = [];
 
@@ -84,12 +85,12 @@ class ClientEsim extends BaseModel implements IHasPhoneNums
     }
     public static function createRules($numero) {
         return array_merge(self::defaultRules($numero), PhoneNum::createRules($numero,self::class), [
-            
+
         ]);
     }
     public static function updateRules($model,$numero) {
         return array_merge(self::defaultRules($numero), PhoneNum::updateRules($model,$numero,self::class), [
-            
+
         ]);
     }
     public static function messagesRules() {

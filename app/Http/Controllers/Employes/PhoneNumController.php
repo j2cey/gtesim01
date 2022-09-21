@@ -12,6 +12,9 @@ use App\Http\Requests\PhoneNum\UpdatePhoneNumRequest;
 
 class PhoneNumController extends Controller
 {
+    public function fetchall() {
+        return PhoneNum::all()->count();
+    }
     /**
      * Display a listing of the resource.
      *
@@ -46,7 +49,7 @@ class PhoneNumController extends Controller
     public function changeesim(UpdatePhoneNumRequest $request, PhoneNum $phonenum)
     {
         $phonenum->changeEsim(null);
-        
+
         ClientEsimSendMailJob::dispatch($phonenum);
 
         return response()->json(['data' => $phonenum]);
@@ -56,7 +59,7 @@ class PhoneNumController extends Controller
         $phonenum = PhoneNum::where('id', $id)->first();
 
         $phonenum->changeEsim(null);
-        
+
         ClientEsimSendMailJob::dispatch($phonenum);
 
         return response()->json(['phonenum'=> new PhoneNumResource($phonenum) ], 200);

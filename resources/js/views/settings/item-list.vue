@@ -1,7 +1,9 @@
 <template>
     <div class="card collapsed-card">
         <div class="card-header">
-            <h5 class="card-title">{{ list_title }}
+
+            <h5 type="button" class="btn btn-tool" data-card-widget="collapse">
+                {{ list_title }}
                 <small class="text text-xs">
                     {{ searchSettings === "" ? "" : " (" + filteredSettings.length + ")" }}
                 </small>
@@ -9,7 +11,7 @@
 
             <div class="card-tools">
 
-                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                <!--<button type="button" class="btn btn-tool" data-card-widget="collapse">
                     <i class="fas fa-plus"></i>
                 </button>
                 <div class="btn-group">
@@ -26,7 +28,7 @@
                 </div>
                 <button type="button" class="btn btn-tool" data-card-widget="remove">
                     <i class="fas fa-times"></i>
-                </button>
+                </button>-->
             </div>
         </div>
         <!-- /.card-header -->
@@ -36,7 +38,11 @@
                 <tr>
                     <th>
                         <div class="row">
-                            <div class="col-sm-3 col-6"></div>
+                            <div class="col-sm-3 col-6">
+                                <div class="btn-group">
+                                    <b-button size="is-small" type="is-info is-light" @click="createSetting">Ajouter</b-button>
+                                </div>
+                            </div>
                             <div class="col-sm-3 col-6"></div>
                             <div class="col-sm-3 col-6"></div>
                             <div class="col-sm-3 col-6">
@@ -92,6 +98,7 @@
 </template>
 
 <script>
+    import SettingBus from "../settings/settingBus";
 
     export default {
         name: "setting-item-list",
@@ -104,6 +111,13 @@
             SettingAddUpdate: () => import('./addupdate'),
             SettingItem: () => import('./item')
         },
+        mounted() {
+            SettingBus.$on('setting_created', (newsetting) => {
+                this.settings.push(newsetting)
+                //SettingBus.$emit('setting_created', newsetting)
+                this.$emit('setting_created', newsetting)
+            })
+        },
         data() {
             return {
                 list_title: this.list_title_prop,
@@ -113,6 +127,20 @@
             };
         },
         methods: {
+            createSetting() {
+                SettingBus.$emit('setting_create');
+            },
+            deleteSetting($event) {
+                console.log("setting_deleted received at list: ", $event)
+
+                let settingIndex = this.settings.findIndex(c => {
+                    return $event.id === c.id
+                })
+
+                if (settingIndex !== -1) {
+                    this.settings.splice(settingIndex, 1)
+                }
+            }
         },
         computed: {
             filteredSettings() {

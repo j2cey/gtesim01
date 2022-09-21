@@ -13,6 +13,9 @@ Route::get('statutesims.fetch',[StatutEsimController::class,'fetch'])
 Route::get('statutesims.fetchall',[StatutEsimController::class,'fetchall'])
     ->name('statutesims.fetchall')
     ->middleware('auth');
+Route::match(['post'],'statutesims.setnext',[StatutEsimController::class, 'setnext'])
+    ->name('statutesims.setnext')
+    ->middleware('auth');
 
 #endregion
 
@@ -23,6 +26,9 @@ Route::get('esims.fetch',[EsimController::class,'fetch'])
     ->middleware('auth');
 Route::get('esims.fetchall',[EsimController::class,'fetchall'])
     ->name('esims.fetchall')
+    ->middleware('auth');
+Route::get('esims.fetchone/{id}',[EsimController::class,'fetchone'])
+    ->name('esims.fetchone')
     ->middleware('auth');
 
 Route::get('esims.headfiles',[EsimController::class,'headfiles'])
@@ -76,5 +82,9 @@ Route::post('clientesims.checkbeforecreate',[ClientEsimController::class,'checkb
 Route::get('clientesims.checkbeforecreate',[ClientEsimController::class,'checkbeforecreate'])
 ->name('clientesims.checkbeforecreate')
 ->middleware('auth');
+
+Route::match(['put', 'patch'],'clientesims.deletephone/{clientesim}',[ClientEsimController::class,'deletephone'])
+    ->name('clientesims.deletephone')
+    ->middleware('auth');
 
 #endregion

@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Resources\Employes\EmployeResource;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -43,6 +44,9 @@ class UserResource extends JsonResource
 
             'status' => StatusResource::make($this->status),
             'created_at' => $this->created_at,
+
+            'roles' => $this->roles,
+            'model_type' => User::class,
 
             'edit_url' => route('users.edit', $this->uuid),
             'destroy_url' => route('users.destroy', $this->uuid),

@@ -187,8 +187,13 @@
                                             </a>
                                             @endcan
                                             @can('esim-attach')
-                                            <a v-if="record.statutesim.code == 'nouveau'" @click="$emit('create_new_clientesim', record.id)" class="tw-inline-block tw-mr-3 tw-text-orange-500">
+                                            <a v-if="record.statutesim.code === 'nouveau'" @click="$emit('create_new_clientesim', record.id)" class="tw-inline-block tw-mr-3 tw-text-orange-500">
                                                 <i class="fa fa-paperclip" aria-hidden="true"></i>
+                                            </a>
+                                            @endcan
+                                            @can('esim-show')
+                                            <a :href="record.show_url" class="tw-inline-block tw-mr-3 tw-text-orange-500">
+                                                <i class="fa fa-eye" aria-hidden="true"></i>
                                             </a>
                                             @endcan
                                         </td>

@@ -522,6 +522,9 @@
                             'borderWidth': chartjsdata.datasets[i].borderWidth,
                             'fill': chartjsdata.datasets[i].fill,
 
+                            pointBackgroundColor: 'black',
+                            pointBorderColor: chartjsdata.datasets[i].backgroundColor,
+
                             'data': Object.values( chartjsdata.datasets[i].data )
                         }
                     }

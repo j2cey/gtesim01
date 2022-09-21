@@ -5,6 +5,7 @@ namespace App\Models\Esims;
 use App\Models\BaseModel;
 use App\Traits\File\HasFile;
 use OwenIt\Auditing\Contracts\Auditable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
@@ -53,7 +54,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  */
 class EsimBodyFile extends BaseModel implements Auditable
 {
-    use HasFile, HasFactory, \OwenIt\Auditing\Auditable;
+    use HasFile, SoftDeletes, HasFactory, \OwenIt\Auditing\Auditable;
 
     protected $guarded = [];
 

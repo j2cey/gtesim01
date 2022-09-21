@@ -167,6 +167,8 @@ Vue.component("clientesim-show", require("./views/clientesims/show").default);
 
 Vue.component("esim-addupdate", require("./views/esims/addupdate").default);
 Vue.component("esims-file-upload", require("./views/esims/fileUpload").default);
+Vue.component("esim-show", require("./views/esims/show").default);
+
 Vue.component("uuid-generator", require("./views/uuid/generator").default);
 
 Vue.component("howto-addupdate", require("./views/howtos/addupdate").default);

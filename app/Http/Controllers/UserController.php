@@ -6,14 +6,18 @@ use Exception;
 use App\Models\User;
 use App\Models\Status;
 use \Illuminate\View\View;
+use Illuminate\Http\Response;
 use App\Jobs\ManageUserActivated;
 use Illuminate\Support\Collection;
 use App\Http\Resources\UserResource;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Contracts\View\Factory;
 
+use Illuminate\Database\Eloquent\Model;
 use App\Http\Requests\User\FetchRequest;
 use App\Http\Resources\SearchCollection;
+use Illuminate\Database\Eloquent\Builder;
+use App\Http\Requests\User\StoreUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
 use Illuminate\Contracts\Foundation\Application;
 use App\Repositories\Contracts\IUserRepositoryContract;
@@ -60,7 +64,11 @@ class UserController extends Controller
     }
 
     public function fetchall() {
-        return User::all();
+        $users = User::all()->load(['roles','status']);
+        // TODO
+        // make UserRessource collection lighter
+        //$users = UserResource::collection($users);
+        return $users;
     }
 
     public function onlineusers() {
@@ -82,6 +90,41 @@ class UserController extends Controller
     }
 
     /**
+     * Store a newly created resource in storage.
+     *
+     * @param StoreUserRequest $request
+     * @return UserResource|Builder|Model|Response
+     */
+    public function store(StoreUserRequest $request)
+    {
+        $status_active = Status::active()->first();
+
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'username' => $request->username,
+            'is_local' => $request->is_local,
+            'is_ldap' => $request->is_ldap,
+            'password' => bcrypt($request->password),
+        ]);
+
+        // sync roles
+        $user->syncRoles($request->roles);
+
+        // set status
+        $user->setStatus($request->status);
+
+        // launch userActivated event
+        if ( $request->status->code === $status_active->code ) {
+            ManageUserActivated::dispatch($user);
+        }
+
+        $user->load(['roles','status']);
+
+        return new UserResource($user);
+    }
+
+    /**
      * [edit description]
      * @param  User $user [description]
      * @return Application|Factory|\Illuminate\Contracts\View\View|View
@@ -97,11 +140,12 @@ class UserController extends Controller
      *
      * @param UpdateUserRequest $request
      * @param User $user
-     * @return User
+     * @return UserResource|User
      */
     public function update(UpdateUserRequest $request, User $user)
     {
         $status_active = Status::active()->first();
+        $old_user = User::with('status')->where('id', $user->id)->first();
 
         $user->update([
             'name' => $request->name,
@@ -118,12 +162,14 @@ class UserController extends Controller
         $user->setStatus($request->status);
 
         // launch userActivated event
-        if ( $request->status->code === $status_active->code ) {
+        if ( $old_user && $old_user->status->code !== $request->status->code && $request->status->code === $status_active->code ) {
             //\Log::info("ManageUserActivated dispatched : " . json_encode( $user ) );
             ManageUserActivated::dispatch($user);
         }
 
-        return $user->load(['roles','status']);
+        $user->load(['roles','status']);
+
+        return new UserResource($user);
     }
 
     /**

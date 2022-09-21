@@ -2,9 +2,21 @@
 
 namespace App\Http\Requests\Role;
 
+use App\Models\Authorization\Role;
 use App\Traits\Request\RequestTraits;
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Class RoleRequest
+ * @package App\Http\Requests\Role
+ *
+ * @property string $name
+ * @property string $guard_name
+ * @property string $description
+ *
+ * @property Role $role
+ * @property array $permissions
+ */
 class RoleRequest extends FormRequest
 {
     use RequestTraits;
@@ -26,8 +38,6 @@ class RoleRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            //
-        ];
+        return Role::defaultRules();
     }
 }

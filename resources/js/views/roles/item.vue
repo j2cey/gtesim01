@@ -20,6 +20,11 @@
                     <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                 </a>
             </span>
+            <span class="text text-xs text-center">
+                <a @click="deleteRole(role)" class="text text-danger">
+                    <i class="fa fa-trash" aria-hidden="true"></i>
+                </a>
+            </span>
         </div>
 
     </div>
@@ -52,7 +57,34 @@
         methods: {
             editRole(role) {
                 RoleBus.$emit('role_edit',role);
-            }
+            },
+            deleteRole(role) {
+                this.$swal({
+                    title: 'Etes-vous sure ?',
+                    text: "Vous ne pourrez pas revenir en arrière !",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Oui, supprimer !',
+                    cancelButtonText: 'Annuler'
+                }).then((result) => {
+                    if(result.value) {
+                        axios.delete(`/roles/${role.id}`)
+                            .then(resp => {
+                                this.$swal({
+                                    html: '<small>Profile supprimé avec succès !</small>',
+                                    icon: 'success',
+                                    timer: 3000
+                                }).then(() => {
+                                    this.$emit('role_deleted', role)
+                                })
+                            }).catch(error => {
+                            window.handleErrors(error)
+                        })
+                    }
+                })
+            },
         },
         computed: {}
     }

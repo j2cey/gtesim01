@@ -1,13 +1,16 @@
 <template>
     <div class="card collapsed-card">
         <div class="card-header">
-            <h5 class="card-title">{{ list_title ? list_title : 'Users' }}</h5>
+
+            <h5 type="button" class="btn btn-tool" data-card-widget="collapse">
+                {{ list_title }}
+                <small class="text text-xs">
+                    {{ searchUsers === "" ? "" : " (" + filteredUsers.length + ")" }}
+                </small>
+            </h5>
 
             <div class="card-tools">
-
-
-
-                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                <!--<button type="button" class="btn btn-tool" data-card-widget="collapse">
                     <i class="fas fa-plus"></i>
                 </button>
                 <div class="btn-group">
@@ -24,7 +27,7 @@
                 </div>
                 <button type="button" class="btn btn-tool" data-card-widget="remove">
                     <i class="fas fa-times"></i>
-                </button>
+                </button>-->
             </div>
         </div>
         <!-- /.card-header -->
@@ -34,7 +37,11 @@
                 <tr>
                     <th>
                         <div class="row">
-                            <div class="col-sm-3 col-6"></div>
+                            <div class="col-sm-3 col-6">
+                                <div class="btn-group">
+                                    <b-button size="is-small" type="is-info is-light" @click="createUser">Ajouter</b-button>
+                                </div>
+                            </div>
                             <div class="col-sm-3 col-6"></div>
                             <div class="col-sm-3 col-6"></div>
                             <div class="col-sm-3 col-6">
@@ -55,12 +62,16 @@
                                 <span class="text text-sm">Name</span>
                             </div>
                             <!-- /.col -->
-                            <div class="col-sm-4 col-6">
+                            <div class="col-sm-3 col-6">
                                 <span class="text text-sm">E-mail</span>
                             </div>
                             <!-- /.col -->
-                            <div class="col-sm-3 col-6">
+                            <div class="col-sm-2 col-6">
                                 <span class="text text-sm">Role(s)</span>
+                            </div>
+                            <!-- /.col -->
+                            <div class="col-sm-2 col-6">
+                                <span class="text text-sm">Statut</span>
                             </div>
                             <!-- /.col -->
                             <div class="col-sm-2 col-6">
@@ -73,7 +84,7 @@
                 <tbody>
                 <tr v-for="(user, index) in filteredUsers" v-if="filteredUsers" :key="user.id" class="text text-xs">
                     <td v-if="index < 10">
-                        <UserItem v-if="user.name" :user_prop="user"></UserItem>
+                        <UserItem v-if="user.name" :user_prop="user" v-on:user_deleted="deleteUser"></UserItem>
                     </td>
                 </tr>
                 </tbody>
@@ -90,24 +101,46 @@
 </template>
 
 <script>
+    import UserBus from "../users/userBus";
+
     export default {
         name: "user-item-list",
         props: {
-            list_title_prop: null,
+            list_title_prop: {default: "Users", type: String},
             users_prop: {}
         },
         components: {
             UserAddUpdate: () => import('./addupdate'),
             UserItem: () => import('./item')
         },
+        mounted() {
+            UserBus.$on('user_created', (newuser) => {
+                this.users.push(newuser)
+                this.$emit('user_created', newuser)
+            })
+        },
         data() {
             return {
                 list_title: this.list_title_prop,
                 users: this.users_prop,
-                searchUsers: null,
+                searchUsers: "",
             };
         },
         methods: {
+            createUser() {
+                UserBus.$emit('user_create');
+            },
+            deleteUser($event) {
+                console.log("user_deleted received at list: ", $event)
+
+                let userIndex = this.users.findIndex(c => {
+                    return $event.id === c.id
+                })
+
+                if (userIndex !== -1) {
+                    this.users.splice(userIndex, 1)
+                }
+            },
         },
         computed: {
             filteredUsers() {

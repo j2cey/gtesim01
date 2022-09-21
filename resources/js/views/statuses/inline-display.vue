@@ -3,7 +3,7 @@
         <div class="control">
             <b-taglist attached>
                 <b-tag rounded :type="'is-'+ status.style + ' is-light'" v-model="statuscode">{{ status.name }}</b-tag>
-                <b-tag rounded type="is-ghost btn" @click="switchStatus(status.code)"> <i class="fa fa-refresh"></i> </b-tag>
+                <b-tag rounded type="is-ghost btn" v-if="can(status_perm)" @click="switchStatus(status.code)"> <i class="fa fa-refresh"></i> </b-tag>
             </b-taglist>
         </div>
     </b-field>
@@ -36,7 +36,8 @@
         props: {
             model_type_prop: "",
             model_id_prop: "",
-            status_prop: {}
+            status_prop: {},
+            status_perm_prop: {default: "status-model-change", type: String},
         },
         data() {
             return {
@@ -47,6 +48,7 @@
                     'model_type': this.model_type_prop,
                     'model_id': this.model_id_prop,
                 } ) ),
+                status_perm: this.status_perm_prop,
                 editing: false,
                 loading: false,
             }
@@ -73,7 +75,7 @@
 
                         Toast.fire({
                             icon: 'success',
-                            title: 'Status changed successfully'
+                            title: 'Status changed to ' + status.name
                         }).then(() => {
                             this.status = status
                         })

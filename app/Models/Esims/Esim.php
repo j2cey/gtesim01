@@ -6,6 +6,7 @@ use App\Models\BaseModel;
 use App\Models\Employes\PhoneNum;
 use Illuminate\Support\Carbon;
 use OwenIt\Auditing\Contracts\Auditable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
@@ -68,7 +69,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  */
 class Esim extends BaseModel implements Auditable
 {
-    use HasFactory, \OwenIt\Auditing\Auditable;
+    use HasFactory, SoftDeletes, \OwenIt\Auditing\Auditable;
 
     protected $guarded = [];
     protected $with = ['qrcode'];

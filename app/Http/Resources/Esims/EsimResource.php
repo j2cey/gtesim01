@@ -29,9 +29,12 @@ class EsimResource extends JsonResource
             'statutesim' => StatutEsimResource::make($this->statutesim),
 
             'phonenum' => $this->phonenum,
+            'technologieesim' => $this->technologieesim,
 
             'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
 
+            'show_url' => route('esims.show', $this->uuid),
             'edit_url' => route('esims.edit', $this->uuid),
             'destroy_url' => route('esims.destroy', $this->uuid),
         ];

@@ -84,4 +84,8 @@ class StatutEsimController extends Controller
     {
         //
     }
+
+    public function setnext(Request $request) {
+
+    }
 }

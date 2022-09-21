@@ -58,10 +58,13 @@ trait HasPhoneNums
     }
 
     public function removePhonenum($num) {
+        $rresult = null;
+
         $phonenum = $this->phonenums()->where('numero', $num)->first();
         if ($phonenum) {
-            $phonenum->delete();
+            $rresult = $phonenum->delete();
         }
+        return $rresult;
     }
     public function removePhonenumsAll() {
         $this->phonenums()->each( function($phonenum) {

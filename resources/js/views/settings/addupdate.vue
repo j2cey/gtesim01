@@ -15,14 +15,28 @@
                             <div class="form-group row">
                                 <label for="name" class="col-sm-4 col-form-label text-xs">Name</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control form-control-sm" id="name" name="name" placeholder="Name" v-model="settingForm.name" readonly>
+                                    <input type="text" class="form-control form-control-sm" id="name" name="name" placeholder="Name" v-model="settingForm.name" :readonly="editing">
                                     <span class="invalid-feedback d-block text-xs" role="alert" v-if="settingForm.errors.has('name')" v-text="settingForm.errors.get('name')"></span>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="type" class="col-sm-4 col-form-label text-xs text-xs">Type</label>
+                                <label for="select_type" class="col-sm-4 col-form-label text-xs text-xs">Type</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control form-control-sm" id="type" name="type" placeholder="Type" v-model="settingForm.type">
+                                    <multiselect
+                                        id="select_type"
+                                        v-model="settingtype_selected"
+                                        selected.sync="settingtype_selected"
+                                        value=""
+                                        :options="settingtypes"
+                                        :searchable="true"
+                                        :multiple="false"
+                                        label="label"
+                                        track-by="value"
+                                        key="value"
+                                        placeholder="Type"
+                                        @input="settingTypeSelected"
+                                    >
+                                    </multiselect>
                                     <span class="invalid-feedback d-block text-xs" role="alert" v-if="settingForm.errors.has('type')" v-text="settingForm.errors.get('type')"></span>
                                 </div>
                             </div>
@@ -91,7 +105,7 @@
 </template>
 
 <script>
-    import Multiselect from 'vue-multiselect'
+    import Multiselect from 'vue-multiselect';
     import SettingBus from "./settingBus";
 
     class Setting {
@@ -110,9 +124,21 @@
         name: "setting-addupdate",
         components: { Multiselect },
         mounted() {
+            SettingBus.$on('setting_create', () => {
+
+                this.editing = false
+                this.setting = new Setting({})
+                this.settingForm = new Form(this.setting)
+
+                $('#addUpdateSetting').modal()
+            })
+
             SettingBus.$on('setting_edit', (setting) => {
                 this.editing = true
+
                 this.setting = new Setting(setting)
+                this.settingtype_selected = this.getSettingType(setting.type)
+
                 this.settingForm = new Form(this.setting)
                 this.settingId = setting.id
 
@@ -124,6 +150,8 @@
         created() {
             axios.get('/settings.fetch')
                 .then(({data}) => this.groups = data);
+            axios.get('/settings.types')
+                .then(({data}) => this.settingtypes = data);
         },
         data() {
             return {
@@ -134,9 +162,46 @@
                 editing: false,
                 loading: false,
                 groups: [],
+                settingtypes: [],
+                settingtype_selected: null,
             }
         },
         methods: {
+            getSettingType($type) {
+                let typeIndex = this.settingtypes.findIndex(s => {
+                    return $type === s.value
+                })
+
+                if (typeIndex !== -1) {
+                    return this.settingtypes[typeIndex]
+                } else {
+                    return null
+                }
+            },
+            settingTypeSelected() {
+                this.settingForm.type = this.settingtype_selected.value
+            },
+            createSetting() {
+                this.loading = true
+
+                this.settingForm
+                    .post('/settings')
+                    .then(newsetting => {
+                        this.loading = false
+                        this.closeModal();
+
+                        this.$swal({
+                            html: '<small>Paramètre créé avec succès !</small>',
+                            icon: 'success',
+                            timer: 3000
+                        }).then(() => {
+                            SettingBus.$emit('setting_created', newsetting)
+                        })
+
+                    }).catch(error => {
+                    this.loading = false
+                });
+            },
             updateSetting() {
                 this.loading = true
 

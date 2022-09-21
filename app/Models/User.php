@@ -109,6 +109,7 @@ class User extends Authenticatable implements Auditable
         'ldap_account_id'
     ];*/
     protected $guarded = [];
+    protected $appends = ['model_type'];
 
     public function getRouteKeyName() { return 'uuid'; }
 
@@ -136,6 +137,9 @@ class User extends Authenticatable implements Auditable
     public static function defaultRules() {
         return [
             'name' => ['required','string',],
+            'username' => ['required'],
+            'status' => ['required'],
+            'roles' => ['required'],
         ];
     }
     public static function createRules()  {
@@ -143,6 +147,7 @@ class User extends Authenticatable implements Auditable
             'email' => ['required',
                 'unique:users,email,NULL,id',
             ],
+            'password' => ['required'],
         ]);
     }
     public static function updateRules($model) {
@@ -155,6 +160,16 @@ class User extends Authenticatable implements Auditable
     public static function validationMessages() {
         return [];
     }
+
+    #endregion
+
+    #region Accessors & Mutators
+
+    public function getModelTypeAttribute() {
+        return User::class;
+    }
+
+    #endregion
 
     #region Eloquent Relationships
 

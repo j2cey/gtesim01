@@ -229,6 +229,7 @@
             },
             clientSuccessfullyCreated(resp) {
                 console.log(resp)
+                ClientEsimBus.$emit('clientesim_created', resp[0])
                 this.$swal({
                     html: '<small>Client cree avec Succes !</small>',
                     icon: 'success',
