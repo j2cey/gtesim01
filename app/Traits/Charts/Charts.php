@@ -9,7 +9,7 @@ trait Charts
     return "Indéfinie";
   }
   //$agences_actives = $this->addLabel($esimsattribuees['data']->count(),$agences_actives,$creator->employe->departement->id,$creator->employe->departement->intitule);
-  public function addLabel($total_values,$labels_array,$id,$label) {
+  public function addLabel($total_values,$labels_array,$id,$label,$label_full = null) {
       foreach ($labels_array as $index => $label_item) {
           if ($label_item['value'] === $id) {
               $labels_array[$index]['count']++;
@@ -21,7 +21,7 @@ trait Charts
       $labels_array[$label] = [
           'value' => $id,
           'label' => $this->getShortLabelLabel($label),
-          'label_full' => $label,
+          'label_full' => is_null($label_full) ? $label : $label_full,
           'count' => 1,
           'ord' => count($labels_array) + 1,
           'rate' =>  $this->getRate($total_values,1),
@@ -106,7 +106,7 @@ trait Charts
         ['hue' => 120, 'hex' => "#00ff40", 'rgb' => "rgb(0, 255, 0)", 'hsl' => "hsl(135, 100%, 50%)"],
     ];
 
-    $color_index = $label_count > count($colors) ? 0 : $label_count;
+    $color_index = $label_count >= count($colors) ? 0 : $label_count;
 
     return $colors[$color_index];
   }

@@ -4,50 +4,47 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Models\User;
 use App\Models\Status;
+use Illuminate\Http\Request;
 use Khill\Lavacharts\Lavacharts;
 use App\Traits\Charts\EsimCharts;
 use App\Http\Controllers\Controller;
+use App\Models\Employes\Departement;
+use App\Http\Requests\Dashboard\PostDashboardDetailsRequest;
 
 class DashboardController extends Controller
 {
     use EsimCharts;
 
-    public function vuechart() {
-        $chartData = json_encode( (object) $this->chartdatastruct() );
-        //dd($chartData);
-        return view('dashboards.vuechart')
-            ->with('chartData', $chartData);
-    }
-
-    public function chartdatamonth($month) {
-        $esims_stats_resume = $this->getEsimsStatsResume();
-        $esims_stats_month = $this->getEsimsStatsMonth(7);
-        return $esims_stats_month['chartjsdata'];
-    }
-
-    private function chartdatastruct() {
-        $cdata = ['labels' => ['January','February','March','April','May','June','July'],
-          'datasets'=> [
-            [
-              'label' => "Data One",
-              'borderColor' => "#4bcc96",
-              'borderWith' => 4,
-              'pointBackgroundColor' => "#000",
-              'fill' => false,
-              'data' => [15, 39, 20, 40, 39, 80, 40]
-            ]
-          ]
-        ];
-        return $cdata;
-    }
-
     public function index() {
         return view('dashboards.esims');
     }
 
-    public function fetchrawstats() {
-        $esims_stats_resume = $this->getEsimsStatsResume();
-        return $esims_stats_resume;
+    public function detailsget($agence = null) {
+        if ( is_null($agence) ) {
+            $agence = -1;
+        } else {
+            $agence = Departement::find($agence);
+        }
+        return view('dashboards.details')
+            ->with('agence', $agence);
+    }
+
+    public function detailspost(PostDashboardDetailsRequest $request) {
+        // T23:00:00.000Z
+        //dd( $request->all(), str_replace(["T23:",".000Z"], [" ",":00"],$request->period_from), str_replace(["T23:",".000Z"], [" ",":00"],$request->period_to));
+        //$freePeriod = $this->getFreePeriod( str_replace(["T23:",".000Z"], [" ",":00"],$request->period_from), str_replace(["T23:",".000Z"], [" ",":00"],$request->period_to) );
+
+        //$agences_ids = [58];
+
+        //dd($request->period, $request->departement, $request->all());
+
+        $data = $this->getStatsRawByUser($request->period, [$request->departement->id]);
+        //dd($request->all(), $data);
+        return [
+            'departement' => $request->departement,
+            'period' => $request->period ? $request->period['start']->format('d-m-Y') . " ~ " . $request->period['end']->format('d-m-Y') : null,
+            'data' => $data
+        ];
     }
 
     public function fetchmonthsofyear() {
@@ -92,16 +89,6 @@ class DashboardController extends Controller
         return $currentweek;
     }
 
-    public function fetchmonthstats($month) {
-        $esims_stats_month = $this->getEsimsStatsMonth($month);
-        return $esims_stats_month;
-    }
-
-    public function fetchweekstats($week) {
-        $esims_stats_week = $this->getEsimsStatsWeek($week);
-        return $esims_stats_week;
-    }
-
     public function fetchyears() {
         $years = [
             ['label'=> "2022", 'value' => 2022],
@@ -117,8 +104,34 @@ class DashboardController extends Controller
         return ['label'=> $year, 'value' => $year];
     }
 
-    public function fetchyearstats($year) {
-        $esims_stats_year = $this->getEsimsStatsYear($year);
+
+    public function fetchrawstats() {
+        $esims_stats_resume = $this->getEsimsStatsResume();
+        return $esims_stats_resume;
+    }
+
+    public function fetchagencestats($agence)
+    {
+        if (is_null($agence)) {
+            return null;
+        } else {
+            $agence_stats_resume = $this->getAgenceStatsResume($agence);
+            return $agence_stats_resume;
+        }
+    }
+
+    public function fetchweekstats($week, $agence) {
+        $esims_stats_week = $this->getEsimsStatsWeek($week, $agence);
+        return $esims_stats_week;
+    }
+
+    public function fetchmonthstats($month, $agence) {
+        $esims_stats_month = $this->getEsimsStatsMonth($month, $agence);
+        return $esims_stats_month;
+    }
+
+    public function fetchyearstats($year, $agence) {
+        $esims_stats_year = $this->getEsimsStatsYear($year, $agence);
         return $esims_stats_year;
     }
 }

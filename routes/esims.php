@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\EsimStateController;
 use App\Http\Controllers\Esims\EsimController;
 use App\Http\Controllers\Esims\ClientEsimController;
 use App\Http\Controllers\Esims\StatutEsimController;
@@ -13,6 +14,12 @@ Route::get('statutesims.fetch',[StatutEsimController::class,'fetch'])
 Route::get('statutesims.fetchall',[StatutEsimController::class,'fetchall'])
     ->name('statutesims.fetchall')
     ->middleware('auth');
+Route::match(['post'],'statutesims.setnext',[StatutEsimController::class, 'setnext'])
+    ->name('statutesims.setnext')
+    ->middleware('auth');
+Route::match(['post'],'statutesims.modelupdate',[StatutEsimController::class, 'modelupdate'])
+    ->name('statuses.modelupdate')
+    ->middleware('auth');
 
 #endregion
 
@@ -23,6 +30,9 @@ Route::get('esims.fetch',[EsimController::class,'fetch'])
     ->middleware('auth');
 Route::get('esims.fetchall',[EsimController::class,'fetchall'])
     ->name('esims.fetchall')
+    ->middleware('auth');
+Route::get('esims.fetchone/{id}',[EsimController::class,'fetchone'])
+    ->name('esims.fetchone')
     ->middleware('auth');
 
 Route::get('esims.headfiles',[EsimController::class,'headfiles'])
@@ -76,5 +86,15 @@ Route::post('clientesims.checkbeforecreate',[ClientEsimController::class,'checkb
 Route::get('clientesims.checkbeforecreate',[ClientEsimController::class,'checkbeforecreate'])
 ->name('clientesims.checkbeforecreate')
 ->middleware('auth');
+
+Route::match(['put', 'patch'],'clientesims.deletephone/{clientesim}',[ClientEsimController::class,'deletephone'])
+    ->name('clientesims.deletephone')
+    ->middleware('auth');
+
+#endregion
+
+#region EsimState
+
+Route::resource('esimstates',EsimStateController::class)->middleware('auth');
 
 #endregion

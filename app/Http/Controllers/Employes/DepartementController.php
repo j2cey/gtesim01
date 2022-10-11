@@ -11,9 +11,9 @@ class DepartementController extends Controller
 {
 
     public function fetchall() {
-        return Departement::all();
+        return Departement::orderBy('intitule')->get();
     }
-    
+
     /**
      * Display a listing of the resource.
      *

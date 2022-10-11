@@ -2,13 +2,20 @@
 
 namespace App\Http\Controllers\Esims;
 
-use App\Models\StatutEsim;
+use Illuminate\Http\Request;
+use App\Models\Esims\StatutEsim;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreStatutEsimRequest;
-use App\Http\Requests\UpdateStatutEsimRequest;
+use App\Http\Requests\StatutEsim\StoreStatutEsimRequest;
+use App\Http\Requests\StatutEsim\UpdateStatutEsimRequest;
+use App\Http\Requests\StatutEsim\ModelUpdateStatutEsimRequest;
 
 class StatutEsimController extends Controller
 {
+    public function fetchall()
+    {
+        return StatutEsim::get();
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -32,8 +39,8 @@ class StatutEsimController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreStatutEsimRequest  $request
-     * @return \Illuminate\Http\Response
+     * @param StoreStatutEsimRequest $request
+     * @return void
      */
     public function store(StoreStatutEsimRequest $request)
     {
@@ -43,8 +50,8 @@ class StatutEsimController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\StatutEsim  $statutEsim
-     * @return \Illuminate\Http\Response
+     * @param StatutEsim $statutEsim
+     * @return void
      */
     public function show(StatutEsim $statutEsim)
     {
@@ -54,8 +61,8 @@ class StatutEsimController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\StatutEsim  $statutEsim
-     * @return \Illuminate\Http\Response
+     * @param StatutEsim $statutEsim
+     * @return void
      */
     public function edit(StatutEsim $statutEsim)
     {
@@ -65,9 +72,9 @@ class StatutEsimController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdateStatutEsimRequest  $request
-     * @param  \App\Models\StatutEsim  $statutEsim
-     * @return \Illuminate\Http\Response
+     * @param UpdateStatutEsimRequest $request
+     * @param StatutEsim $statutEsim
+     * @return void
      */
     public function update(UpdateStatutEsimRequest $request, StatutEsim $statutEsim)
     {
@@ -77,11 +84,23 @@ class StatutEsimController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\StatutEsim  $statutEsim
-     * @return \Illuminate\Http\Response
+     * @param StatutEsim $statutEsim
+     * @return void
      */
     public function destroy(StatutEsim $statutEsim)
     {
         //
+    }
+
+    public function setnext(Request $request) {
+
+    }
+
+    public function modelupdate(ModelUpdateStatutEsimRequest $request)
+    {
+        $request->model->setStatutEsim($request->status);
+        $request->model->load(['statutesim']);
+
+        return $request->model->statutesim;
     }
 }

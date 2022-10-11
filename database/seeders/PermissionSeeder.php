@@ -40,6 +40,9 @@ class PermissionSeeder extends Seeder
             ['clientesim-esim-attach', 3],
             ['clientesim-esim-dettach', 3],
             ['clientesim-addphone', 3],
+            ['clientesim-deletephone', 2],
+            ['clientesim-list-creator', 2],
+            ['clientesim-list-creator-department', 2],
 
             ['esim-list', 4],
             ['esim-show', 4],
@@ -48,6 +51,11 @@ class PermissionSeeder extends Seeder
             ['esim-delete', 3],
             ['esim-attach', 3],
             ['esim-import', 3],
+            ['esim-attributor-list', 2],
+            ['esim-attributor-department-list', 2],
+            ['esim-phonenum-edit', 3],
+
+            ['esimstate-list', 2],
 
             ['esimqrcode-list', 4],
             ['esimqrcode-create', 3],
@@ -65,13 +73,17 @@ class PermissionSeeder extends Seeder
             ['howtothread-create', 3],
             ['howtothread-edit', 3],
             ['howtothread-delete', 3],
-	    ['howtothread-update-code', 1],
+            ['howtothread-update-code', 1],
 
-            ['stats-list', 4],
+            ['status-list', 1],
+            ['status-create', 1],
+            ['status-edit', 1],
+            ['status-delete', 1],
+            ['status-model-change', 1],
         ];
 
         foreach ($permissions as $permission) {
-            Permission::create(['name' => $permission[0], 'level' => $permission[1]]);
+            Permission::firstOrCreate(['name' => $permission[0], 'level' => $permission[1]]);
         }
     }
 }

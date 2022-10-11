@@ -81,8 +81,17 @@
                                             </thead>
                                             <tbody>
                                             <tr v-for="(phonenum, index) in clientesim.phonenums" :key="phonenum.id" class="tw-text-xs">
-                                                <td><div class="text tw-text-xs border-right">{{ phonenum.numero }}</div></td>
-                                                <td><div class="text tw-text-xs border-right">{{ phonenum.esim.imsi }}</div></td>
+                                                <td><div class="text tw-text-xs border-right">
+                                                    <a v-if="can('esim-phonenum-edit')" class="text text-sm text-primary" data-toggle="tooltip" @click="$emit('edit_phonenum', phonenum)">
+                                                        <small>{{ phonenum.numero }}</small>
+                                                    </a>
+                                                    <small v-else>{{ phonenum.numero }}</small>
+                                                </div></td>
+                                                <td><div class="text tw-text-xs border-right">
+                                                    <a v-if="can('esim-show')" class="text text-sm text-primary" data-toggle="tooltip" @click="showEsim(phonenum.esim)">
+                                                        <small>{{ phonenum.esim.imsi }}</small>
+                                                    </a>
+                                                </div></td>
                                                 <td><div class="text tw-text-xs border-right">{{ phonenum.esim.iccid }}</div></td>
                                                 <td><div class="text tw-text-xs border-right">{{ phonenum.esim.pin }}</div></td>
                                                 <td><div class="text tw-text-xs border-right">{{ phonenum.esim.puk }}</div></td>
@@ -94,6 +103,9 @@
                                                         </a>
                                                         <a v-if="can('clientesim-esim-attach')" type="button" class="btn btn-tool btn-sm text-warning" data-toggle="tooltip" :disabled="loading" @click="changePhoneNumEsim(phonenum)">
                                                             <i class="fa fa-recycle"></i>
+                                                        </a>
+                                                        <a v-if="can('clientesim-deletephone')" type="button" class="btn btn-tool btn-sm text-danger" data-toggle="tooltip" :disabled="loading" @click="deletePhoneNum(phonenum)">
+                                                            <i class="fa fa-trash"></i>
                                                         </a>
                                                     </div>
                                                 </td>
@@ -121,6 +133,8 @@
     import AddUpdateClientesim from "./addupdate.vue";
     import AddPhoneNum from "./addphonenum";
     import ClientEsimBus from "./clientesimBus";
+    import ClientEsimServices from '../clientesims/clientEsimServices'
+    import PhoneNumBus from "./phonenumBus";
 
     class ClientEsim {
         constructor(clientesim) {
@@ -129,13 +143,6 @@
             this.numero_telephone = clientesim.numero_telephone || ''
             this.email = clientesim.email || ''
             this.esim_id = clientesim.esim_id || ''
-        }
-    }
-
-    class PhoneNum {
-        constructor(phonenum) {
-            this.numero = phonenum.numero || ''
-            this.client_esim = phonenum.client_esim || ''
         }
     }
 
@@ -151,6 +158,24 @@
             ClientEsimBus.$on('clientesim_updated', (updclientesim) => {
                 if (this.clientesim.id === updclientesim.id) {
                     this.clientesim = updclientesim
+                }
+            })
+
+            ClientEsimBus.$on('phonenum_esim_changed', ({phonenum, clientesim}) => {
+                if (this.clientesim.id === clientesim.id) {
+                    this.updatePhoneNum(phonenum)
+                }
+            })
+
+            ClientEsimBus.$on('phonenum_deleted', ({phonenum, clientesim}) => {
+                if (this.clientesim.id === clientesim.id) {
+                    this.removePhoneNum(phonenum)
+                }
+            })
+
+            PhoneNumBus.$on('phonenum_updated', (phonenum) => {
+                if (this.clientesim.model_type === phonenum.hasphonenum_type && this.clientesim.id === phonenum.hasphonenum_id) {
+                    this.updatePhoneNum(phonenum)
                 }
             })
         },
@@ -170,8 +195,10 @@
                 this.$emit('edit_clientesim', clientesim)
             },
             showPreviewPDF(phonenum) {
-                /*ClientEsimBus.$emit('show_flowchart', clientesim)*/
-                window.location = '/clientesims.previewpdf/' + phonenum.id
+                ClientEsimServices.showPreviewPDF(phonenum)
+            },
+            showEsim(esim) {
+                window.location = '/esims/' + esim.uuid
             },
             deleteClientEsim(clientesim) {
                 this.$swal({
@@ -204,51 +231,7 @@
                 })
             },
             changePhoneNumEsim(phonenum) {
-                
-                let phonenumForm = new Form(
-                    new PhoneNum({
-                        'numero': phonenum.numero,
-                        'client_esim': this.clientesim
-                    })
-                )
-
-                Swal.fire({
-                    html: '<small>Affecter une nouvelle eSIM au <b>' + phonenum.numero + '</b></small>',
-                    icon: 'warning',
-                    showCancelButton: true,
-                    showLoaderOnConfirm: true,
-                    confirmButtonText: 'Valider',
-                    cancelButtonText: 'Annuler',
-                    preConfirm: () => {
-                        return fetch(`/phonenums.getchangeesim/${phonenum.id}`)
-                        .then(response => {
-                            /*
-                            if (!response.ok) {
-                            throw new Error(response.statusText)
-                            }*/
-                            return response.json()
-                        })
-                        .catch(error => {
-                            console.log("request failed: ", error)
-                            Swal.showValidationMessage(
-                            `Request failed: ${error}`
-                            )
-                        })
-                    }, allowOutsideClick: () => !Swal.isLoading()
-                }).then((result) => {
-                    if (result.value) {
-                        Swal.fire({
-                            html: '<small>Nouvelle eSIM affectée avec Succes !</small>',
-                            icon: 'success',
-                            timer: 3000
-                        }).then(() => {
-                            this.updatePhoneNum(result.value.phonenum)
-                            window.location = '/clientesims.previewpdf/' + result.value.phonenum.id
-                        })
-                    }
-                })
-
-                
+                ClientEsimServices.changePhoneNumEsim(phonenum, this.clientesim)
             },
             updatePhoneNum(phonenum) {
                 let phonenumIndex = this.clientesim.phonenums.findIndex(p => {
@@ -256,6 +239,17 @@
                 })
                 if (phonenumIndex !== -1) {
                     this.clientesim.phonenums.splice(phonenumIndex, 1, phonenum)
+                }
+            },
+            deletePhoneNum(phonenum) {
+                ClientEsimServices.deletePhoneNum(phonenum, this.clientesim)
+            },
+            removePhoneNum(phonenum) {
+                let phonenumIndex = this.clientesim.phonenums.findIndex(p => {
+                    return phonenum.id === p.id
+                })
+                if (phonenumIndex !== -1) {
+                    this.clientesim.phonenums.splice(phonenumIndex, 1)
                 }
             },
             collapseClicked() {

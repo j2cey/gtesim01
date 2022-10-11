@@ -1,7 +1,10 @@
 <?php
 
+use App\Mail\TestMail;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Redis;
 use App\Http\Controllers\PDFController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\UserController;
@@ -16,7 +19,7 @@ use App\Http\Controllers\HowTos\HowToStepController;
 use App\Http\Controllers\HowTos\HowToTypeController;
 use App\Http\Controllers\Authorization\RoleController;
 use App\Http\Controllers\HowTos\HowToThreadController;
-use App\Http\Controllers\Dashboard\DashboardController;
+use App\Http\Controllers\Authorization\PermissionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,56 +32,31 @@ use App\Http\Controllers\Dashboard\DashboardController;
 |
 */
 
+/**
+ * Test mail
+ */
+/*
+Route::get('/send-email', function() {
+    Mail::to('j2cey@j2cey.dev')->send(new TestMail);
+});*/
+
+/**
+ * Test Redis
+ */
+/*Route::get('/store', function() {
+    Redis::set('foo', 'bar');
+});
+
+Route::get('/retrieve', function() {
+    return Redis::get('foo');
+});*/
+
 Route::get('/', function () {
     if (Auth::check()) {
         return view('admin02');
     }
     return redirect('/login');
 })->name('home');
-
-Route::get('dashboards.index',[DashboardController::class,'index'])
-    ->name('dashboards.index')
-    ->middleware('auth');
-
-Route::get('dashboards.fetchrawstats',[DashboardController::class,'fetchrawstats'])
-    ->name('dashboards.fetchrawstats')
-    ->middleware('auth');
-
-Route::get('dashboards.fetchmonthsofyear',[DashboardController::class,'fetchmonthsofyear'])
-    ->name('dashboards.fetchmonthsofyear')
-    ->middleware('auth');
-
-Route::get('dashboards.fetchcurrentmonth',[DashboardController::class,'fetchcurrentmonth'])
-    ->name('dashboards.fetchcurrentmonth')
-    ->middleware('auth');
-
-Route::get('dashboards.fetchweeksofyear',[DashboardController::class,'fetchweeksofyear'])
-    ->name('dashboards.fetchweeksofyear')
-    ->middleware('auth');
-
-Route::get('dashboards.fetchcurrentweek',[DashboardController::class,'fetchcurrentweek'])
-    ->name('dashboards.fetchcurrentweek')
-    ->middleware('auth');
-
-Route::get('dashboards.fetchmonthstats/{month}',[DashboardController::class,'fetchmonthstats'])
-    ->name('dashboards.fetchmonthstats')
-    ->middleware('auth');
-
-Route::get('dashboards.fetchweekstats/{week}',[DashboardController::class,'fetchweekstats'])
-    ->name('dashboards.fetchweekstats')
-    ->middleware('auth');
-
-Route::get('dashboards.fetchyears',[DashboardController::class,'fetchyears'])
-    ->name('dashboards.fetchyears')
-    ->middleware('auth');
-
-Route::get('dashboards.fetchcurrentyear',[DashboardController::class,'fetchcurrentyear'])
-    ->name('dashboards.fetchcurrentyear')
-    ->middleware('auth');
-
-Route::get('dashboards.fetchyearstats/{year}',[DashboardController::class,'fetchyearstats'])
-    ->name('dashboards.fetchyearstats')
-    ->middleware('auth');
 
 require __DIR__.'/auth.php';
 
@@ -91,6 +69,9 @@ Route::get('systems.index',[SystemController::class,'index'])
 Route::resource('settings',SettingController::class);
 Route::get('settings.fetch',[SettingController::class,'fetch'])
     ->name('settings.fetch')
+    ->middleware('auth');
+Route::get('settings.types',[SettingController::class,'settingtypes'])
+    ->name('settings.types')
     ->middleware('auth');
 
 Route::get('audits.index', [AuditController::class,'index'])
@@ -112,7 +93,12 @@ Route::get('uuid.generate',[UuidController::class,'generate'])
 
 #region permissions & roles
 
-Route::get('permissions',[RoleController::class, 'permissions'])->middleware('auth');
+//Route::get('permissions',[RoleController::class, 'permissions'])->middleware('auth');
+
+Route::resource('permissions',PermissionController::class)->middleware('auth');
+Route::get('permissions.fetch',[PermissionController::class,'fetch'])
+    ->name('permissions.fetch')
+    ->middleware('auth');
 
 Route::resource('roles',RoleController::class)->middleware('auth');
 Route::get('roles.fetch',[RoleController::class,'fetch'])
@@ -127,6 +113,10 @@ Route::get('users.fetch',[UserController::class,'fetch'])
 Route::get('users.fetchall',[UserController::class,'fetchall'])
     ->name('users.fetchall')
     ->middleware('auth');
+Route::get('users.fetchone/{id}',[UserController::class,'fetchone'])
+    ->name('users.fetchone')
+    ->middleware('auth');
+
 Route::get('users.online', [UserController::class, 'onlineusers'])
     ->name('users.online')
     ->middleware('auth');

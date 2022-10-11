@@ -2,6 +2,8 @@
 
 namespace App\Http\Resources\Esims;
 
+use App\Models\Esims\Esim;
+use App\Http\Resources\UserResource;
 use App\Http\Resources\StatusResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -29,9 +31,16 @@ class EsimResource extends JsonResource
             'statutesim' => StatutEsimResource::make($this->statutesim),
 
             'phonenum' => $this->phonenum,
+            'technologieesim' => $this->technologieesim,
+            'model_type' => Esim::class,
+
+            'attributor' => UserResource::make($this->attributor),
+            'states' => EsimStateResource::collection($this->states),
 
             'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
 
+            'show_url' => route('esims.show', $this->uuid),
             'edit_url' => route('esims.edit', $this->uuid),
             'destroy_url' => route('esims.destroy', $this->uuid),
         ];

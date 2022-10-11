@@ -1,0 +1,107 @@
+<template>
+    <div class="card card-default" v-if="phonenums">
+
+        <div class="card-body table-responsive p-0">
+            <table class="table table-head-fixed text-nowrap">
+                <thead>
+                <tr>
+                    <th>
+                        <div class="row">
+                            <div class="col-sm-3 col-6">
+
+                            </div>
+                            <div class="col-sm-3 col-6"></div>
+                            <div class="col-sm-3 col-6"></div>
+                            <div class="col-sm-3 col-6">
+                                <div class="btn-group">
+                                    <div class="input-group input-group-sm">
+                                        <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search" v-model="searchPhonescreated">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-navbar" type="button">
+                                                <i class="fas fa-search"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-3 col-6">
+                                <span class="text text-sm">Numero</span>
+                            </div>
+                            <!-- /.col -->
+                            <div class="col-sm-4 col-6">
+                                <span class="text text-sm">IMSI</span>
+                            </div>
+                            <!-- /.col -->
+                            <div class="col-sm-3 col-6">
+                                <span class="text text-sm">ICCID</span>
+                            </div>
+                            <!-- /.col -->
+                            <div class="col-sm-2 col-6">
+                                <span class="text text-sm">Date</span>
+                            </div>
+                        </div>
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="(phonenum, index) in phonenums" v-if="phonenums" :key="phonenum.id" class="text text-xs">
+                    <td>
+
+                        <div class="row">
+                            <div class="col-sm-3 col-6 border-right">
+                                <span class="text text-sm">{{ phonenum.numero }}</span>
+                            </div>
+                            <!-- /.col -->
+                            <div class="col-sm-4 col-6 border-right">
+                                <span class="text text-xs">{{ phonenum.esim.imsi }}</span>
+                            </div>
+                            <!-- /.col -->
+                            <div class="col-sm-3 col-6 border-right">
+                                <span class="text text-xs">{{ phonenum.esim.iccid }}</span>
+                            </div>
+                            <!-- /.col -->
+
+                            <div class="col-sm-2 col-6 border-right">
+                                <span class="text text-xs">{{ phonenum.numero.created_at | formatDate }}</span>
+                            </div>
+                            <!-- /.col -->
+
+                        </div>
+
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</template>
+
+<script>
+
+    export default {
+        name: "phonesesimcreated-details",
+        props: {
+            phonenums_prop: [],
+        },
+        components: {
+        },
+        mounted() {
+
+        },
+        created() {
+            console.log("phonenums_prop: ", this.phonenums_prop)
+        },
+        data() {
+            return {
+                phonenums: this.phonenums_prop,
+                searchPhonescreated: null,
+            };
+        },
+    }
+</script>
+
+<style scoped>
+
+</style>

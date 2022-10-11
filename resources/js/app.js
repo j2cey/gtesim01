@@ -167,6 +167,8 @@ Vue.component("clientesim-show", require("./views/clientesims/show").default);
 
 Vue.component("esim-addupdate", require("./views/esims/addupdate").default);
 Vue.component("esims-file-upload", require("./views/esims/fileUpload").default);
+Vue.component("esim-show", require("./views/esims/show").default);
+
 Vue.component("uuid-generator", require("./views/uuid/generator").default);
 
 Vue.component("howto-addupdate", require("./views/howtos/addupdate").default);
@@ -177,6 +179,7 @@ Vue.component("howtothread-show", require("./views/howtothreads/show").default);
 Vue.component("howtothread-read", require("./views/howtothreads/read/index").default);
 
 Vue.component("esims-dashboard", require("./views/dashboard/esims").default);
+Vue.component("dashboard-details", require("./views/dashboard/details").default);
 Vue.component("charts-index", require("./views/chartjs/index").default);
 
 /**

@@ -3,6 +3,8 @@
 namespace App\Http\Requests\Role;
 
 
+use App\Models\Authorization\Role;
+
 class UpdateRoleRequest extends RoleRequest
 {
     /**
@@ -22,10 +24,7 @@ class UpdateRoleRequest extends RoleRequest
      */
     public function rules()
     {
-        return [
-            'name' => 'required',
-            'permissions' => 'required',
-        ];
+        return Role::updateRules($this->role);
     }
 
     /**

@@ -62,11 +62,99 @@
         <!-- /.row -->
 
         <div class="row">
+            <div class="col-12 col-sm-6 col-md-3">
+                <div class="row mb-3 no-gutters" style="padding: 0 !important;">
+                    <div class="col-10">
+                        <multiselect
+                            id="m_select_departement"
+                            v-model="currdepartement"
+                            selected.sync="departements"
+                            value=""
+                            :options="departements"
+                            :searchable="true"
+                            :multiple="false"
+                            label="intitule"
+                            track-by="id"
+                            key="id"
+                            placeholder="Agence"
+                            @input="fetchallstats"
+                            :disabled="someFetchsAreLoading"
+                        >
+                        </multiselect>
+                    </div>
+                    <div class="col-2">
+                        <b-button :loading="someFetchsAreLoading" type="is-light" size="is-small" @click="clearSelectedAgence()"><i class="fa fa-times"></i></b-button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-6 col-md-3" v-if="agenceHasStats">
+                <div class="info-box bg-danger">
+                    <span class="info-box-icon"><i class="far fa-thumbs-up"></i></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text text-sm">eSIM affectées <small>(agence)</small> </span>
+                        <span class="info-box-number">{{ agencestats ? agencestats.attribuees : 0 }} <span class="badge badge-light">{{ attribueesAgenceRate }}%</span> </span>
+
+                        <div class="progress">
+                            <div class="progress-bar" :style=" 'width:' + attribueesAgenceRate + '%;'"></div>
+                        </div>
+                        <span class="progress-description"></span>
+                    </div>
+                    <!-- /.info-box-content -->
+                </div>
+                <!-- /.info-box -->
+            </div>
+            <!-- /.col -->
+
+            <!-- fix for small devices only -->
+            <div class="clearfix hidden-md-up" v-if="agenceHasStats"></div>
+
+            <div class="col-12 col-sm-6 col-md-3" v-if="agenceHasStats">
+                <div class="info-box bg-success">
+                    <span class="info-box-icon"><i class="fa fa-shopping-cart"></i></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text text-sm">Clients eSIM <small>(agence)</small> </span>
+                        <span class="info-box-number">{{ agencestats ? agencestats.clientsesim : 0 }} <span class="badge badge-light">{{ clientsesimAgenceRate }}%</span> </span>
+
+                        <div class="progress">
+                            <div class="progress-bar" :style=" 'width:' + clientsesimAgenceRate + '%;'"></div>
+                        </div>
+                        <span class="progress-description"></span>
+                    </div>
+                    <!-- /.info-box-content -->
+                </div>
+                <!-- /.info-box -->
+            </div>
+            <!-- /.col -->
+            <div class="col-12 col-sm-6 col-md-3" v-if="agenceHasStats">
+                <div class="info-box bg-warning">
+                    <span class="info-box-icon"><i class="fa fa-users"></i></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text text-sm">Utilisateurs actifs <small>(agence)</small> </span>
+                        <span class="info-box-number">{{ agencestats ? agencestats.activesusers : 0 }} <span class="badge badge-light">{{ activesusersAgenceRate }}%</span> </span>
+
+                        <div class="progress">
+                            <div class="progress-bar" :style=" 'width:' + activesusersAgenceRate + '%;'"></div>
+                        </div>
+                        <span class="progress-description"><a @click="showDahboardDetails(currdepartement)" class="small-box-footer">Plus de details <i class="fas fa-arrow-circle-right"></i></a>
+                        </span>
+                    </div>
+                    <!-- /.info-box-content -->
+                </div>
+                <!-- /.info-box -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+
+        <div class="row">
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
                         <div class="col-md-6 col-sm-8 col-12">
-                            <h5 class="card-title">Recap Hebdomadaire</h5>
+                            <h5 class="card-title">Recap Hebdomadaire <small> {{ agenceHasStats ? " (" + currdepartement.intitule + ")" : "" }} </small> </h5>
                         </div>
 
                         <div class="col-md-6 col-sm-4 col-12 text-right">
@@ -94,7 +182,7 @@
                         <div class="row">
                             <div class="col-md-8">
                                 <p class="text-center">
-                                    <strong>Affectations Hebdo</strong>
+                                    <span class="text text-sm text-bold">Affectations Hebdo</span>
                                 </p>
 
                                 <div class="chart">
@@ -105,30 +193,30 @@
                             <!-- /.col -->
                             <div class="col-md-4">
                                 <p class="text-center">
-                                    <strong>Top Agences</strong>
+                                    <span class="text text-sm text-bold">{{ topPerformsLabel }}</span>
                                 </p>
 
-                                <div class="progress-group" v-if="weekstats && weekstats.agence_first">
-                                    <span class="progress-text">{{ weekstats.agence_first.label_full }}</span>
-                                    <span class="float-right"><b>{{ weekstats.agence_first.count }}</b>/{{ weekstats.count }}</span>
+                                <div class="progress-group" v-if="weekstats && weekstats.statlabel_first">
+                                    <span class="progress-text text text-xs">{{ weekstats.statlabel_first.label_full }}</span>
+                                    <span class="float-right text text-sm"><b>{{ weekstats.statlabel_first.count }}</b>/{{ weekstats.count }}</span>
                                     <div class="progress progress-sm">
-                                        <div class="progress-bar" :style=" 'width:' + weekstats.agence_first.rate + '%; background-color:' + weekstats.agence_first.color.hex "></div>
+                                        <div class="progress-bar" :style=" 'width:' + weekstats.statlabel_first.rate + '%; background-color:' + weekstats.statlabel_first.color.hex "></div>
                                     </div>
                                 </div>
 
-                                <div class="progress-group" v-if="weekstats && weekstats.agence_second">
-                                    <span class="progress-text">{{ weekstats.agence_second.label_full }}</span>
-                                    <span class="float-right"><b>{{ weekstats.agence_second.count }}</b>/{{ weekstats.count }}</span>
+                                <div class="progress-group" v-if="weekstats && weekstats.statlabel_second">
+                                    <span class="progress-text text text-xs">{{ weekstats.statlabel_second.label_full }}</span>
+                                    <span class="float-right text text-sm"><b>{{ weekstats.statlabel_second.count }}</b>/{{ weekstats.count }}</span>
                                     <div class="progress progress-sm">
-                                        <div class="progress-bar" :style=" 'width:' + weekstats.agence_second.rate + '%; background-color:' + weekstats.agence_second.color.hex "></div>
+                                        <div class="progress-bar" :style=" 'width:' + weekstats.statlabel_second.rate + '%; background-color:' + weekstats.statlabel_second.color.hex "></div>
                                     </div>
                                 </div>
 
-                                <div class="progress-group" v-if="weekstats && weekstats.agence_third">
-                                    <span class="progress-text">{{ weekstats.agence_third.label_full }}</span>
-                                    <span class="float-right"><b>{{ weekstats.agence_third.count }}</b>/{{ weekstats.count }}</span>
+                                <div class="progress-group" v-if="weekstats && weekstats.statlabel_third">
+                                    <span class="progress-text text text-xs">{{ weekstats.statlabel_third.label_full }}</span>
+                                    <span class="float-right text text-sm"><b>{{ weekstats.statlabel_third.count }}</b>/{{ weekstats.count }}</span>
                                     <div class="progress progress-sm">
-                                        <div class="progress-bar" :style=" 'width:' + weekstats.agence_third.rate + '%; background-color:' + weekstats.agence_third.color.hex "></div>
+                                        <div class="progress-bar" :style=" 'width:' + weekstats.statlabel_third.rate + '%; background-color:' + weekstats.statlabel_third.color.hex "></div>
                                     </div>
                                 </div>
 
@@ -138,6 +226,9 @@
                         <!-- /.row -->
                     </div>
                     <!-- ./card-body -->
+                    <div v-if="weekstats_loading" class="overlay dark">
+                        <i class="fas fa-2x fa-sync-alt fa-spin"></i>
+                    </div>
                 </div>
                 <!-- /.card -->
             </div>
@@ -150,7 +241,7 @@
                 <div class="card">
                     <div class="card-header">
                         <div class="col-md-6 col-sm-8 col-12">
-                            <h5 class="card-title">Recap Mensuel</h5>
+                            <h5 class="card-title">Recap Mensuel <small> {{ agenceHasStats ? " (" + currdepartement.intitule + ")" : "" }} </small> </h5>
                         </div>
 
                         <div class="col-md-6 col-sm-4 col-12 text-right">
@@ -178,7 +269,7 @@
                         <div class="row">
                             <div class="col-md-8">
                                 <p class="text-center">
-                                    <strong>Affectations Mensuelles</strong>
+                                    <span class="text text-sm text-bold">Affectations Mensuelles</span>
                                 </p>
 
                                 <div class="chart">
@@ -189,30 +280,30 @@
                             <!-- /.col -->
                             <div class="col-md-4">
                                 <p class="text-center">
-                                    <strong>Top Agences</strong>
+                                    <span class="text text-sm text-bold">{{ topPerformsLabel }}</span>
                                 </p>
 
-                                <div class="progress-group" v-if="monthstats && monthstats.agence_first">
-                                    <span class="progress-text">{{ monthstats.agence_first.label_full }}</span>
-                                    <span class="float-right"><b>{{ monthstats.agence_first.count }}</b>/{{ monthstats.count }}</span>
+                                <div class="progress-group" v-if="monthstats && monthstats.statlabel_first">
+                                    <span class="progress-text text text-xs">{{ monthstats.statlabel_first.label_full }}</span>
+                                    <span class="float-right text text-sm"><b>{{ monthstats.statlabel_first.count }}</b>/{{ monthstats.count }}</span>
                                     <div class="progress progress-sm">
-                                        <div class="progress-bar" :style=" 'width:' + monthstats.agence_first.rate + '%; background-color:' + monthstats.agence_first.color.hex "></div>
+                                        <div class="progress-bar" :style=" 'width:' + monthstats.statlabel_first.rate + '%; background-color:' + monthstats.statlabel_first.color.hex "></div>
                                     </div>
                                 </div>
 
-                                <div class="progress-group" v-if="monthstats && monthstats.agence_second">
-                                    <span class="progress-text">{{ monthstats.agence_second.label_full }}</span>
-                                    <span class="float-right"><b>{{ monthstats.agence_second.count }}</b>/{{ monthstats.count }}</span>
+                                <div class="progress-group" v-if="monthstats && monthstats.statlabel_second">
+                                    <span class="progress-text text text-xs">{{ monthstats.statlabel_second.label_full }}</span>
+                                    <span class="float-right text text-sm"><b>{{ monthstats.statlabel_second.count }}</b>/{{ monthstats.count }}</span>
                                     <div class="progress progress-sm">
-                                        <div class="progress-bar" :style=" 'width:' + monthstats.agence_second.rate + '%; background-color:' + monthstats.agence_second.color.hex "></div>
+                                        <div class="progress-bar" :style=" 'width:' + monthstats.statlabel_second.rate + '%; background-color:' + monthstats.statlabel_second.color.hex "></div>
                                     </div>
                                 </div>
 
-                                <div class="progress-group" v-if="monthstats && monthstats.agence_third">
-                                    <span class="progress-text">{{ monthstats.agence_third.label_full }}</span>
-                                    <span class="float-right"><b>{{ monthstats.agence_third.count }}</b>/{{ monthstats.count }}</span>
+                                <div class="progress-group" v-if="monthstats && monthstats.statlabel_third">
+                                    <span class="progress-text text text-xs">{{ monthstats.statlabel_third.label_full }}</span>
+                                    <span class="float-right text text-sm"><b>{{ monthstats.statlabel_third.count }}</b>/{{ monthstats.count }}</span>
                                     <div class="progress progress-sm">
-                                        <div class="progress-bar" :style=" 'width:' + monthstats.agence_third.rate + '%; background-color:' + monthstats.agence_third.color.hex "></div>
+                                        <div class="progress-bar" :style=" 'width:' + monthstats.statlabel_third.rate + '%; background-color:' + monthstats.statlabel_third.color.hex "></div>
                                     </div>
                                 </div>
 
@@ -222,6 +313,9 @@
                         <!-- /.row -->
                     </div>
                     <!-- ./card-body -->
+                    <div v-if="monthstats_loading" class="overlay dark">
+                        <i class="fas fa-2x fa-sync-alt fa-spin"></i>
+                    </div>
                 </div>
                 <!-- /.card -->
             </div>
@@ -234,7 +328,7 @@
                 <div class="card">
                     <div class="card-header">
                         <div class="col-md-6 col-sm-8 col-12">
-                            <h5 class="card-title">Recap Annuel</h5>
+                            <h5 class="card-title">Recap Annuel <small> {{ agenceHasStats ? " (" + currdepartement.intitule + ")" : "" }} </small> </h5>
                         </div>
 
                         <div class="col-md-6 col-sm-4 col-12 text-right">
@@ -262,7 +356,7 @@
                         <div class="row">
                             <div class="col-md-8">
                                 <p class="text-center">
-                                    <strong>Affectations Annuelles</strong>
+                                    <span class="text text-sm text-bold">Affectations Annuelles</span>
                                 </p>
 
                                 <div class="chart">
@@ -273,30 +367,30 @@
                             <!-- /.col -->
                             <div class="col-md-4">
                                 <p class="text-center">
-                                    <strong>Top Agences</strong>
+                                    <span class="text text-sm text-bold">{{ topPerformsLabel }}</span>
                                 </p>
 
-                                <div class="progress-group" v-if="yearstats && yearstats.agence_first">
-                                    <span class="progress-text">{{ yearstats.agence_first.label_full }}</span>
-                                    <span class="float-right"><b>{{ yearstats.agence_first.count }}</b>/{{ yearstats.count }}</span>
+                                <div class="progress-group" v-if="yearstats && yearstats.statlabel_first">
+                                    <span class="progress-text text text-xs">{{ yearstats.statlabel_first.label_full }}</span>
+                                    <span class="float-right text text-sm"><b>{{ yearstats.statlabel_first.count }}</b>/{{ yearstats.count }}</span>
                                     <div class="progress progress-sm">
-                                        <div class="progress-bar" :style=" 'width:' + yearstats.agence_first.rate + '%; background-color:' + yearstats.agence_first.color.hex "></div>
+                                        <div class="progress-bar" :style=" 'width:' + yearstats.statlabel_first.rate + '%; background-color:' + yearstats.statlabel_first.color.hex "></div>
                                     </div>
                                 </div>
 
-                                <div class="progress-group" v-if="yearstats && yearstats.agence_second">
-                                    <span class="progress-text">{{ yearstats.agence_second.label_full }}</span>
-                                    <span class="float-right"><b>{{ yearstats.agence_second.count }}</b>/{{ yearstats.count }}</span>
+                                <div class="progress-group" v-if="yearstats && yearstats.statlabel_second">
+                                    <span class="progress-text text text-xs">{{ yearstats.statlabel_second.label_full }}</span>
+                                    <span class="float-right text text-sm"><b>{{ yearstats.statlabel_second.count }}</b>/{{ yearstats.count }}</span>
                                     <div class="progress progress-sm">
-                                        <div class="progress-bar" :style=" 'width:' + yearstats.agence_second.rate + '%; background-color:' + yearstats.agence_second.color.hex "></div>
+                                        <div class="progress-bar" :style=" 'width:' + yearstats.statlabel_second.rate + '%; background-color:' + yearstats.statlabel_second.color.hex "></div>
                                     </div>
                                 </div>
 
-                                <div class="progress-group" v-if="yearstats && yearstats.agence_third">
-                                    <span class="progress-text">{{ yearstats.agence_third.label_full }}</span>
-                                    <span class="float-right"><b>{{ yearstats.agence_third.count }}</b>/{{ yearstats.count }}</span>
+                                <div class="progress-group" v-if="yearstats && yearstats.statlabel_third">
+                                    <span class="progress-text text text-xs">{{ yearstats.statlabel_third.label_full }}</span>
+                                    <span class="float-right text text-sm"><b>{{ yearstats.statlabel_third.count }}</b>/{{ yearstats.count }}</span>
                                     <div class="progress progress-sm">
-                                        <div class="progress-bar" :style=" 'width:' + yearstats.agence_third.rate + '%; background-color:' + yearstats.agence_third.color.hex "></div>
+                                        <div class="progress-bar" :style=" 'width:' + yearstats.statlabel_third.rate + '%; background-color:' + yearstats.statlabel_third.color.hex "></div>
                                     </div>
                                 </div>
 
@@ -306,6 +400,9 @@
                         <!-- /.row -->
                     </div>
                     <!-- ./card-body -->
+                    <div v-if="yearstats_loading" class="overlay dark">
+                        <i class="fas fa-2x fa-sync-alt fa-spin"></i>
+                    </div>
                 </div>
                 <!-- /.card -->
             </div>
@@ -335,9 +432,14 @@
 
             this.inityearstats()
         },
+        created() {
+            axios.get('/departements.fetchall')
+                .then(({data}) => this.departements = data);
+        },
         data() {
             return {
                 rawstats: null,
+                agencestats: null,
 
                 monthsofyear: [],
                 currentmonth: null,
@@ -355,12 +457,23 @@
                 week_key: 0,
                 year_key: 0,
 
+                departements: [],
+                currdepartement: null,
+
                 month_chart_data_key: '_month_chart_data_' + 0,
                 week_chart_data_key: '_week_chart_data_' + 0,
                 year_chart_data_key: '_year_chart_data_' + 0,
+
+                weekstats_loading: true,
+                monthstats_loading: true,
+                yearstats_loading: true,
             }
         },
         methods: {
+
+            showDahboardDetails(agence) {
+                window.location = '/dashboards.details/' + agence.id
+            },
 
             forceRerenderMonthLineChart() {
                 this.month_key += 1;
@@ -396,11 +509,30 @@
                 this.fetchrawstats()
             },
 
+            clearSelectedAgence() {
+
+                if ( this.currdepartement !== null ) {
+                    this.currdepartement = null
+                    this.fetchallstats()
+                }
+
+            },
+
             fetchrawstats() {
                 axios.get('/dashboards.fetchrawstats')
                     .then(({data}) => {
                         //console.log("rawstats: ", data);
                         this.rawstats = data
+                        return data
+                    });
+            },
+
+            fetchagencestats() {
+                let agence = this.currdepartement ? this.currdepartement.id : -1
+                axios.get('/dashboards.fetchagencestats/' + agence)
+                    .then(({data}) => {
+                        //console.log("rawstats: ", data);
+                        this.agencestats = data
                         return data
                     });
             },
@@ -425,10 +557,14 @@
                     });
             },
             fetchmonthstats() {
-                let month = this.currentmonth.value
+                this.monthstats_loading = true
 
-                axios.get('/dashboards.fetchmonthstats/' + month)
+                let month = this.currentmonth.value
+                let agence = this.currdepartement ? this.currdepartement.id : -1
+
+                axios.get('/dashboards.fetchmonthstats/' + month + '/' + agence)
                     .then(({data}) => {
+                        this.monthstats_loading = false
                         //console.log("monthstats (" + month + "): ", data);
                         this.monthstats = data
                         this.forceRerenderMonthLineChart()
@@ -456,10 +592,15 @@
                     });
             },
             fetchweekstats() {
-                let week = this.currentweek.value
+                this.weekstats_loading = true
 
-                axios.get('/dashboards.fetchweekstats/' + week)
+                let week = this.currentweek.value
+                let agence = this.currdepartement ? this.currdepartement.id : -1
+
+                axios.get('/dashboards.fetchweekstats/' + week + '/' + agence)
                     .then(({data}) => {
+                        this.weekstats_loading = false
+
                         //console.log("monthstats (" + month + "): ", data);
                         this.weekstats = data
                         this.forceRerenderWeekLineChart()
@@ -486,22 +627,33 @@
                     });
             },
             fetchyearstats() {
-                let year = this.currentyear.value
+                this.yearstats_loading = true
 
-                axios.get('/dashboards.fetchyearstats/' + year)
+                let year = this.currentyear.value
+                let agence = this.currdepartement ? this.currdepartement.id : -1
+
+                axios.get('/dashboards.fetchyearstats/' + year + '/' + agence)
                     .then(({data}) => {
+                        this.yearstats_loading = false
+
                         this.yearstats = data
                         this.forceRerenderYearLineChart()
                         return data
                     });
             },
 
+            fetchallstats() {
+                this.fetchagencestats()
+
+                this.fetchweekstats()
+                this.fetchmonthstats()
+                this.fetchyearstats()
+            },
+
             getChartData(chartjsdata) {
                 let cdata = null;
 
                 if (chartjsdata) {
-                    //console.log("computed monthChartData: ", this.monthstats)
-                    //console.log("computed agences: ", Object.values( this.monthstats.agences ))
                     cdata = {
                         labels: chartjsdata.labels,
                         datasets: []
@@ -521,6 +673,9 @@
                             'borderColor': chartjsdata.datasets[i].borderColor,
                             'borderWidth': chartjsdata.datasets[i].borderWidth,
                             'fill': chartjsdata.datasets[i].fill,
+
+                            pointBackgroundColor: 'black',
+                            pointBorderColor: chartjsdata.datasets[i].backgroundColor,
 
                             'data': Object.values( chartjsdata.datasets[i].data )
                         }
@@ -542,6 +697,32 @@
             yearChartData() {
                 return this.yearstats ? this.getChartData( this.yearstats.chartjsdata ) : null;
             },
+
+            agenceHasStats() {
+                return !!(this.currdepartement && this.agencestats);
+                /*if (this.currdepartement && this.agencestats) {
+                    return (this.agencestats.attribuees > 0) || (this.agencestats.clientsesim > 0) || (this.agencestats.activesusers > 0)
+                } else {
+                    return false
+                }*/
+            },
+            attribueesAgenceRate() {
+                return this.agencestats ? parseFloat( this.agencestats.attribuees / this.rawstats.attribuees ).toFixed(2) : null
+            },
+            clientsesimAgenceRate() {
+                return this.agencestats ? parseFloat( this.agencestats.clientsesim / this.rawstats.clientsesim ).toFixed(2) : null
+            },
+            activesusersAgenceRate() {
+                return this.agencestats ? parseFloat( this.agencestats.activesusers / this.rawstats.activesusers ).toFixed(2) : null
+            },
+
+            topPerformsLabel() {
+                return this.agenceHasStats ? "Top Agents" : "Top Agences"
+            },
+
+            someFetchsAreLoading() {
+                return this.weekstats_loading || this.monthstats_loading || this.yearstats_loading
+            }
         }
     }
 </script>

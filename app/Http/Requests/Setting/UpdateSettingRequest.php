@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests\Setting;
 
+use App\Models\Setting;
+
 class UpdateSettingRequest extends SettingRequest
 {
     /**
@@ -21,9 +23,7 @@ class UpdateSettingRequest extends SettingRequest
      */
     public function rules()
     {
-        return [
-            //
-        ];
+        return Setting::updateRules($this->setting);
     }
 
     /**

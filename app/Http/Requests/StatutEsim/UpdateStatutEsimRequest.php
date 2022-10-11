@@ -2,9 +2,7 @@
 
 namespace App\Http\Requests\StatutEsim;
 
-use Illuminate\Foundation\Http\FormRequest;
-
-class UpdateStatutEsimRequest extends FormRequest
+class UpdateStatutEsimRequest extends StatutEsimRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,7 +11,7 @@ class UpdateStatutEsimRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**

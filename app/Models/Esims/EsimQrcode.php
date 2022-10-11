@@ -6,6 +6,7 @@ use App\Models\BaseModel;
 use Illuminate\Support\Facades\Storage;
 use OwenIt\Auditing\Contracts\Auditable;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
@@ -50,7 +51,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  */
 class EsimQrcode extends BaseModel implements Auditable
 {
-    use HasFactory, \OwenIt\Auditing\Auditable;
+    use HasFactory, SoftDeletes, \OwenIt\Auditing\Auditable;
 
     protected $guarded = [];
 
@@ -114,8 +115,8 @@ class EsimQrcode extends BaseModel implements Auditable
             'raw_value' => $raw_value,
         ]);
 
-        $esimqrcode->esim()->associate($esim); 
-        
+        $esimqrcode->esim()->associate($esim);
+
         $esimqrcode->save();
 
         $esimqrcode->generateQrcodeImage();
@@ -126,7 +127,7 @@ class EsimQrcode extends BaseModel implements Auditable
     public function generateQrcodeImage() {
         // <img src="data:image/png;base64, {{ base64_encode(QrCode::format('png')->size(150)->generate($client->esim->ac)) }} ">
         //$directory = "esim_fichier_qrcode";
-        
+
         //$file_dir = config('app.' . self::CONFIG_DIR);
         $file_name = md5(self::CONFIG_DIR . '_' . time()) . '.png';
         //$output_file = $this->image_folderpath . $file_name;
@@ -138,7 +139,7 @@ class EsimQrcode extends BaseModel implements Auditable
             //->merge('img/jpg', 0.1, true)
             ->size(200)->errorCorrection('H')
             ->generate($this->raw_value, $this->image_fullpath);
-            
+
         //Storage::disk('public')->put($output_file, $image);
     }
 
@@ -150,7 +151,7 @@ class EsimQrcode extends BaseModel implements Auditable
 
         // juste avant suppression
         self::creating(function($model){
-            
+
         });
     }
 }

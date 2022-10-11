@@ -103,7 +103,7 @@
             })
         },
         created() {
-            axios.get('/permissions')
+            axios.get('/permissions.fetch')
                 .then(({data}) => this.permissions = data);
         },
         data() {

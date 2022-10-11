@@ -3,11 +3,14 @@
 namespace App\Models;
 
 use GuzzleHttp\Client;
+use App\Models\Esims\Esim;
 use App\Traits\Base\BaseTrait;
 use Illuminate\Support\Carbon;
 use App\Models\Comments\Comment;
 use App\Models\Employes\Employe;
 use App\Models\Ldap\LdapAccount;
+use App\Models\Esims\ClientEsim;
+use App\Models\Employes\PhoneNum;
 use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
@@ -19,6 +22,8 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use LaravelAndVueJS\Traits\LaravelPermissionToVueJS;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use phpDocumentor\Reflection\PseudoTypes\LiteralString;
+use function PHPUnit\Framework\isNull;
 
 /**
  * Class User
@@ -34,6 +39,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @property string $username
  * @property Carbon|null $email_verified_at
  * @property string $password
+ * @property string|null $local_password
+ * @property string|null $ldap_password
  * @property string|null $image
  * @property boolean $is_local
  * @property boolean $is_ldap
@@ -109,6 +116,7 @@ class User extends Authenticatable implements Auditable
         'ldap_account_id'
     ];*/
     protected $guarded = [];
+    protected $appends = ['model_type'];
 
     public function getRouteKeyName() { return 'uuid'; }
 
@@ -136,6 +144,9 @@ class User extends Authenticatable implements Auditable
     public static function defaultRules() {
         return [
             'name' => ['required','string',],
+            'username' => ['required'],
+            'status' => ['required'],
+            'roles' => ['required'],
         ];
     }
     public static function createRules()  {
@@ -143,6 +154,7 @@ class User extends Authenticatable implements Auditable
             'email' => ['required',
                 'unique:users,email,NULL,id',
             ],
+            'password' => ['required'],
         ]);
     }
     public static function updateRules($model) {
@@ -155,6 +167,16 @@ class User extends Authenticatable implements Auditable
     public static function validationMessages() {
         return [];
     }
+
+    #endregion
+
+    #region Accessors & Mutators
+
+    public function getModelTypeAttribute() {
+        return User::class;
+    }
+
+    #endregion
 
     #region Eloquent Relationships
 
@@ -180,6 +202,16 @@ class User extends Authenticatable implements Auditable
     public function employe()
     {
         return $this->hasOne(Employe::class);
+    }
+
+    public function phonesesimcreated() {
+        return $this->hasMany(PhoneNum::class, "created_by", "id")
+            ->where('hasphonenum_type', ClientEsim::class)
+            ;
+    }
+
+    public function esimsattributed() {
+        return $this->hasMany(Esim::class, "attributed_by", "id");
     }
 
     #endregion
@@ -251,6 +283,51 @@ class User extends Authenticatable implements Auditable
                 \Log::error($error_message);
             }
         }
+    }
+
+    public function switchLocalPassword() {
+        if ( is_null($this->local_password) ) {
+            $this->local_password = $this->password;
+        } else {
+            $this->password = $this->local_password;
+        }
+        $this->saveQuietly();
+    }
+
+    public function setPassword($password) {
+        if ( ! is_null($password) ) {
+            $this->password = $this->getPasswordHash($password);
+            $this->saveQuietly();
+        }
+    }
+
+    public function setLocalPassword($password) {
+        if ( ! is_null($password) && $this->is_local ) {
+            $this->local_password = $this->getPasswordHash($password);
+            $this->saveQuietly();
+        }
+    }
+
+    private function getPasswordHash($password) {
+        return bcrypt($password);
+    }
+
+    #endregion
+
+    #region BOOT
+
+    public static function boot(){
+        parent::boot();
+
+        // when creation
+        self::saving(function($model){
+            // set additional passwords
+            if ( $model->is_local && is_null($model->local_password) ) {
+                $model->local_password = $model->password;
+            } elseif ( $model->is_ldap && is_null($model->ldap_password) ) {
+                $model->ldap_password = $model->password;
+            }
+        });
     }
 
     #endregion

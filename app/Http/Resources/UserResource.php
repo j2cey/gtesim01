@@ -2,9 +2,11 @@
 
 namespace App\Http\Resources;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Resources\Employes\EmployeResource;
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Http\Resources\Employes\PhoneNumResource;
 
 /**
  * Class UserResource
@@ -43,6 +45,11 @@ class UserResource extends JsonResource
 
             'status' => StatusResource::make($this->status),
             'created_at' => $this->created_at,
+
+            'roles' => $this->roles,
+            'phonesesimcreated' => PhoneNumResource::collection($this->phonesesimcreated),
+
+            'model_type' => User::class,
 
             'edit_url' => route('users.edit', $this->uuid),
             'destroy_url' => route('users.destroy', $this->uuid),

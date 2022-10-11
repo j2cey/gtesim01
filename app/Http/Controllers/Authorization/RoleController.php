@@ -2,20 +2,21 @@
 
 namespace App\Http\Controllers\Authorization;
 
-use Illuminate\Http\Response;
 use Illuminate\Http\Request;
-use Spatie\Permission\Models\Role;
+use Illuminate\Http\Response;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
+use App\Models\Authorization\Role;
 use Illuminate\Contracts\View\View;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Database\Eloquent\Model;
-use Spatie\Permission\Models\Permission;
+use App\Models\Authorization\Permission;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use App\Http\Requests\Role\StoreRoleRequest;
 use App\Http\Requests\Role\UpdateRoleRequest;
-use Illuminate\Validation\ValidationException;
 use Illuminate\Contracts\Foundation\Application;
 
 class RoleController extends Controller
@@ -63,37 +64,36 @@ class RoleController extends Controller
      */
     public function create()
     {
-        $permission = Permission::get();
+        $permission = (new PermissionController())->fetchall();
         return view('roles.create',compact('permission'));
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param Request $request
+     * @param StoreRoleRequest $request
      * @return Builder|Model|Response
-     * @throws ValidationException
      */
-    public function store(Request $request)
+    public function store(StoreRoleRequest $request)
     {
-        $this->validate($request, [
-            'name' => 'required|unique:roles,name',
-            'permissions' => 'required',
-        ]);
-
-        $perm_list = [];
+        /*$perm_list = [];
         foreach ($request->input('permissions') as $perm) {
             $perm_list[] = $perm["name"];
-        }
+        }*/
 
-        $role = Role::create(['name' => $request->input('name')]);
-        $role->syncPermissions($perm_list);
+        $role = Role::create([
+            'name' => $request->name,
+            'description' => $request->description,
+        ]);
+
+        $role->syncPermissions($request->permissions);
 
         return $role->load(['permissions']);
 
         /*return redirect()->route('roles.index')
             ->with('success','Role created successfully');*/
     }
+
     /**
      * Display the specified resource.
      *
@@ -131,17 +131,15 @@ class RoleController extends Controller
      * Update the specified resource in storage.
      *
      * @param UpdateRoleRequest $request
-     * @param int $id
-     * @return void
+     * @param Role $role
+     * @return Role
      */
-    public function update(UpdateRoleRequest $request, $id)
+    public function update(UpdateRoleRequest $request, Role $role)
     {
         /*$this->validate($request, [
             'name' => 'required',
             'permissions' => 'required',
         ]);*/
-
-        $role = Role::find($id);
         $role->update([
             'name' => $request->name,
             'description' => $request->description,
@@ -154,21 +152,21 @@ class RoleController extends Controller
         /*return redirect()->route('roles.index')
             ->with('success','Role updated successfully');*/
     }
+
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return RedirectResponse|Response
+     * @param Role $role
+     * @return JsonResponse|RedirectResponse|Response
      */
-    public function destroy($id)
+    public function destroy(Role $role)
     {
-        DB::table("roles")->where('id',$id)->delete();
-        return redirect()->route('roles.index')
-            ->with('success','Role deleted successfully');
-    }
+        //DB::table("roles")->where('id',$id)->delete();
+        //return redirect()->route('roles.index')->with('success','Role deleted successfully');
 
-    public function permissions() {
-        return Permission::all();
+        $data = ["success" => $role->forceDelete()];
+
+        return response()->json($data);
     }
 
     public function hasrole($roleid) {

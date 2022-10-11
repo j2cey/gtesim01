@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Setting;
 use Illuminate\Http\Request;
+use App\Http\Requests\Setting\StoreSettingRequest;
 use App\Http\Requests\Setting\UpdateSettingRequest;
 
 class SettingController extends Controller
 {
+    public function test() {
+    }
     /**
      * Display a listing of the resource.
      *
@@ -18,9 +21,8 @@ class SettingController extends Controller
         $all_settings = Setting::all()->toArray();
 
         //dd($all_settings);
-
-        $tree = $this->buildTree($all_settings);
-        $tree_clean = $this->cleanTree($tree);
+        $tree = Setting::buildTree($all_settings);
+        $tree_clean = Setting::cleanTree($tree);
         dd($tree,$tree_clean);
     }
 
@@ -30,6 +32,7 @@ class SettingController extends Controller
         return $settings;
     }
 
+    /*
     function buildTree(array $elements, $parentId = 0) {
         $branch = array();
 
@@ -75,6 +78,7 @@ class SettingController extends Controller
         }
         return $setting['value'];
     }
+    */
 
     /**
      * Show the form for creating a new resource.
@@ -89,12 +93,22 @@ class SettingController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param Request $request
+     * @param StoreSettingRequest $request
      * @return void
      */
-    public function store(Request $request)
+    public function store(StoreSettingRequest $request)
     {
-        //
+        $setting = Setting::create([
+            'name' => $request->name,
+            'value' => $request->value,
+            'type' => $request->type,
+            'array_sep' => is_null( $request->array_sep ) ? "," : $request->array_sep,
+            'description' => $request->description,
+        ]);
+
+        $setting->setGroup($request->group, true);
+
+        return $setting->load('group');
     }
 
     /**
@@ -149,5 +163,9 @@ class SettingController extends Controller
     public function destroy(Setting $setting)
     {
         //
+    }
+
+    public function settingtypes() {
+        return Setting::$SETTINGTYPES;
     }
 }

@@ -29,14 +29,14 @@
                             <div class="form-group row">
                                 <label for="numero" class="col-sm-2 col-form-label text-xs">Numero Telephone</label>
                                 <div class="col-sm-10">
-                                    <input @keyup.enter="formKeyEnter()" type="text" class="form-control text-xs" id="numero" name="numero" required autocomplete="numero" autofocus placeholder="Numero Telephone" v-model="clientesimForm.numero">
+                                    <input :disabled="editing" @keyup.enter="formKeyEnter()" type="text" class="form-control text-xs" id="numero" name="numero" required autocomplete="numero" autofocus placeholder="Numero Telephone" v-model="clientesimForm.numero">
                                     <span class="invalid-feedback d-block text-xs" role="alert" v-if="clientesimForm.errors.has('numero')" v-text="clientesimForm.errors.get('numero')"></span>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="email" class="col-sm-2 col-form-label text-xs">E-mail</label>
                                 <div class="col-sm-10">
-                                    <input @keyup.enter="formKeyEnter()" type="text" class="form-control text-xs" id="email" name="email" required autocomplete="email" autofocus placeholder="email" v-model="clientesimForm.email">
+                                    <input :disabled="editing" @keyup.enter="formKeyEnter()" type="text" class="form-control text-xs" id="email" name="email" required autocomplete="email" autofocus placeholder="email" v-model="clientesimForm.email">
                                     <span class="invalid-feedback d-block text-xs" role="alert" v-if="clientesimForm.errors.has('email')" v-text="clientesimForm.errors.get('email')"></span>
                                 </div>
                             </div>
@@ -229,6 +229,7 @@
             },
             clientSuccessfullyCreated(resp) {
                 console.log(resp)
+                ClientEsimBus.$emit('clientesim_created', resp[0])
                 this.$swal({
                     html: '<small>Client cree avec Succes !</small>',
                     icon: 'success',

@@ -146,6 +146,12 @@
                                         <th class="tw-px-4 tw-py-2">Statut</th>
                                         <th class="tw-px-4 tw-py-2">Pin</th>
                                         <th class="tw-px-4 tw-py-2">Puk</th>
+                                        @can('esim-attributor-list')
+                                            <th class="tw-px-4 tw-py-2">Attribue Par</th>
+                                        @endcan
+                                        @can('esim-attributor-department-list')
+                                            <th class="tw-px-4 tw-py-2">Departement</th>
+                                        @endcan
                                         <th class="tw-px-4 tw-py-2">Num. Phone</th>
                                         <th class="tw-px-4 tw-py-2">Details</th>
                                     </tr>
@@ -175,6 +181,20 @@
                                         <td class="tw-px-4 tw-py-2">
                                             <span class="tw-text-sm">@{{ record.puk }}</span>
                                         </td>
+                                        @can('esim-attributor-list')
+                                            <td class="tw-px-6 tw-py-2">
+                                            <span class="tw-text-xs" v-if="record.attributor">
+                                                @{{ record.attributor.name }}
+                                            </span>
+                                            </td>
+                                        @endcan
+                                        @can('esim-attributor-department-list')
+                                            <td class="tw-px-6 tw-py-2">
+                                            <span class="tw-text-xs" v-if="record.attributor && record.attributor.employe">
+                                                @{{ record.attributor.employe.departement.intitule }}
+                                            </span>
+                                            </td>
+                                        @endcan
                                         <td class="tw-px-4 tw-py-2">
                                             <span class="tw-text-xs" v-if="record.phonenum">
                                                 @{{ record.phonenum.numero }}
@@ -187,8 +207,13 @@
                                             </a>
                                             @endcan
                                             @can('esim-attach')
-                                            <a v-if="record.statutesim.code == 'nouveau'" @click="$emit('create_new_clientesim', record.id)" class="tw-inline-block tw-mr-3 tw-text-orange-500">
+                                            <a v-if="record.statutesim.code === 'nouveau'" @click="$emit('create_new_clientesim', record.id)" class="tw-inline-block tw-mr-3 tw-text-orange-500">
                                                 <i class="fa fa-paperclip" aria-hidden="true"></i>
+                                            </a>
+                                            @endcan
+                                            @can('esim-show')
+                                            <a :href="record.show_url" class="tw-inline-block tw-mr-3 tw-text-orange-500">
+                                                <i class="fa fa-eye" aria-hidden="true"></i>
                                             </a>
                                             @endcan
                                         </td>

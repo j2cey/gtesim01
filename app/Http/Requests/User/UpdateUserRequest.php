@@ -2,6 +2,13 @@
 
 namespace App\Http\Requests\User;
 
+use App\Models\User;
+
+/**
+ * Class UpdateUserRequest
+ * @package App\Http\Requests\User
+ *
+ */
 class UpdateUserRequest extends UserRequest
 {
     /**
@@ -21,9 +28,7 @@ class UpdateUserRequest extends UserRequest
      */
     public function rules()
     {
-        return [
-            //
-        ];
+        return User::updateRules($this->user);
     }
 
     /**

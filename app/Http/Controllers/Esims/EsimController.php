@@ -56,6 +56,13 @@ class EsimController extends Controller
         return Esim::all();
     }
 
+    public function fetchone($id) {
+        $esim = Esim::find($id);
+        $esim->load(['statutesim','technologieesim','phonenum','phonenum.hasphonenum']);
+
+        return $esim;
+    }
+
     /**
      * Display products page.
      *
@@ -102,11 +109,13 @@ class EsimController extends Controller
      * Display the specified resource.
      *
      * @param Esim $esim
-     * @return void
+     * @return Application|Factory|\Illuminate\Contracts\View\View|void
      */
-    public function show(Esim $esim): void
+    public function show(Esim $esim)
     {
-        //
+        $esim->load(['statutesim','technologieesim','phonenum','phonenum.hasphonenum']);
+        return view('esims.show')
+            ->with('esim', new EsimResource($esim));
     }
 
     /**

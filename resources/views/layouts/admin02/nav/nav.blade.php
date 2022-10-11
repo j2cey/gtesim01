@@ -15,8 +15,16 @@
             <!-- Left navbar links -->
             <ul class="navbar-nav">
                 @can('stats-list')
-                <li class="nav-item">
-                    <a href="/dashboards.index" class="nav-link"><i class="nav-icon fas fa-tachometer-alt"></i> Dashboard</a>
+                <li class="nav-item dropdown">
+                    <a id="dropdownDashoard" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle"><i class="nav-icon fas fa-tachometer-alt"></i></a>
+                    <ul aria-labelledby="dropdownDashoard" class="dropdown-menu border-0 shadow">
+                        <li class="nav-item">
+                            <a href="/dashboards.index" class="nav-link">Dashboard</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/dashboards.details" class="nav-link">Details</a>
+                        </li>
+                    </ul>
                 </li>
                 @endcan
 

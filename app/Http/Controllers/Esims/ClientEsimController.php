@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Esims;
 
 use PDF;
 use \Illuminate\View\View;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Models\Esims\ClientEsim;
 use App\Models\Employes\PhoneNum;
@@ -186,7 +187,7 @@ class ClientEsimController extends Controller
         return $request->client_esim->addNewPhoneNum($request->numero,true);
     }
     */
-    
+
     public function phonenumschangeesim(StoreClientEsimPhonenumRequest $request) {
         $phonenum = $request->client_esim->phonenums()->where('numero', $request->numero)->first();
         //dd($phonenum, $request->all());
@@ -249,6 +250,15 @@ class ClientEsimController extends Controller
             $request->numero_telephone
         );
         return new ClientEsimResource($clientesim);
+    }
+
+    public function deletephone(Request $request, ClientEsim $clientesim) {
+
+        $rslt = $clientesim->removePhonenum($request->numero);
+
+        $data = [ "success" => $rslt ];
+
+        return response()->json($data);
     }
 
     /**
