@@ -39,7 +39,7 @@ class PhoneNumController extends Controller
      * Store a newly created resource in storage.
      *
      * @param StorePhoneNumRequest $request
-     * @return void
+     * @return PhoneNum|void
      */
     public function store(StorePhoneNumRequest $request)
     {

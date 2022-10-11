@@ -6,7 +6,7 @@
     //import Chart from 'chart.js';
 
     export default {
-        name: "monthLineChart",
+        name: "lineChart",
         props: {
             chartId: {
                 type: String,
@@ -40,7 +40,7 @@
             chartOptions: {}
         },
         mounted() {
-            console.log("monthLineChart mounted ref: ", this.chartData)
+            //console.log("monthLineChart mounted ref: ", this.chartData)
             if (this.chartData) {
                 var ctx = document.getElementById(this.chartId).getContext('2d');
                 var cdata = this.chartData

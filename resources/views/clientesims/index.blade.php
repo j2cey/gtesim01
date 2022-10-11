@@ -115,11 +115,15 @@
                                         <th class="tw-px-4 tw-py-2">Nom</th>
                                         <th class="tw-px-4 tw-py-2">Numéros Téléphone</th>
                                         <th class="tw-px-4 tw-py-2">Adresses mail</th>
+                                        @can('XXXX')
                                         <th class="tw-px-4 tw-py-2">Status</th>
-                                        @role('Admin')
-                                        <th class="tw-px-4 tw-py-2">Creator</th>
+                                        @endcan
+                                        @can('clientesim-list-creator')
+                                        <th class="tw-px-4 tw-py-2">User</th>
+                                        @endcan
+                                        @can('clientesim-list-creator-department')
                                         <th class="tw-px-4 tw-py-2">Departement</th>
-                                        @endrole('Admin')
+                                        @endcan
                                         <th class="tw-px-4 tw-py-2">Details</th>
                                     </tr>
                                     </thead>
@@ -178,24 +182,28 @@
                                                 </table>
                                             </span>
                                         </td>
+                                        @can('XXXX')
                                         <td class="tw-px-6 tw-py-2">
                                             <span class="tw-text-sm" v-if="record.status">
                                                 <span v-if="record.status.code === 'active'" class="tw-text-xs tw-font-semibold tw-inline-block tw-py-1 tw-px-2 tw-rounded tw-text-green-600 tw-bg-green-200 tw-w-32 last:tw-mr-0 tw-mr-1">@{{ record.status.name }}</span>
                                                 <span v-else class="tw-text-xs tw-font-semibold tw-inline-block tw-py-1 tw-px-2 tw-rounded tw-text-teal-600 tw-bg-red-200 tw-w-32 last:tw-mr-0 tw-mr-1">@{{ record.status.name }}</span>
                                             </span>
                                         </td>
-                                        @role('Admin')
+                                        @endcan
+                                        @can('clientesim-list-creator')
                                         <td class="tw-px-6 tw-py-2">
                                             <span class="tw-text-xs" v-if="record.creator">
                                                 @{{ record.creator.name }}
                                             </span>
                                         </td>
+                                        @endcan
+                                        @can('clientesim-list-creator-department')
                                         <td class="tw-px-6 tw-py-2">
                                             <span class="tw-text-xs" v-if="record.creator && record.creator.employe">
                                                 @{{ record.creator.employe.departement.intitule }}
                                             </span>
                                         </td>
-                                        @endrole
+                                        @endcan
                                         <td class="tw-px-4 tw-py-2">
                                             @can('clientesim-edit')
                                             <a @click="$emit('edit_clientesim', record)" class="tw-inline-block tw-mr-3 tw-text-green-500">

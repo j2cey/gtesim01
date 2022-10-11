@@ -7,6 +7,13 @@ Route::get('dashboards.index',[DashboardController::class,'index'])
     ->name('dashboards.index')
     ->middleware('auth');
 
+Route::get('dashboards.details/{agence?}',[DashboardController::class,'detailsget'])
+    ->name('dashboards.details')
+    ->middleware('auth');
+Route::post('dashboards.details',[DashboardController::class,'detailspost'])
+    ->name('dashboards.details')
+    ->middleware('auth');
+
 Route::get('dashboards.fetchrawstats',[DashboardController::class,'fetchrawstats'])
     ->name('dashboards.fetchrawstats')
     ->middleware('auth');
@@ -27,11 +34,11 @@ Route::get('dashboards.fetchcurrentweek',[DashboardController::class,'fetchcurre
     ->name('dashboards.fetchcurrentweek')
     ->middleware('auth');
 
-Route::get('dashboards.fetchmonthstats/{month}',[DashboardController::class,'fetchmonthstats'])
+Route::get('dashboards.fetchmonthstats/{month}/{agence}',[DashboardController::class,'fetchmonthstats'])
     ->name('dashboards.fetchmonthstats')
     ->middleware('auth');
 
-Route::get('dashboards.fetchweekstats/{week}',[DashboardController::class,'fetchweekstats'])
+Route::get('dashboards.fetchweekstats/{week}/{agence}',[DashboardController::class,'fetchweekstats'])
     ->name('dashboards.fetchweekstats')
     ->middleware('auth');
 
@@ -43,6 +50,10 @@ Route::get('dashboards.fetchcurrentyear',[DashboardController::class,'fetchcurre
     ->name('dashboards.fetchcurrentyear')
     ->middleware('auth');
 
-Route::get('dashboards.fetchyearstats/{year}',[DashboardController::class,'fetchyearstats'])
+Route::get('dashboards.fetchyearstats/{year}/{agence}',[DashboardController::class,'fetchyearstats'])
     ->name('dashboards.fetchyearstats')
+    ->middleware('auth');
+
+Route::get('dashboards.fetchagencestats/{agence}',[DashboardController::class,'fetchagencestats'])
+    ->name('dashboards.fetchagencestats')
     ->middleware('auth');

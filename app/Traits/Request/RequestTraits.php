@@ -9,8 +9,10 @@ use App\Models\Status;
 use App\Models\HowTos\HowTo;
 use App\Models\Esims\ClientEsim;
 use App\Models\HowTos\HowToType;
+use App\Models\Esims\StatutEsim;
 use App\Models\HowTos\HowToThread;
 use Spatie\Permission\Models\Role;
+use App\Models\Employes\Departement;
 
 trait RequestTraits
 {
@@ -50,8 +52,8 @@ trait RequestTraits
         }
     }
 
-    public function setRelevantPolymorph($type, $id) {
-        return $type && $id ? $type::where('id', $id)->first() : null;
+    public function setRelevantPolymorph($type, $value, $field = "id") {
+        return $type && $value ? $type::where($field, $value)->first() : null;
     }
 
     public function setRelevantRole($value, $json_decode_before = false): ?Role
@@ -102,6 +104,17 @@ trait RequestTraits
         return $value ? ClientEsim::where($field, $value[$field])->first() : null;
     }
 
+    public function setRelevantStatutEsim($value, $field = 'id', $json_decode_before = false) {
+        if (is_null($value)) {
+            return null;
+        }
+        if ($json_decode_before || is_string($value)) {
+            $value = $this->decodeJsonField($value);
+        }
+        //return $value ? StatutEsim::where($field, $value[$field])->first() : null;
+        return $this->setRelevantPolymorph(StatutEsim::class, $value[$field], $field);
+    }
+
     public function setRelevantHowToType($value, $field = 'id', $json_decode_before = false) {
         if (is_null($value)) {
             return null;
@@ -111,7 +124,7 @@ trait RequestTraits
         }
         return $value ? HowToType::where($field, $value[$field])->first() : null;
     }
-    
+
     public function setRelevantHowTo($value, $field = 'id', $json_decode_before = false) {
         if (is_null($value)) {
             return null;
@@ -121,7 +134,7 @@ trait RequestTraits
         }
         return $value ? HowTo::where($field, $value[$field])->first() : null;
     }
-    
+
     public function setRelevantHowToThread($value, $field = 'id', $json_decode_before = false) {
         if (is_null($value)) {
             return null;
@@ -140,6 +153,16 @@ trait RequestTraits
             $value = $this->decodeJsonField($value);
         }
         return $value ? Status::where($field, $value[$field])->first() : null;
+    }
+
+    public function setRelevantDepartement($value, $field = 'id', $json_decode_before = false) {
+        if (is_null($value)) {
+            return null;
+        }
+        if ($json_decode_before || is_string($value)) {
+            $value = $this->decodeJsonField($value);
+        }
+        return $value ? Departement::where($field, $value[$field])->first() : null;
     }
 
     public function setRelevantIdsList($value, $json_decode_before = false): ?array

@@ -179,6 +179,7 @@ Vue.component("howtothread-show", require("./views/howtothreads/show").default);
 Vue.component("howtothread-read", require("./views/howtothreads/read/index").default);
 
 Vue.component("esims-dashboard", require("./views/dashboard/esims").default);
+Vue.component("dashboard-details", require("./views/dashboard/details").default);
 Vue.component("charts-index", require("./views/chartjs/index").default);
 
 /**

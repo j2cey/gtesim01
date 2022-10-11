@@ -41,7 +41,7 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="m_select_action_type" class="col-sm-2 col-form-label text-xs">User(s)</label>
+                                <label for="m_select_action_type" class="col-sm-2 col-form-label text-xs">Role(s)</label>
                                 <div class="col-sm-10 text-xs">
                                     <multiselect
                                         id="m_select_action_type"
@@ -88,11 +88,50 @@
                                     <span class=" invalid-feedback d-block text-xs" role="alert" v-if="userForm.errors.has('is_local')" v-text="userForm.errors.get('is_local')"></span>
                                 </div>
                             </div>
+                            <div v-if="editing && userForm.is_local" class="form-group row">
+                                <label for="local_password" class="col-sm-2 col-form-label text-xs text-xs">Mot de Passe (Local)</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control form-control-sm" id="local_password" name="local_password" placeholder="Mot de Passe (Local)" v-model="userForm.local_password">
+                                    <span class="invalid-feedback d-block text-xs" role="alert" v-if="userForm.errors.has('local_password')" v-text="userForm.errors.get('local_password')"></span>
+                                </div>
+                            </div>
                             <div class="form-group row">
                                 <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success col-sm-4">
                                     <input type="checkbox" class="custom-control-input" id="is_ldap" name="is_ldap" autocomplete="is_ldap" v-model="userForm.is_ldap">
                                     <label class="custom-control-label" for="is_ldap"><span class="text text-xs">Is LDAP</span></label>
                                     <span class=" invalid-feedback d-block text-xs" role="alert" v-if="userForm.errors.has('is_ldap')" v-text="userForm.errors.get('is_ldap')"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col">
+                                    <b-tabs size="is-small" type="is-boxed">
+                                        <b-tab-item>
+                                            <template #header>
+                                                <b-icon icon="information-outline"></b-icon>
+                                                <span class="help-inline pr-1 text-sm"> Infos Employe </span>
+                                                <b-button v-if="! userForm.employe" size="is-small" type="is-ghost" @click="createEmploye()"><i class="fas fa-plus"></i></b-button>
+                                            </template>
+
+                                            <employeDetails v-if="userForm.employe" :key="employe_infos_key" :employe_prop="userForm.employe" ></employeDetails>
+
+                                        </b-tab-item>
+                                        <b-tab-item>
+                                            <template #header>
+                                                <b-icon icon="source-pull"></b-icon>
+                                                <span class="help-inline pr-1 text-sm"> eSIMs Created </span>
+                                                <span class="badge badge-warning">( {{ userForm.phonesesimcreated.length }} )</span>
+                                            </template>
+
+                                            <phonesesimcreatedDetails v-if="userForm.phonesesimcreated" :key="phonescreated_infos_key" :phonenums_prop="userForm.phonesesimcreated"></phonesesimcreatedDetails>
+
+                                        </b-tab-item>
+
+                                    </b-tabs>
                                 </div>
                             </div>
 
@@ -121,11 +160,14 @@
             this.name = user.name || ''
             this.email = user.email || ''
             this.username = user.username || ''
-            this.password = user.password || ''
+            this.password = ''
             this.is_local = user.is_local || 0
             this.is_ldap = user.is_ldap || 0
             this.roles = user.roles || []
             this.status = user.status || {}
+            this.employe = user.employe || {}
+            this.phonesesimcreated = user.phonesesimcreated || []
+            this.local_password = ''
         }
     }
 
@@ -133,7 +175,11 @@
         name: "user-addupdate",
         props: {
         },
-        components: { Multiselect },
+        components: {
+            Multiselect,
+            phonesesimcreatedDetails: () => import('./phonesesimcreated-details'),
+            employeDetails: () => import('./employe-details'),
+        },
         mounted() {
             UserBus.$on('user_create', () => {
 
@@ -146,6 +192,16 @@
 
             UserBus.$on('user_edit', (user) => {
                 this.launchEditUser(user)
+                /*
+                axios.get('/users.fetchone/' + user.id).then(({data}) => {
+
+                    console.log("fetchone: ", data)
+                    this.launchEditUser(data)
+
+                }).catch(error => {
+
+                });
+                */
             })
 
             this.$parent.$on('user_edit', (user) => {
@@ -168,9 +224,17 @@
                 loading: false,
                 roles: [],
                 statuses: [],
+                commom_key: 0,
+                employe_infos_key: '_employe_infos_0',
+                phonescreated_infos_key: '_phonescreated_infos_',
             }
         },
         methods: {
+            forceEmployeAndPhonesCreaied() {
+                this.commom_key += 1;
+                this.employe_infos_key = '_employe_infos_' + this.commom_key;
+                this.phonescreated_infos_key = '_phonescreated_infos_' + this.commom_key;
+            },
             createUser() {
                 this.loading = true
 
@@ -200,6 +264,8 @@
 
                 this.formTitle = 'Modifier Utilisateur'
 
+                this.forceEmployeAndPhonesCreaied()
+
                 $('#addUpdateUser').modal()
             },
             updateUser() {
@@ -223,6 +289,11 @@
                     this.loading = false
                 });
             },
+
+            createEmploye() {
+
+            },
+
             closeModal() {
                 this.resetForm()
                 $('#addUpdateUser').modal('hide')

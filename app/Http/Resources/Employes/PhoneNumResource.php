@@ -49,7 +49,7 @@ class PhoneNumResource extends JsonResource
             'hasphonenum_type' => $this->hasphonenum_type,
             'hasphonenum_id' => $this->hasphonenum_id,
 
-            'esim' => EsimResource::make($this->esim),
+            'esim' => $this->esim,// EsimResource::make($this->esim),
             'status' => StatusResource::make($this->status),
 
             'created_at' => $this->created_at,

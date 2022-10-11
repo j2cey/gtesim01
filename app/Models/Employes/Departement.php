@@ -3,6 +3,7 @@
 namespace App\Models\Employes;
 
 use App\Models\BaseModel;
+use Illuminate\Support\Carbon;
 use OwenIt\Auditing\Contracts\Auditable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 

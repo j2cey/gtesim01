@@ -15,7 +15,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //import Chart from 'chart.js';
 /* harmony default export */ __webpack_exports__["default"] = ({
-  name: "monthLineChart",
+  name: "lineChart",
   props: {
     chartId: {
       type: String,
@@ -51,8 +51,7 @@ __webpack_require__.r(__webpack_exports__);
     chartOptions: {}
   },
   mounted: function mounted() {
-    console.log("monthLineChart mounted ref: ", this.chartData);
-
+    //console.log("monthLineChart mounted ref: ", this.chartData)
     if (this.chartData) {
       var ctx = document.getElementById(this.chartId).getContext('2d');
       var cdata = this.chartData; //new Chart(this.$refs.monthLineCanvas, {

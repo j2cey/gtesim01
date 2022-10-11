@@ -2,10 +2,13 @@
 
 namespace App\Models\Esims;
 
+use App\Models\User;
 use App\Models\BaseModel;
 use App\Models\Employes\PhoneNum;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 use OwenIt\Auditing\Contracts\Auditable;
+use App\Models\ModelPickers\ModelPicker;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -118,33 +121,62 @@ class Esim extends BaseModel implements Auditable
         return $this->hasOne(PhoneNum::class, 'esim_id');
     }
 
+    public function attributor() {
+        return $this->belongsTo(User::class, 'attributed_by');
+    }
+
     #endregion
 
     #region Custom Functions
 
+    public function setStatutEsim(StatutEsim $status) {
+        if ($status->code === "nouveau") {
+            $this->setStatutFree();
+        } elseif ($status->code === "attribution") {
+            $this->setStatutAttribution();
+        } elseif ($status->code === "attribue") {
+            $this->setStatutAttribue();
+        }
+    }
+
     public function setStatutAttribue() {
         $esim_attribue_statut = StatutEsim::where('code', "attribue")->first();
         $this->statutesim()->associate($esim_attribue_statut);
+
+        // free model picker if any
+        $esim_picked = ModelPicker::where('model_type', Esim::class)->where('model_id', $this->id)->first();
+        if ($esim_picked) {
+            $esim_picked->setFree();
+        }
+
+        $this->setAttributor();
+
         $this->save();
     }
 
     public function setStatutAttribution() {
         $esim_attribue_statut = StatutEsim::where('code', "attribution")->first();
+
         $this->statutesim()->associate($esim_attribue_statut);
         $this->save();
     }
 
     public function setStatutFree() {
-        $esim_nouveau_statut = StatutEsim::where('code', "nouveau")->first();
-        $this->statutesim()->associate($esim_nouveau_statut);
-        $this->save();
+        if ( ! $this->phonenum ) {
+            $esim_nouveau_statut = StatutEsim::where('code', "nouveau")->first();
+            $this->statutesim()->associate($esim_nouveau_statut);
+            $this->save();
+        }
     }
 
     public static function getFirstFree($esim_id = -1) {
         if ($esim_id === -1 || is_null($esim_id)) {
             $esim_nouveau_statut = StatutEsim::where('code', "nouveau")->first();
 
-            $esim = Esim::where('statut_esim_id', $esim_nouveau_statut->id)->first();
+            //$esim = Esim::where('statut_esim_id', $esim_nouveau_statut->id)->first();
+            $esim_picked = ModelPicker::pick(Esim::class, [['field'=>"statut_esim_id", 'value'=>$esim_nouveau_statut->id]]);
+            $esim = Esim::find($esim_picked->model_id);
+
             $esim->setStatutAttribution();
 
             return $esim;
@@ -189,6 +221,34 @@ class Esim extends BaseModel implements Auditable
         }
     }
 
+    public function saveState() {
+        $previous_state = EsimState::with(['esim','statutesim','user'])
+            ->where('esim_id', $this->id)
+            ->orderBy('id', 'DESC')->first();
+        if ($previous_state) {
+            if ($this->statut_esim_id !== $previous_state->statut_esim_id) {
+                EsimState::createNew($this);
+            }
+        } else {
+            EsimState::createNew($this);
+        }
+    }
+
+    public function setAttributor($user = null, $date = null) {
+        if ( is_null($user) ) {
+            $user = Auth::user();
+        }
+
+        if ( is_null($date) ) {
+            $date = Carbon::now();
+        }
+
+        $this->attributor()->associate($user);
+        $this->attributed_at = $date;
+
+        return $this;
+    }
+
     #endregion
 
     public static function boot ()
@@ -196,8 +256,8 @@ class Esim extends BaseModel implements Auditable
         parent::boot();
 
         // juste avant suppression
-        self::creating(function($model){
-
+        self::saving(function($model){
+            $model->saveState();
         });
     }
 }

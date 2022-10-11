@@ -119,10 +119,6 @@ class ClientEsim extends BaseModel implements IHasPhoneNums
 
     public static function createNew($nom_raison_sociale, $prenom, $email, $numero_telephone)
     {
-        //$esim = Esim::getFirstFree($esim_id);
-
-        //$esim->setStatutAttribution();
-
         $clientesim = ClientEsim::create([
             'nom_raison_sociale' => strtoupper($nom_raison_sociale),
             'prenom' => ucwords($prenom),
@@ -130,34 +126,27 @@ class ClientEsim extends BaseModel implements IHasPhoneNums
             'numero_telephone' => $numero_telephone,
         ]);
 
-        //$clientesim->esim()->associate($esim);
-        //$clientesim->save();
-        //$clientesim->esim->saveQrcode();
-        //$clientesim->save();
-
-        //$esim->setStatutAttribue();
-
         return $clientesim;
     }
 
     public function updateOne($esim_id, $nom_raison_sociale, $prenom, $email, $numero_telephone)
     {
-        $esim = Esim::getFirstFree($esim_id);
+        //$esim = Esim::getFirstFree($esim_id);
 
-        $esim->setStatutFree();
+        //$esim->setStatutFree();
 
         $this->update([
             'nom_raison_sociale' => $nom_raison_sociale,
             'prenom' => $prenom,
-            'email' => $email,
-            'numero_telephone' => $numero_telephone,
+            //'email' => $email,
+            //'numero_telephone' => $numero_telephone,
         ]);
 
-        $this->esim()->associate($esim);
+        //$this->esim()->associate($esim);
 
         $this->save();
 
-        $esim->setStatutAttribue();
+        //$esim->setStatutAttribue();
 
         return $this;
     }

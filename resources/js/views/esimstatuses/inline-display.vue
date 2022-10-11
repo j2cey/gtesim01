@@ -6,57 +6,13 @@
                 <b-tag rounded type="is-ghost btn" v-if="can(statutesim_perm)" @click="cardModal"> <small> <i class="fa fa-refresh"></i> </small> </b-tag>
             </b-taglist>
         </div>
+        <ModalForm></ModalForm>
     </b-field>
 </template>
 
 <script>
-
-    const ModalForm = {
-        props: ['email', 'password'],
-        template: `
-            <form action="">
-                <div class="modal-card" style="width: auto">
-                    <header class="modal-card-head">
-                        <p class="modal-card-title">Login</p>
-                        <button
-                            type="button"
-                            class="delete"
-                            @click="$emit('close')"/>
-                    </header>
-                    <section class="modal-card-body">
-                        <b-field label="Email">
-                            <b-input
-                                type="email"
-                                :value="email"
-                                placeholder="Your email"
-                                required>
-                            </b-input>
-                        </b-field>
-
-                        <b-field label="Password">
-                            <b-input
-                                type="password"
-                                :value="password"
-                                password-reveal
-                                placeholder="Your password"
-                                required>
-                            </b-input>
-                        </b-field>
-
-                        <b-checkbox>Remember me</b-checkbox>
-                    </section>
-                    <footer class="modal-card-foot">
-                        <b-button
-                            label="Close"
-                            @click="$emit('close')" />
-                        <b-button
-                            label="Login"
-                            type="is-primary" />
-                    </footer>
-                </div>
-            </form>
-        `
-    }
+    import ModalForm from "./modalForm";
+    import esimstatusBus from "../esimstatuses/esimstatusBus";
 
     const Toast = Swal.mixin({
         toast: true,
@@ -86,6 +42,15 @@
             statutesim_prop: {},
             statutesim_perm_prop: {default: "esim-edit", type: String},
         },
+        components: { ModalForm },
+        mounted() {
+
+            esimstatusBus.$on('esimstatus_updated', ( {model_type,model_id,statutesim} ) => {
+                if (this.model_type_prop === model_type && this.model_id_prop === model_id) {
+                    this.statutesim = statutesim
+                }
+            })
+        },
         data() {
             return {
                 statutesim: this.statutesim_prop,
@@ -102,13 +67,11 @@
         },
         methods: {
             cardModal() {
-                this.$buefy.modal.open({
-                    parent: this,
-                    component: ModalForm,
-                    hasModalCard: true,
-                    customClass: 'custom-class custom-class-2',
-                    trapFocus: true
-                })
+                let model_type = this.model_type_prop
+                let model_id = this.model_id_prop
+                let statutesim = this.statutesim_prop
+
+                esimstatusBus.$emit("edit_esimstatus", {model_type,model_id,statutesim})
             },
             switchStatus(code) {
                 if (code === 'active') {
@@ -121,8 +84,6 @@
                 this.statusForm.code = code
 
                 this.loading = true
-
-                console.log("save status: ", code)
 
                 this.statusForm
                     .post('/statutesims.setnext')

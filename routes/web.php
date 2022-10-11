@@ -1,7 +1,10 @@
 <?php
 
+use App\Mail\TestMail;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Redis;
 use App\Http\Controllers\PDFController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\UserController;
@@ -28,6 +31,25 @@ use App\Http\Controllers\Authorization\PermissionController;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+/**
+ * Test mail
+ */
+/*
+Route::get('/send-email', function() {
+    Mail::to('j2cey@j2cey.dev')->send(new TestMail);
+});*/
+
+/**
+ * Test Redis
+ */
+/*Route::get('/store', function() {
+    Redis::set('foo', 'bar');
+});
+
+Route::get('/retrieve', function() {
+    return Redis::get('foo');
+});*/
 
 Route::get('/', function () {
     if (Auth::check()) {
@@ -91,6 +113,10 @@ Route::get('users.fetch',[UserController::class,'fetch'])
 Route::get('users.fetchall',[UserController::class,'fetchall'])
     ->name('users.fetchall')
     ->middleware('auth');
+Route::get('users.fetchone/{id}',[UserController::class,'fetchone'])
+    ->name('users.fetchone')
+    ->middleware('auth');
+
 Route::get('users.online', [UserController::class, 'onlineusers'])
     ->name('users.online')
     ->middleware('auth');

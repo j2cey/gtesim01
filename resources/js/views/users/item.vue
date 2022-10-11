@@ -53,6 +53,10 @@
                 }
             })
         },
+        created() {
+            axios.get('/users.fetchone/' + this.user_prop.id)
+                .then(({data}) => this.user = data);
+        },
         data() {
             return {
                 user: this.user_prop,

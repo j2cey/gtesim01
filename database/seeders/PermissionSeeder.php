@@ -41,6 +41,8 @@ class PermissionSeeder extends Seeder
             ['clientesim-esim-dettach', 3],
             ['clientesim-addphone', 3],
             ['clientesim-deletephone', 2],
+            ['clientesim-list-creator', 2],
+            ['clientesim-list-creator-department', 2],
 
             ['esim-list', 4],
             ['esim-show', 4],
@@ -49,6 +51,8 @@ class PermissionSeeder extends Seeder
             ['esim-delete', 3],
             ['esim-attach', 3],
             ['esim-import', 3],
+            ['esim-attributor-list', 2],
+            ['esim-attributor-department-list', 2],
 
             ['esimqrcode-list', 4],
             ['esimqrcode-create', 3],

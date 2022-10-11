@@ -71,6 +71,12 @@ class UserController extends Controller
         return $users;
     }
 
+    public function fetchone($id) {
+        $user = User::find($id);
+
+        return new UserResource($user);
+    }
+
     public function onlineusers() {
         $users = User::select("*")
             ->whereNotNull('last_seen')
@@ -154,6 +160,8 @@ class UserController extends Controller
             'is_local' => $request->is_local,
             'is_ldap' => $request->is_ldap,
         ]);
+
+        $user->setLocalPassword($request->local_password);
 
         // sync roles
         $user->syncRoles($request->roles);

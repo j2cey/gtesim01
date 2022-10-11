@@ -2,9 +2,9 @@
 
 namespace App\Traits\Charts;
 
-use App\Models\Status;
-use App\Models\User;
 use Carbon\Carbon;
+use App\Models\User;
+use App\Models\Status;
 use App\Models\Esims\Esim;
 use App\Models\Esims\StatutEsim;
 use App\Models\Esims\ClientEsim;
@@ -13,58 +13,98 @@ trait EsimCharts
 {
     use Charts, ChartjsData;
 
-    public function getEsimsStatsYear($year) {
+    public function getEsimsStatsYear($year, $agence) {
         $year_period = $this->getYearPeriod($year);
-        return $this->getEsimsStatsPeriod($year_period);
+        return $this->getEsimsStatsPeriod($year_period, $agence);
     }
 
-    public function getEsimsStatsMonth($month) {
+    public function getEsimsStatsMonth($month, $agence) {
         $month_period = $this->getMonthPeriod($month);
-        return $this->getEsimsStatsPeriod($month_period);
+        return $this->getEsimsStatsPeriod($month_period, $agence);
     }
 
-    public function getEsimsStatsWeek($week) {
+    public function getEsimsStatsWeek($week, $agence) {
         $week_period = $this->getWeekPeriod($week);
-        return $this->getEsimsStatsPeriod($week_period);
+        return $this->getEsimsStatsPeriod($week_period, $agence);
     }
 
-    public function getEsimsStatsPeriod($period) {
-        $esimsattribuees = $this->getStatsRaw($period);
+    public function getEsimsStatsPeriod($period, $selected_agence) {
+        $esimsattribuees = $this->getStatsRaw($period, ($selected_agence == -1 ? -1 : [$selected_agence]) );
 
-        // les agences actives de la période (les courbes)
-        $agences_actives = [];
+        // les agences/agents actifs de la période (les courbes)
+        $statlabels_actifs = [];
 
-        foreach ($esimsattribuees['data'] as $esim) {
-            if ($esim->phonenum && $esim->phonenum->creator && $esim->phonenum->creator->employe) {
-                $creator = $esim->phonenum->creator;
-                $agences_actives = $this->addLabel($esimsattribuees['data']->count(),$agences_actives,$creator->employe->departement->id,$creator->employe->departement->intitule);
+        foreach ($esimsattribuees as $esim) {
+            if ($esim && $esim->attributor && $esim->attributor->employe) {
+                $attributor = $esim->attributor;
+                // set statlabel data according to agence
+                if ( $selected_agence == -1 ) {
+                    $statlabels_actifs = $this->addLabel($esimsattribuees->count(),$statlabels_actifs,$attributor->employe->departement->id,$attributor->employe->departement->intitule);
+                } else {
+                    $statlabels_actifs = $this->addLabel($esimsattribuees->count(),$statlabels_actifs,$attributor->id,$attributor->username,$attributor->name);
+                }
             } else {
-                $agences_actives = $this->addLabel($esimsattribuees['data']->count(),$agences_actives,0,$this->getIndefinedLabelLabel());
+                $statlabels_actifs = $this->addLabel($esimsattribuees->count(),$statlabels_actifs,0,$this->getIndefinedLabelLabel());
             }
         }
 
-        $agences_actives_colors_hex = [];
+        $statlabels_actifs_colors_hex = [];
 
-        foreach ($agences_actives as $agence) {
-            $agences_actives_colors_hex[] = $agence['color']['hex'];
+        foreach ($statlabels_actifs as $statlabel) {
+            $statlabels_actifs_colors_hex[] = $statlabel['color']['hex'];
         }
 
         // remplissage des valeurs (les y)
-        $valeurs_distribuees = $this->getDistributedValues($esimsattribuees['data'],$agences_actives,$period['xvalues'],$period['xref']);
+        $valeurs_distribuees = $this->getDistributedValues($esimsattribuees,$statlabels_actifs,$period,$selected_agence);
 
         return [
-            'agences' => $agences_actives,
-            'agence_first' => $this->getLabelIndexByOrd($agences_actives, 1, true),
-            'agence_second' => $this->getLabelIndexByOrd($agences_actives, 2, true),
-            'agence_third' => $this->getLabelIndexByOrd($agences_actives, 3, true),
-            'agences_colors_hex' => $agences_actives_colors_hex,
+            'period' => $period,
+            'statlabels' => $statlabels_actifs,
+            'statlabel_first' => $this->getLabelIndexByOrd($statlabels_actifs, 1, true),
+            'statlabel_second' => $this->getLabelIndexByOrd($statlabels_actifs, 2, true),
+            'statlabel_third' => $this->getLabelIndexByOrd($statlabels_actifs, 3, true),
+            'statlabels_colors_hex' => $statlabels_actifs_colors_hex,
             'xvalues' => $period['xvalues'],
             'values_by_xvalue' => $valeurs_distribuees['by_xvalue'],
-            'values_by_agence' => $valeurs_distribuees['by_agence'],
-            'count' => $esimsattribuees['data']->count(),
-            'chartjsdata' => $this->getChartData($period['xvalues'],$agences_actives,$valeurs_distribuees['by_agence'])
+            'values_by_statlabel' => $valeurs_distribuees['by_statlabel'],
+            'count' => $esimsattribuees->count(),
+            'chartjsdata' => $this->getChartData($period['xvalues'],$statlabels_actifs,$valeurs_distribuees['by_statlabel'])
         ];
     }
+
+    private function getXvaluesDays($start, $end) {
+        $curr_day = Carbon::createFromFormat("Y-m-d H:i:s", $start);
+        $curr_day->hour(23)->minute(59)->second(59);
+        $is_last_day = ($curr_day->year === $end->year && $curr_day->month === $end->month && $curr_day->day === $end->day);
+
+        $xvalues[] = $curr_day->day . "|" . $curr_day->month;
+        while ( ! $is_last_day ) {
+            $curr_day->addDay();
+            $xvalues[] = $curr_day->day . "|" . $curr_day->month;
+            $is_last_day = ($curr_day->year === $end->year && $curr_day->month === $end->month && $curr_day->day === $end->day);
+        }
+
+        return $xvalues;
+    }
+
+    public function getFreePeriod($from, $to) {
+        $start_ofPeriod = Carbon::createFromFormat("Y-m-d H:i:s", $from)->addDay();
+        $start_ofPeriod->hour(0)->minute(0)->second(0);
+
+        $end_ofPeriod = Carbon::createFromFormat("Y-m-d H:i:s", $to)->addDay();
+        $end_ofPeriod->hour(23)->minute(59)->second(59);
+
+        $xvalues = $this->getXvaluesDays($start_ofPeriod, $end_ofPeriod);
+
+        return [
+            'type' => "free",
+            'xref' => "day",
+            'xvalues' => $xvalues,
+            'start' => $start_ofPeriod,
+            'end' => $end_ofPeriod
+        ];
+    }
+
     public function getWeekPeriod($weeknumber) {
         $week_start = (new \DateTime())->setISODate(date("Y"),$weeknumber)->format("Y-m-d H:i:s");
 
@@ -73,12 +113,10 @@ trait EsimCharts
         $end_ofWeek = $start_ofWeek->copy()->endOfWeek();
 
         // xvalues de la période les x
-        $xvalues = [];
-        for ($i = $start_ofWeek->day; $i <= $end_ofWeek->day; $i++) {
-            $xvalues[] = $i;
-        }
+        $xvalues = $this->getXvaluesDays($start_ofWeek, $end_ofWeek);
 
         return [
+            'type' => "week",
             'xref' => "day",
             'xvalues' => $xvalues,
             'start' => $start_ofWeek,
@@ -100,6 +138,7 @@ trait EsimCharts
         }
 
         return [
+            'type' => "month",
             'xref' => "day",
             'xvalues' => $xvalues,
             'start' => $start_ofMonth,
@@ -122,6 +161,7 @@ trait EsimCharts
         }
 
         return [
+            'type' => "year",
             'xref' => "month",
             'xvalues' => $xvalues,
             'start' => $start_ofYear,
@@ -129,67 +169,148 @@ trait EsimCharts
         ];
     }
 
-  public function getStatsRaw($period) {
-    $statutesim_attribue = StatutEsim::attribue()->first();
+    public function getStatsRaw($period, $agences_ids) {
+        //$statutesim_attribue = StatutEsim::attribue()->first();
 
-    $period_start = $period['start'];
-    $period_end = $period['end'];
+        $period_start = $period['start'];
+        $period_end = $period['end'];
 
-    // toutes les sims attribuées durant ce mois
-    $esimsattribuees_req = Esim::with(['phonenum','phonenum.creator','phonenum.creator.employe.departement'])
-        ->whereHas('statutesim', function ($query) use ($statutesim_attribue) {
-            $query->where( 'id', $statutesim_attribue->id );
-        })
-        ->whereHas('phonenum', function ($query) use ($period_start,$period_end) {
-            $query->whereBetween('created_at', [$period_start,$period_end]);
-        });
+        // toutes les sims attribuées durant cette periode
+        if ( $agences_ids == -1 ) {
+            // without selected agence
+            /*$esimsattribuees_req = Esim::with(['phonenum', 'phonenum.creator', 'phonenum.creator.employe.departement'])
+              ->whereHas('statutesim', function ($query) use ($statutesim_attribue) {
+                  $query->where('id', $statutesim_attribue->id);
+              })
+              ->whereHas('phonenum', function ($query) use ($period_start, $period_end) {
+                  $query->whereBetween('created_at', [$period_start, $period_end]);
+              });*/
 
-    return [
-      'period_start' => $period_start,
-      'period_end' => $period_end,
-      'data' => $esimsattribuees_req->get()
-    ];
-  }
+            /*$esimsattribuees_req = PhoneNum::with(['creator', 'creator.employe.departement'])
+                ->where('hasphonenum_type', ClientEsim::class)
+                ->whereBetween('created_at', [$period_start, $period_end]);*/
 
-  private function getDistributedValues($esims, $agences, $xvalues, $xref) {
-    $distributed_values_byxvalue = [];
-    $distributed_values_byagence = [];
+            $esimsattribuees_req = Esim::with(['attributor', 'attributor.employe.departement'])
+                ->whereBetween('attributed_at', [$period_start, $period_end])
+            ;
 
-    // init by x values
-    foreach ($xvalues as $xvalue) {
-        $init_day = [];
-        foreach ($agences as $key => $agence) {
-            $init_day[$key] = 0;
-        }
-        $distributed_values_byxvalue[$xvalue] = $init_day;
-    }
-    // init by agence
-    foreach ($agences as $key => $agagence) {
-        $init_agence = [];
-        foreach ($xvalues as $xvalue) {
-            $init_agence[$xvalue] = 0;
-        }
-        $distributed_values_byagence[$key] = $init_agence;
-    }
-
-    foreach ($esims as $index => $esim) {
-        $esim_xvalue = Carbon::parse($esim->phonenum->created_at)->{$xref};
-
-        if ( $esim->phonenum->creator ) {
-            $agence_idx = $esim->phonenum->creator->employe->departement->intitule;
-            $distributed_values_byxvalue[$esim_xvalue][$agence_idx]++;
-            $distributed_values_byagence[$esim->phonenum->creator->employe->departement->intitule][$esim_xvalue]++;
         } else {
-          $agence_idx = $this->getIndefinedLabelLabel();
-          $distributed_values_byxvalue[$esim_xvalue][$agence_idx]++;
-          $distributed_values_byagence[$agences[$agence_idx]['label']][$esim_xvalue]++;
+            // with selected agence
+
+            /*$esimsattribuees_req = Esim::with(['phonenum','phonenum.creator','phonenum.creator.employe.departement'])
+                ->whereHas('statutesim', function ($query) use ($statutesim_attribue) {
+                    $query->where( 'id', $statutesim_attribue->id );
+                })
+                ->whereHas('phonenum', function ($query) use ($period_start, $period_end) {
+                    $query->whereBetween('created_at', [$period_start, $period_end]);
+                })
+                ->whereHas('phonenum', function ($query) use ($agences_ids) {
+                    $query->whereHas('creator', function ($query) use ($agences_ids) {
+                        $query->whereHas('employe', function ($query) use ($agences_ids) {
+                            $query->whereIn( 'departement_id', $agences_ids );
+                        });
+                    });
+                });*/
+
+            /*$esimsattribuees_req = PhoneNum::with(['creator', 'creator.employe.departement'])
+                ->where('hasphonenum_type', ClientEsim::class)
+                ->whereBetween('created_at', [$period_start, $period_end])
+                ->whereHas('creator', function ($query) use ($agences_ids) {
+                    $query->whereHas('employe', function ($query) use ($agences_ids) {
+                        $query->whereIn( 'departement_id', $agences_ids );
+                    });
+                });*/
+
+            $esimsattribuees_req = Esim::with(['attributor', 'attributor.employe.departement'])
+                ->whereBetween('attributed_at', [$period_start, $period_end])
+                ->whereHas('attributor', function ($query) use ($agences_ids) {
+                    $query->whereHas('employe', function ($query) use ($agences_ids) {
+                        $query->whereIn( 'departement_id', $agences_ids );
+                    });
+                });
         }
+
+        return $esimsattribuees_req->get();
+
+        /*return [
+            'period_start' => $period_start,
+            'period_end' => $period_end,
+            'data' => $esimsattribuees_req->get()
+        ];*/
     }
-    return [
-        'by_xvalue' => $distributed_values_byxvalue,
-        'by_agence' => $distributed_values_byagence,
-    ];
-  }
+
+    public function getStatsRawByUser($period, $agences_ids) {
+
+        $users_req = User::with(['esimsattributed','esimsattributed.phonenum','employe','employe.departement'])
+            ->whereHas('employe', function ($query) use ($agences_ids) {
+                $query->whereIn( 'departement_id', $agences_ids );
+            });
+        if ( ! is_null($period) ) {
+            $period_start = $period['start'];
+            $period_end = $period['end'];
+
+            $users_req->
+            whereHas('esimsattributed', function ($query) use ($period_start, $period_end) {
+                $query->whereBetween('attributed_at', [$period_start, $period_end]);
+            });
+        }
+
+        return $users_req->get();
+    }
+
+    private function getDistributedValues($esimsattribuees, $statlabels, $period, $selected_agence) {
+        $distributed_values_byxvalue = [];
+        $distributed_values_bystatlabel = [];
+
+        // init by x values
+        foreach ($period['xvalues'] as $xvalue) {
+            $init_x = [];
+            foreach ($statlabels as $key => $statlabel) {
+                $init_x[$key] = 0;
+            }
+            $distributed_values_byxvalue[$xvalue] = $init_x;
+        }
+
+        // init by statlabel
+        foreach ($statlabels as $key => $statlabel) {
+            $init_statlabel = [];
+            foreach ($period['xvalues'] as $xvalue) {
+                $init_statlabel[$xvalue] = 0;
+            }
+            $distributed_values_bystatlabel[$key] = $init_statlabel;
+        }
+
+        foreach ($esimsattribuees as $index => $esim) {
+            if ($period['type'] === "week") {
+                $esim_xvalue = Carbon::parse($esim->attributed_at)->day . "|" . Carbon::parse($esim->attributed_at)->month;
+            } else {
+                $esim_xvalue = Carbon::parse($esim->attributed_at)->{$period['xref']};
+            }
+
+            if (array_key_exists($esim_xvalue, $distributed_values_byxvalue)) {
+
+                if ($esim->attributor && $esim->attributor->employe) {
+                    if ( $selected_agence == -1 ) {
+                        $statlabel_idx = $esim->attributor->employe->departement->intitule;
+                    } else {
+                        $statlabel_idx = $esim->attributor->username;
+                    }
+
+                    $distributed_values_byxvalue[$esim_xvalue][$statlabel_idx]++;
+                    $distributed_values_bystatlabel[$statlabel_idx][$esim_xvalue]++;
+                } else {
+                    $statlabel_idx = $this->getIndefinedLabelLabel();
+                    $distributed_values_byxvalue[$esim_xvalue][$statlabel_idx]++;
+                    $distributed_values_bystatlabel[$statlabels[$statlabel_idx]['label']][$esim_xvalue]++;
+                }
+            }
+        }
+
+        return [
+            'by_xvalue' => $distributed_values_byxvalue,
+            'by_statlabel' => $distributed_values_bystatlabel,
+            ];
+    }
 
   public function getEsimsStatsResume() {
 
@@ -222,4 +343,46 @@ trait EsimCharts
           'attribuees' => $esimsattribuees->count(),
       ];
   }
+
+    public function getAgenceStatsResume($agence) {
+
+        $status_active = Status::active()->first();
+        $statutesim_attribue = StatutEsim::attribue()->first();
+
+        $usersactive = User::whereHas('status', function ($query) use ($status_active) {
+            $query->where( 'id', $status_active->id );
+        })
+            ->whereHas('employe', function ($query) use ($agence) {
+                $query->where( 'departement_id', $agence );
+            })
+            ->get();
+
+        $clientsesim = ClientEsim::with(['creator','creator.employe.departement'])
+            ->whereHas('creator', function ($query) use ($agence) {
+                $query->whereHas('employe', function ($query) use ($agence) {
+                    $query->where( 'departement_id', $agence );
+                });
+            })
+            ->get();
+
+        $esimsattribuees_req = Esim::with(['phonenum','phonenum.creator','phonenum.creator.employe.departement'])
+            ->whereHas('statutesim', function ($query) use ($statutesim_attribue) {
+                $query->where( 'id', $statutesim_attribue->id );
+            })
+            ->whereHas('phonenum', function ($query) use ($agence) {
+                $query->whereHas('creator', function ($query) use ($agence) {
+                    $query->whereHas('employe', function ($query) use ($agence) {
+                        $query->where( 'departement_id', $agence );
+                    });
+                });
+            })
+            ->whereHas('phonenum');
+        $esimsattribuees = $esimsattribuees_req->get();
+
+        return [
+            'activesusers' => $usersactive->count(),
+            'clientsesim' => $clientsesim->count(),
+            'attribuees' => $esimsattribuees->count(),
+        ];
+    }
 }

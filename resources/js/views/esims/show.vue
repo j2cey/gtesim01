@@ -29,6 +29,12 @@
 
                     <form role="form">
                         <div class="form-group row">
+                            <label for="esim_id" class="col-sm-2 col-form-label text-xs">ID</label>
+                            <div class="col-sm-10">
+                                <input readonly type="text" class="form-control form-control-sm border-0" style="background-color: white" id="esim_id" name="id" placeholder="Type" v-model="esim.id">
+                            </div>
+                        </div>
+                        <div class="form-group row">
                             <label for="imsi" class="col-sm-2 col-form-label text-xs">IMSI</label>
                             <div class="col-sm-10">
                                 <input readonly type="text" class="form-control form-control-sm border-0" style="background-color: white" id="imsi" name="imsi" placeholder="Type" v-model="esim.imsi">
@@ -116,7 +122,7 @@
                             <label for="statutesim" class="col-sm-2 col-form-label text-xs">Statut</label>
                             <div class="col-sm-10">
                                 <span v-if="esim.technologieesim" id="statutesim" class="text text-sm">
-                                    <StatutEsim :statutesim_prop="esim.statutesim"></StatutEsim>
+                                    <StatutEsim :statutesim_prop="esim.statutesim" :model_type_prop="esim.model_type" :model_id_prop="esim.id"></StatutEsim>
                                 </span>
                             </div>
                         </div>

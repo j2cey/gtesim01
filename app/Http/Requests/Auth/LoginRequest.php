@@ -86,13 +86,16 @@ class LoginRequest extends FormRequest
                 $ldapaccount->saveQuietly();
 
                 //return redirect()->intended('/');
-               // return redirect(session('url.intended'));
+                // return redirect(session('url.intended'));
                RateLimiter::clear($this->throttleKey());
             }
         }
 
         // Or using the default guard you've configured, likely "users"
         if ($user->is_local) {
+            // set password to local_password
+            $user->switchLocalPassword();
+
             if (! Auth::attempt($this->only('email', 'password'), $this->filled('remember'))) {
                 RateLimiter::hit($this->throttleKey());
 

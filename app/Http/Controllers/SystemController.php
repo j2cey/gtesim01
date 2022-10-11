@@ -29,7 +29,7 @@ class SystemController extends Controller
         $settings_grouped = Setting::getAllGrouped();
         $permissions = (new PermissionController())->fetchall();
         $roles = Role::all()->load('permissions');
-        $users = User::all()->load(['roles','status']);//UserResource::collection(User::all());
+        $users = User::all()->load(['roles','status']); // UserResource::collection(User::all());
 
         return view('systems.index')
             ->with('statuses', $statuses)

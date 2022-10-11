@@ -16,6 +16,9 @@ Route::get('statutesims.fetchall',[StatutEsimController::class,'fetchall'])
 Route::match(['post'],'statutesims.setnext',[StatutEsimController::class, 'setnext'])
     ->name('statutesims.setnext')
     ->middleware('auth');
+Route::match(['post'],'statutesims.modelupdate',[StatutEsimController::class, 'modelupdate'])
+    ->name('statuses.modelupdate')
+    ->middleware('auth');
 
 #endregion
 

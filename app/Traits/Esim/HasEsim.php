@@ -18,6 +18,7 @@ trait HasEsim
 
         $this->esim()->associate($esim);
         $this->save();
+
         $this->esim->saveQrcode();
         $this->save();
 
