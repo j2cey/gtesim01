@@ -53,6 +53,9 @@ class PermissionSeeder extends Seeder
             ['esim-import', 3],
             ['esim-attributor-list', 2],
             ['esim-attributor-department-list', 2],
+            ['esim-phonenum-edit', 3],
+
+            ['esimstate-list', 2],
 
             ['esimqrcode-list', 4],
             ['esimqrcode-create', 3],

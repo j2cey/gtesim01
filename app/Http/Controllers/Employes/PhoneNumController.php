@@ -92,11 +92,15 @@ class PhoneNumController extends Controller
      *
      * @param UpdatePhoneNumRequest $request
      * @param PhoneNum $phonenum
-     * @return void
+     * @return PhoneNumResource|PhoneNum|void
      */
-    public function update(UpdatePhoneNumRequest $request, PhoneNum $phonenum): void
+    public function update(UpdatePhoneNumRequest $request, PhoneNum $phonenum)
     {
-        //
+        $phonenum->update([
+            'numero' => $request->numero
+        ]);
+
+        return new PhoneNumResource($phonenum);
     }
 
     /**

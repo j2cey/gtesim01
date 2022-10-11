@@ -3,7 +3,6 @@
 namespace App\Http\Requests\PhoneNum;
 
 use App\Models\Employes\PhoneNum;
-use Illuminate\Foundation\Http\FormRequest;
 
 class UpdatePhoneNumRequest extends PhoneNumRequest
 {

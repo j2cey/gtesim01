@@ -125,6 +125,10 @@ class Esim extends BaseModel implements Auditable
         return $this->belongsTo(User::class, 'attributed_by');
     }
 
+    public function states() {
+        return $this->hasMany(EsimState::class, 'esim_id');
+    }
+
     #endregion
 
     #region Custom Functions

@@ -81,7 +81,12 @@
                                             </thead>
                                             <tbody>
                                             <tr v-for="(phonenum, index) in clientesim.phonenums" :key="phonenum.id" class="tw-text-xs">
-                                                <td><div class="text tw-text-xs border-right">{{ phonenum.numero }}</div></td>
+                                                <td><div class="text tw-text-xs border-right">
+                                                    <a v-if="can('esim-phonenum-edit')" class="text text-sm text-primary" data-toggle="tooltip" @click="$emit('edit_phonenum', phonenum)">
+                                                        <small>{{ phonenum.numero }}</small>
+                                                    </a>
+                                                    <small v-else>{{ phonenum.numero }}</small>
+                                                </div></td>
                                                 <td><div class="text tw-text-xs border-right">
                                                     <a v-if="can('esim-show')" class="text text-sm text-primary" data-toggle="tooltip" @click="showEsim(phonenum.esim)">
                                                         <small>{{ phonenum.esim.imsi }}</small>
@@ -129,6 +134,7 @@
     import AddPhoneNum from "./addphonenum";
     import ClientEsimBus from "./clientesimBus";
     import ClientEsimServices from '../clientesims/clientEsimServices'
+    import PhoneNumBus from "./phonenumBus";
 
     class ClientEsim {
         constructor(clientesim) {
@@ -164,6 +170,12 @@
             ClientEsimBus.$on('phonenum_deleted', ({phonenum, clientesim}) => {
                 if (this.clientesim.id === clientesim.id) {
                     this.removePhoneNum(phonenum)
+                }
+            })
+
+            PhoneNumBus.$on('phonenum_updated', (phonenum) => {
+                if (this.clientesim.model_type === phonenum.hasphonenum_type && this.clientesim.id === phonenum.hasphonenum_id) {
+                    this.updatePhoneNum(phonenum)
                 }
             })
         },

@@ -178,6 +178,18 @@
                                 </div>
                             </div>
                         </div>
+
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label text-xs">
+                                <span v-if="can('esimstate-list')" class="text text-align-left">Etats(Historique)</span>
+                                <span class="text text-align-right">
+
+                                </span>
+                            </label>
+                            <div class="col-sm-10">
+                                <EsimState v-if="can('esimstate-list')" :esimstates_prop="esim.states"></EsimState>
+                            </div>
+                        </div>
                     </form>
 
                 </div>
@@ -224,7 +236,9 @@
             esim_prop: {}
         },
         components: {
-            AddUpdateEsim, StatutEsim: () => import('../esimstatuses/inline-display')
+            AddUpdateEsim,
+            StatutEsim: () => import('../esimstatuses/inline-display'),
+            EsimState: () => import('../esimstates/list')
         },
         mounted() {
             ClientEsimBus.$on('clientesim_created', (newesimclient) => {

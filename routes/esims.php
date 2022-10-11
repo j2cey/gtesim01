@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\EsimStateController;
 use App\Http\Controllers\Esims\EsimController;
 use App\Http\Controllers\Esims\ClientEsimController;
 use App\Http\Controllers\Esims\StatutEsimController;
@@ -89,5 +90,11 @@ Route::get('clientesims.checkbeforecreate',[ClientEsimController::class,'checkbe
 Route::match(['put', 'patch'],'clientesims.deletephone/{clientesim}',[ClientEsimController::class,'deletephone'])
     ->name('clientesims.deletephone')
     ->middleware('auth');
+
+#endregion
+
+#region EsimState
+
+Route::resource('esimstates',EsimStateController::class)->middleware('auth');
 
 #endregion

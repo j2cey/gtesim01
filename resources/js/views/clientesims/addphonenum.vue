@@ -147,7 +147,7 @@
                 this.loading = true
 
                 this.phonenumForm
-                    .put(`/clientesims.phonenums/${this.phonenumId}`,undefined)
+                    .put(`/phonenums/${this.phonenumId}`,undefined)
                     .then(updphonenum => {
 
                         this.loading = false

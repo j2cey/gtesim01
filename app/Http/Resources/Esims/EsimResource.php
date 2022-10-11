@@ -35,6 +35,7 @@ class EsimResource extends JsonResource
             'model_type' => Esim::class,
 
             'attributor' => UserResource::make($this->attributor),
+            'states' => EsimStateResource::collection($this->states),
 
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
