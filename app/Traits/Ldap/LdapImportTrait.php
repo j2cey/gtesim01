@@ -289,7 +289,7 @@ trait LdapImportTrait
                     'email' => $usermail,
                     'is_ldap' => true,
                     'ldap_account_id' => $ldapaccount->id,
-                    'status_id' => Status::inactive()->first()->id,
+                    'status_id' => 2,//Status::inactive()->first()->id,
                     'roles' => json_encode([$role_id]),
                     'password' => 'gestocksecret',
                     'confirm_password' => 'gestocksecret'

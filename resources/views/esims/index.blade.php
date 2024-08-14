@@ -206,7 +206,7 @@
                                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                             </a>
                                             @endcan
-                                            @can('esim-attach')
+                                            @can('esim-attach-xxx')
                                             <a v-if="record.statutesim.code === 'nouveau'" @click="$emit('create_new_clientesim', record.id)" class="tw-inline-block tw-mr-3 tw-text-orange-500">
                                                 <i class="fa fa-paperclip" aria-hidden="true"></i>
                                             </a>

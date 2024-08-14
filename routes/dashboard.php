@@ -8,10 +8,10 @@ Route::get('dashboards.index',[DashboardController::class,'index'])
     ->middleware('auth');
 
 Route::get('dashboards.details/{agence?}',[DashboardController::class,'detailsget'])
-    ->name('dashboards.details')
+    ->name('dashboards.detailsget')
     ->middleware('auth');
 Route::post('dashboards.details',[DashboardController::class,'detailspost'])
-    ->name('dashboards.details')
+    ->name('dashboards.detailspost')
     ->middleware('auth');
 
 Route::get('dashboards.fetchrawstats',[DashboardController::class,'fetchrawstats'])

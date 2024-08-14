@@ -173,6 +173,14 @@ class Esim extends BaseModel implements Auditable
         }
     }
 
+    public function setStatutSuspendue() {
+        if ( ! $this->phonenum ) {
+            $esim_nouveau_statut = StatutEsim::where('code', "suspendue")->first();
+            $this->statutesim()->associate($esim_nouveau_statut);
+            $this->save();
+        }
+    }
+
     public static function getFirstFree($esim_id = -1) {
         if ($esim_id === -1 || is_null($esim_id)) {
             $esim_nouveau_statut = StatutEsim::where('code', "nouveau")->first();

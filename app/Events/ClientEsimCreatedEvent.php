@@ -25,7 +25,7 @@ class ClientEsimCreatedEvent
      */
     public function __construct(PhoneNum $phonenum)
     {
-        \Log::info("clientesim received ClientEsimCreatedEvent : " . json_encode( $phonenum ) );
+        //\Log::info("clientesim received ClientEsimCreatedEvent : " . json_encode( $phonenum ) );
         $this->phonenum = $phonenum;
     }
 

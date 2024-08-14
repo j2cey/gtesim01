@@ -122,10 +122,10 @@ __webpack_require__.r(__webpack_exports__);
   },
   components: {
     SettingAddUpdate: function SettingAddUpdate() {
-      return __webpack_require__.e(/*! import() */ 16).then(__webpack_require__.bind(null, /*! ./addupdate */ "./resources/js/views/settings/addupdate.vue"));
+      return __webpack_require__.e(/*! import() */ 17).then(__webpack_require__.bind(null, /*! ./addupdate */ "./resources/js/views/settings/addupdate.vue"));
     },
     SettingItem: function SettingItem() {
-      return __webpack_require__.e(/*! import() */ 17).then(__webpack_require__.bind(null, /*! ./item */ "./resources/js/views/settings/item.vue"));
+      return __webpack_require__.e(/*! import() */ 18).then(__webpack_require__.bind(null, /*! ./item */ "./resources/js/views/settings/item.vue"));
     }
   },
   mounted: function mounted() {

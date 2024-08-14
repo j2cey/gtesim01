@@ -111,10 +111,10 @@ __webpack_require__.r(__webpack_exports__);
   },
   components: {
     PermissionAddUpdate: function PermissionAddUpdate() {
-      return __webpack_require__.e(/*! import() */ 10).then(__webpack_require__.bind(null, /*! ./addupdate */ "./resources/js/views/permissions/addupdate.vue"));
+      return __webpack_require__.e(/*! import() */ 11).then(__webpack_require__.bind(null, /*! ./addupdate */ "./resources/js/views/permissions/addupdate.vue"));
     },
     PermissionItem: function PermissionItem() {
-      return __webpack_require__.e(/*! import() */ 11).then(__webpack_require__.bind(null, /*! ./item */ "./resources/js/views/permissions/item.vue"));
+      return __webpack_require__.e(/*! import() */ 12).then(__webpack_require__.bind(null, /*! ./item */ "./resources/js/views/permissions/item.vue"));
     }
   },
   mounted: function mounted() {

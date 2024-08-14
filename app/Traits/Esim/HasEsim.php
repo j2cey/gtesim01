@@ -34,7 +34,7 @@ trait HasEsim
         $this->esim()->dissociate();
         $this->attachEsim($esim_id);
 
-        $old_esim->setStatutFree();
+        $old_esim->setStatutSuspendue();
 
         return $this;
     }
